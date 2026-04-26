@@ -1,0 +1,33 @@
+<div class="contenedor-animales">
+    <h2>Animales Esperando un Hogar</h2>
+
+    <div *ngIf="cargando" class="mensaje-carga">
+        <p>Buscando peludos disponibles...</p>
+    </div>
+
+    <div *ngIf="errorMsg" class="mensaje-error">
+        <p>{{ errorMsg }}</p>
+    </div>
+
+    <div *ngIf="!cargando && !errorMsg" class="grid-animales">
+
+        <div class="tarjeta-animal" *ngFor="let animal of animales">
+            <img [src]="animal.foto_portada"
+                [alt]="'Foto de ' + animal.nombre" class="foto-animal">
+            <div class="info-animal">
+                <h3>{{ animal.nombre }}</h3>
+                <span class="etiqueta">{{ animal.especie }}</span>
+                <p><strong>Raza:</strong> {{ animal.raza }}</p>
+                <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
+                <p><strong>Tamaño:</strong> {{ animal.tamano }}</p>
+                <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
+
+            </div>
+        </div>
+
+        <div *ngIf="animales.length === 0" class="sin-resultados">
+            <p>Actualmente no hay animales disponibles para adopción.</p>
+        </div>
+
+    </div>
+</div>

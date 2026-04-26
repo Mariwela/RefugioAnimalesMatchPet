@@ -1,0 +1,47 @@
+<header class="main-header">
+    <div class="container">
+        <div class="logo-container">
+            <img src="logo-matchpet.png" alt="MatchPet Logo" class="logo-icon">
+            <span class="brand-name">MatchPet</span>
+        </div>
+
+        <nav class="main-nav">
+            <ul>
+                <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+                </li>
+                <li><a routerLink="/animales" routerLinkActive="active">Adoptar</a></li>
+                <li><a routerLink="/pareja" routerLinkActive="active">Encontrar Pareja</a></li>
+                <li><a routerLink="/eventos" routerLinkActive="active">Eventos</a></li>
+                <li><a routerLink="/comunidad" routerLinkActive="active">Comunidad</a></li>
+            </ul>
+        </nav>
+
+        <div class="user-actions">
+            <div class="search-box">
+                <input type="text" placeholder="Buscar mascotas, razas...">
+                <i class="fa fa-search"></i>
+            </div>
+
+            <div class="auth-buttons" *ngIf="!authService.isLoggedIn()">
+                <a routerLink="/login" class="btn-login">Entrar</a>
+            </div>
+
+            <div class="user-icons" *ngIf="authService.isLoggedIn()">
+                <i class="fa fa-bell notification-icon"></i>
+
+                <div class="user-profile">
+                    <span class="user-greeting">Hola, {{ nombreUsuario }}</span>
+                    <img src="assets/user-avatar.jpg" alt="Usuario" class="avatar">
+
+                    <button (click)="cerrarSesion()" class="btn-logout" title="Cerrar sesión">
+                        <i class="fa fa-sign-out"></i> Salir
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <router-outlet></router-outlet>
+</main>

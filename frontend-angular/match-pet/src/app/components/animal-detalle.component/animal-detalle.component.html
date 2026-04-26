@@ -1,0 +1,95 @@
+<div class="contenedor-perfil-animal">
+
+    <div *ngIf="cargando" class="estado-carga">
+        <div class="spinner"></div>
+        <p>Buscando ficha del peludo...</p>
+    </div>
+
+    <div *ngIf="errorMsg" class="estado-error">
+        <p>❌ {{ errorMsg }}</p>
+        <button class="btn-secundario" (click)="volver()">Volver a la lista</button>
+    </div>
+
+    <div *ngIf="!cargando && animal" class="perfil-contenido">
+
+        <div class="cabecera-perfil">
+            <button class="btn-volver" (click)="volver()">
+                ← Volver a todos los animales
+            </button>
+        </div>
+
+        <div class="grid-perfil">
+            <div class="columna-foto">
+                <div class="marco-foto">
+                    <img [src]="animal.foto_portada"
+                        [alt]="'Foto de ' + animal.nombre" class="foto-principal">
+                </div>
+            </div>
+
+            <div class="columna-info">
+                <div class="titulo-animal">
+                    <h2>{{ animal.nombre }}</h2>
+                    <span class="etiqueta-estado">Disponible para Adopción</span>
+                </div>
+
+                <div class="datos-rapidos">
+                    <div class="dato-item">
+                        <span class="icono">🐾</span>
+                        <div class="dato-texto">
+                            <strong>Especie / Raza</strong>
+                            <p>{{ animal.especie }} - {{ animal.raza }}</p>
+                        </div>
+                    </div>
+
+                    <div class="dato-item" *ngIf="animal.fecha_nacimiento && getEdad(animal.fecha_nacimiento)">
+                        <span class="icono">🎂</span>
+                        <div class="dato-texto">
+                            <strong>Edad</strong>
+                            <p>{{ getEdad(animal.fecha_nacimiento) }}</p>
+                        </div>
+                    </div>
+
+                    <div class="dato-item">
+                        <span class="icono">🚻</span>
+                        <div class="dato-texto">
+                            <strong>Sexo</strong>
+                            <p>{{ animal.sexo }}</p>
+                        </div>
+                    </div>
+
+                    <div class="dato-item">
+                        <span class="icono">📏</span>
+                        <div class="dato-texto">
+                            <strong>Tamaño</strong>
+                            <p>{{ animal.tamano }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="descripcion-animal">
+                    <h3>Conoce a {{ animal.nombre }}</h3>
+                    <p>{{ animal.descripcion }}</p>
+                </div>
+
+                <div class="zona-adopcion">
+                    <h3>¿Te has enamorado?</h3>
+                    <p>Si crees que puedes darle el hogar que se merece, ¡inicia el proceso!</p>
+                    <button class="btn-adoptar-principal">Adoptar a {{ animal.nombre }}</button>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="animal.galeria && animal.galeria.length > 0" class="seccion-galeria">
+            <hr class="separador">
+            <h3>Conoce un poco más a {{ animal.nombre }}</h3>
+
+            <div class="grid-galeria">
+                <div *ngFor="let foto of animal.galeria" class="item-galeria">
+                    <img [src]="foto.url_completa" 
+                        [alt]="animal.nombre" 
+                        class="foto-extra">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
