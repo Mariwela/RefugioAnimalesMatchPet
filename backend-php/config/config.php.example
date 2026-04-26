@@ -1,0 +1,23 @@
+<?php
+/**
+ * ARCHIVO DE EJEMPLO DE CONFIGURACIÓN
+ * Instrucciones: Copia este archivo como 'config.php' y rellena los datos
+ */
+
+// 1. Configuración de la Base de Datos
+define('DB_HOST', 'localhost');
+define('DB_NAME', 'matchpath');
+define('DB_USER', 'tu_usuario');
+define('DB_PASS', 'tu_contraseña');
+define('DB_CHARSET', 'utf8mb4');
+
+// 2. Configuración del Sistema
+define('DEBUG_MODE', true); // Cambiar a false en producción
+define('URL_BASE', 'http://localhost/matchpath/backend/');
+
+// 3. Seguridad (JWT)
+// Necesitarás una clave secreta para firmar los tokens de Angular
+define('JWT_SECRET', 'escribe_aqui_una_cadena_aleatoria_muy_larga');
+
+// 4. Rutas de Archivos (Para fotos de animales)
+define('UPLOAD_DIR', __DIR__ . '/public/uploads/');
