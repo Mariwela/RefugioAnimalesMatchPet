@@ -35,10 +35,7 @@ try {
             
             // 1. Quitamos "fotos/" del texto que viene de la BD
             // Esto transforma "fotos/zafiro/1.jpg" en "zafiro/1.jpg"
-            $ruta_limpia = str_replace('fotos/', '', $animal['foto_portada']);
-            
-            // 2. Construimos la URL final apuntando a tu carpeta de imágenes
-            $animal['foto_portada'] = "http://127.0.0.1/refugioAnimalesMatchPet-main/backend-php/public/img/animales/" . $ruta_limpia;
+          $animal['foto_portada'] = "http://localhost/RefugioAnimalesMatchPet/backend-php/database/" . $animal['foto_portada'];
         }
     }
 
