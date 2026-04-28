@@ -6,8 +6,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AnimalService {
-  // 1. La URL base de backend
-  private baseUrl = 'http://127.0.0.1/refugioAnimalesMatchPet-main/backend-php/api/animales';
+  // CORRECCIÓN CLAVE: La URL ahora coincide exactamente con tu servidor local
+  private baseUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales';
 
   constructor(private http: HttpClient) { }
 

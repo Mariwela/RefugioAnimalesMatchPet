@@ -15,8 +15,9 @@ export class AnimalComponent implements OnInit {
   cargando: boolean = true;
   errorMsg: string = '';
   animalIdSeleccionado: number | null = null;
-  // 2. Inyectamos ChangeDetectorRef en el constructor
 
+  // 1. NUEVO: Variable para controlar la página actual
+  paginaActual: number = 1;
 
   constructor(
     private animalService: AnimalService,
@@ -24,17 +25,12 @@ export class AnimalComponent implements OnInit {
     private router: Router
   ) { }
 
-
-
   ngOnInit(): void {
     this.cargarAnimales();
   }
 
   verDetalles(id: number) {
-    // 1. Comprobamos si llega el clic y qué ID trae
     console.log('Botón pulsado. Navegando al animal con ID:', id);
-
-    // 2. La navegación real
     this.router.navigate(['/animal', id]).then(exito => {
       if (exito) {
         console.log('Navegación exitosa');
@@ -45,15 +41,15 @@ export class AnimalComponent implements OnInit {
   }
 
   cargarAnimales(): void {
-    this.animalService.getAnimalesDisponibles().subscribe({
-      next: (res) => { // Cambiamos el nombre a 'res' para no confundir
-        // REVISIÓN CLAVE: Tu JSON tiene la lista dentro de la propiedad .data
-        this.animales = res.data; 
-        
+    this.cargando = true; // 2. IMPORTANTE: Ponemos esto en true para mostrar el "Cargando..." al cambiar de página
+
+    // 3. Pasamos la página actual al servicio
+    this.animalService.getAnimalesDisponibles(this.paginaActual).subscribe({
+      next: (res) => {
+        this.animales = res.data;
         this.cargando = false;
         this.cdr.detectChanges();
-
-        console.log('Lista de animales:', this.animales);
+        console.log(`Lista de animales (Página ${this.paginaActual}):`, this.animales);
       },
       error: (error) => {
         this.errorMsg = 'Error al cargar los animales.';
@@ -62,5 +58,16 @@ export class AnimalComponent implements OnInit {
         console.error('Error:', error);
       }
     });
+  }
+
+  // 4. NUEVO: Función para cambiar de página
+  cambiarPagina(nuevaPagina: number): void {
+    if (nuevaPagina >= 1) {
+      this.paginaActual = nuevaPagina;
+      this.cargarAnimales(); // Volvemos a llamar a la base de datos con la nueva página
+
+      // Opcional: Hace que la pantalla suba al principio de la lista al cambiar de página
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   }
 }

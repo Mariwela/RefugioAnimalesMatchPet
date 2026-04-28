@@ -12,8 +12,7 @@
     <div *ngIf="!cargando && !errorMsg" class="grid-animales">
 
         <div class="tarjeta-animal" *ngFor="let animal of animales">
-            <img [src]="animal.foto_portada"
-                [alt]="'Foto de ' + animal.nombre" class="foto-animal">
+            <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
             <div class="info-animal">
                 <h3>{{ animal.nombre }}</h3>
                 <span class="etiqueta">{{ animal.especie }}</span>
@@ -24,7 +23,23 @@
 
             </div>
         </div>
+        <div class="paginacion" *ngIf="!cargando && animales.length > 0" style="text-align: center; margin-top: 20px;">
 
+            <button [disabled]="paginaActual === 1" (click)="cambiarPagina(paginaActual - 1)"
+                style="padding: 10px 20px; margin-right: 15px; cursor: pointer;">
+                Anterior
+            </button>
+
+            <span style="font-weight: bold; font-size: 1.1rem;">
+                Página {{ paginaActual }}
+            </span>
+
+            <button [disabled]="animales.length < 20" (click)="cambiarPagina(paginaActual + 1)"
+                style="padding: 10px 20px; margin-left: 15px; cursor: pointer;">
+                Siguiente
+            </button>
+
+        </div>
         <div *ngIf="animales.length === 0" class="sin-resultados">
             <p>Actualmente no hay animales disponibles para adopción.</p>
         </div>
