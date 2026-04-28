@@ -53,7 +53,6 @@
         },
         "serve": {
           "builder": "@angular/build:dev-server",
-
           "configurations": {
             "production": {
               "buildTarget": "match-pet:build:production"
@@ -72,11 +71,7 @@
           "options": {
             "tsConfig": "tsconfig.spec.json",
             "assets": [
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "public"
-              }
+              "src/assets"
             ],
             "styles": [
               "src/styles.css"
