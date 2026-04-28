@@ -21,8 +21,8 @@
         <div class="grid-perfil">
             <div class="columna-foto">
                 <div class="marco-foto">
-                    <img [src]="animal.foto_portada"
-                        [alt]="'Foto de ' + animal.nombre" class="foto-principal">
+                    <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-principal">
+
                 </div>
             </div>
 
@@ -85,9 +85,7 @@
 
             <div class="grid-galeria">
                 <div *ngFor="let foto of animal.galeria" class="item-galeria">
-                    <img [src]="foto.url_completa" 
-                        [alt]="animal.nombre" 
-                        class="foto-extra">
+                    <img [src]="foto.url_completa" [alt]="animal.nombre" class="foto-extra">
                 </div>
             </div>
         </div>

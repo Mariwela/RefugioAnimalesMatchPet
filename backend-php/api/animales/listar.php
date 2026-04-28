@@ -35,7 +35,7 @@ try {
             
             // 1. Quitamos "fotos/" del texto que viene de la BD
             // Esto transforma "fotos/zafiro/1.jpg" en "zafiro/1.jpg"
-          $animal['foto_portada'] = "http://localhost/RefugioAnimalesMatchPet/backend-php/database/" . $animal['foto_portada'];
+           $animal['foto_portada'] = "http://localhost/RefugioAnimalesMatchPet/backend-php/database/" . $animal['foto_portada'];
         }
     }
 
