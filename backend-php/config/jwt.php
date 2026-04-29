@@ -4,7 +4,7 @@
 // Tres funciones puras. Sin composer. Sin magia.
 // ================================================
 
-define('JWT_SECRET', 'matchpet_secret_cambia_esto_en_produccion');
+define('JWT_SECRET', JWT_SECRET_KEY);
 define('JWT_EXPIRY', 60 * 60 * 8); // 8 horas en segundos
 
 // ------------------------------------------------
