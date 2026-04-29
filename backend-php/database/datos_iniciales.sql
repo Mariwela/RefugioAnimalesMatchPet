@@ -3210,3 +3210,6 @@ WHERE nombre IN ('Zeta', 'Tintin', 'Claudio', 'Carla', 'Olaf', 'Kira', 'Maya', '
 
 
 UPDATE salud_historial SET id_usuario = (SELECT id_usuario FROM usuarios WHERE rol = 'vet' ORDER BY id_usuario ASC LIMIT 1) WHERE id_usuario IS NULL;
+
+UPDATE animal_fotos SET ruta_foto = REPLACE(ruta_foto, 'fotos/', '') WHERE ruta_foto LIKE 'fotos/%';
+UPDATE animales SET foto_portada = REPLACE(foto_portada, 'fotos/', '') WHERE foto_portada LIKE 'fotos/%';

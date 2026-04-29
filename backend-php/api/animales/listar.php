@@ -7,14 +7,12 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // 1. Parámetros de paginación (opcionales)
-    // Si Angular no envía nada, por defecto página 1 y 20 animales
+    // 1. Parámetros de paginación
     $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $por_pagina = 20;
     $inicio = ($pagina - 1) * $por_pagina;
 
-    // 2. Consulta para obtener animales y sus fotos principales
-    // Usamos LIMIT para no saturar la memoria
+    // 2. Consulta
     $query = "SELECT id_animal, nombre, especie, raza, sexo, tamano, foto_portada, estado 
               FROM animales 
               WHERE estado = 'Disponible' 
@@ -28,16 +26,24 @@ try {
 
     $animales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+    // --- BLOQUE DE URL DINÁMICA ---
+    // Detecta http/https y el host (ej. localhost o 127.0.0.1)
+    $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
+    $base_url = $protocol . "://" . $_SERVER['HTTP_HOST'];
+    
+    // Calcula la ruta del proyecto dinámicamente
+    // Esto quita "/api/animales/listar.php" de la ruta actual para llegar a la raíz
+    $project_path = str_replace('/api/animales', '', dirname($_SERVER['SCRIPT_NAME']));
+    $img_base = $base_url . $project_path . '/public/img/animales/';
+    // ------------------------------
+
     // 3. Formatear la URL de la imagen para Angular
     foreach ($animales as &$animal) {
-        // Si la foto no es una URL externa, construimos la ruta con la carpeta del animal
-        if (!filter_var($animal['foto_portada'], FILTER_VALIDATE_URL)) {
-            
-            // 1. Quitamos "fotos/" del texto que viene de la BD
-            // Esto transforma "fotos/zafiro/1.jpg" en "zafiro/1.jpg"
-           $animal['foto_portada'] = "http://localhost/RefugioAnimalesMatchPet/backend-php/database/" . $animal['foto_portada'];
+        if (!empty($animal['foto_portada']) && !filter_var($animal['foto_portada'], FILTER_VALIDATE_URL)) {
+            $animal['foto_portada'] = $img_base . $animal['foto_portada'];
         }
     }
+    unset($animal); // Romper la referencia
 
     echo json_encode([
         "status" => "success",
@@ -48,5 +54,6 @@ try {
 
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(["message" => "Error al obtener animales: " . $e->getMessage()]);
+    echo json_encode(["status" => "error", "message" => "Error al obtener animales: " . $e->getMessage()]);
 }
+?>

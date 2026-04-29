@@ -1,0 +1,52 @@
+<?php
+require_once '../../config/cors.php';
+require_once '../../config/config.php';
+require_once '../../config/conexion.php';
+
+$data = json_decode(file_get_contents("php://input"), true);
+
+if (!empty($data['id_animal'])) {
+    try {
+        $database = new Database();
+        $db = $database->getConnection();
+
+        // 1. Obtener el nombre del animal para localizar su carpeta física
+        $stmtNombre = $db->prepare("SELECT nombre FROM animales WHERE id_animal = :id");
+        $stmtNombre->execute([':id' => $data['id_animal']]);
+        $animal = $stmtNombre->fetch(PDO::FETCH_ASSOC);
+
+        if ($animal) {
+            // Normalizamos el nombre para la carpeta (minúsculas y sin espacios)
+            $nombre_carpeta = strtolower(str_replace(' ', '_', $animal['nombre']));
+            
+            // Construimos la ruta física absoluta partiendo desde donde está este script
+            $ruta_carpeta = __DIR__ . "/../../public/img/animales/" . $nombre_carpeta;
+
+            // 2. Borrar registro de la BD
+            $query = "DELETE FROM animales WHERE id_animal = :id";
+            $stmt = $db->prepare($query);
+            
+            if ($stmt->execute([':id' => $data['id_animal']])) {
+                
+                // 3. Borrar la carpeta física y todas las fotos numeradas dentro
+                if (is_dir($ruta_carpeta)) {
+                    $files = glob($ruta_carpeta . '/*'); 
+                    foreach($files as $file) {
+                        if(is_file($file)) unlink($file); 
+                    }
+                    rmdir($ruta_carpeta);
+                }
+
+                echo json_encode(["status" => "success", "message" => "Animal y sus fotos eliminadas"]);
+            }
+        } else {
+            echo json_encode(["status" => "error", "message" => "Animal no encontrado"]);
+        }
+    } catch (Exception $e) {
+        http_response_code(500);
+        echo json_encode(["status" => "error", "message" => $e->getMessage()]);
+    }
+} else {
+    echo json_encode(["status" => "error", "message" => "ID no proporcionado"]);
+}
+?>
