@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalService } from '../../services/animal';
@@ -21,7 +21,8 @@ export class AnimalEditComponent implements OnInit {
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
-    private animalService: AnimalService
+    private animalService: AnimalService,
+    private cdr: ChangeDetectorRef
   ) {
     this.iniciarFormulario();
   }
@@ -65,20 +66,55 @@ export class AnimalEditComponent implements OnInit {
   }
 
   // 2. Traemos los datos de la DB y los metemos en el formulario
+  // 2. Traemos los datos de la DB y los metemos en el formulario
+  // 2. Traemos los datos de la DB y los metemos en el formulario
   cargarDatosAnimal(id: number): void {
+    console.log('1. Iniciando petición para el animal ID:', id);
+
     this.animalService.getAnimalById(id).subscribe({
       next: (res) => {
+        console.log('2. Respuesta del PHP recibida:', res);
+
         if (res.status === 'success') {
-          // patchValue rellena automáticamente los campos que coincidan
-          this.animalForm.patchValue(res.data);
+          try {
+            const animalData = res.data;
+
+            // TRADUCCIÓN DE DATOS PARA ANGULAR
+            animalData.apto_pisos = animalData.apto_pisos == 1;
+            animalData.sociable_ninos = animalData.sociable_ninos == 1;
+            animalData.sociable_perros = animalData.sociable_perros == 1;
+            animalData.sociable_gatos = animalData.sociable_gatos == 1;
+            animalData.enfermedad_cronica = animalData.enfermedad_cronica == 1;
+            animalData.esterilizado = animalData.esterilizado == 1;
+            animalData.es_para_principiantes = animalData.es_para_principiantes == 1;
+
+            animalData.aviso_importante = animalData.aviso_importante || '';
+            animalData.raza = animalData.raza || '';
+            animalData.microchip = animalData.microchip || '';
+
+            console.log('3. Datos traducidos, listos para el formulario:', animalData);
+
+            // Rellenamos el formulario
+            this.animalForm.patchValue(animalData);
+            console.log('4. ¡Formulario rellenado con éxito!');
+
+          } catch (error) {
+            console.error('❌ Error al meter los datos al formulario:', error);
+            this.mensaje = 'Hubo un problema al procesar los datos.';
+          }
         } else {
           this.mensaje = 'Error al cargar datos: ' + res.message;
         }
+
+        // Sea cual sea el resultado, quitamos la pantalla de carga
         this.cargando = false;
+        this.cdr.detectChanges();
       },
-      error: () => {
+      error: (err) => {
+        console.error('❌ Error crítico en la conexión:', err);
         this.mensaje = 'Error de conexión con el servidor.';
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }
