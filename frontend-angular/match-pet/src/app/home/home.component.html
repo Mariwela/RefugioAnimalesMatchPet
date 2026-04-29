@@ -1,1 +1,57 @@
-<p>home.component works!</p>
+<div class="home-wrapper">
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>El lugar donde los <span class="highlight">corazones peludos</span> encuentran su hogar</h1>
+            <p>Únete a MatchPet. Adopta un nuevo integrante para tu familia, encuentra pareja para tu mascota, asiste a
+                eventos y conecta con miles de amantes de los animales.</p>
+            <div class="hero-buttons">
+                <a routerLink="/animales" class="btn btn-primary">Adoptar ahora</a>
+                <a routerLink="/login" class="btn btn-secondary">Crear cuenta</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title">¿Qué puedes hacer en MatchPet?</h2>
+        <div class="features-grid">
+
+            <div class="feature-card">
+                <div class="icon-wrapper">🏠</div>
+                <h3>Adopción</h3>
+                <p>Dale una segunda oportunidad a un peludo que lo necesita. Encuentra a tu nuevo mejor amigo.</p>
+                <a routerLink="/animales" class="feature-link">Ver peludos &rarr;</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon-wrapper">❤️</div>
+                <h3>Buscar Pareja</h3>
+                <p>Crea el perfil de tu mascota y haz 'match' con otros usuarios de tu zona para cruzas responsables.
+                </p>
+                <a routerLink="/pareja" class="feature-link">Ir a citas &rarr;</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon-wrapper">📅</div>
+                <h3>Eventos Locales</h3>
+                <p>Descubre paseos grupales, ferias de adopción y talleres para disfrutar con tu mascota.</p>
+                <a routerLink="/eventos" class="feature-link">Descubrir eventos &rarr;</a>
+            </div>
+
+            <div class="feature-card">
+                <div class="icon-wrapper">💬</div>
+                <h3>Comunidad</h3>
+                <p>Comparte fotos, resuelve dudas y recibe consejos de nuestra gran red de Pet Lovers.</p>
+                <a routerLink="/comunidad" class="feature-link">Unirse al foro &rarr;</a>
+            </div>
+
+        </div>
+    </section>
+
+    <section class="cta-banner">
+        <div class="cta-content">
+            <h2>¿Tienes un refugio o rescataste a un animal?</h2>
+            <p>Ayúdanos a encontrarles una familia amorosa. Publicar en MatchPet es 100% gratis y seguro.</p>
+            <button class="btn btn-light" routerLink="/login">Publicar una mascota</button>
+        </div>
+    </section>
+</div>

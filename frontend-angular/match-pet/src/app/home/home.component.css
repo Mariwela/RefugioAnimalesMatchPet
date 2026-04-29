@@ -1,0 +1,229 @@
+/* =========================================
+   Variables de color del tema MatchPet
+   ========================================= */
+:host {
+    --primary-salmon: #ff6b6b;
+    --salmon-hover: #fa5252;
+    --text-dark: #374151;
+    --text-light: #6b7280;
+    --bg-white: #FFFFFF;
+    --bg-offwhite: #f3f4f6;
+    --bg-salmon-light: #fff0f0;
+    /* Un tono salmón super suave para fondos */
+}
+
+.home-wrapper {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* =========================================
+   Hero Section (Cabecera principal)
+   ========================================= */
+.hero-section {
+    background-color: var(--bg-salmon-light);
+    padding: 80px 20px;
+    text-align: center;
+    border-bottom-left-radius: 40px;
+    border-bottom-right-radius: 40px;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero-content h1 {
+    font-size: 3rem;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    line-height: 1.2;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.highlight {
+    color: var(--primary-salmon);
+}
+
+.hero-content p {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    margin-bottom: 40px;
+    line-height: 1.6;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+/* =========================================
+   Botones Globales del Home
+   ========================================= */
+.btn {
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn-primary {
+    background-color: var(--primary-salmon);
+    color: var(--bg-white);
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: var(--salmon-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+}
+
+.btn-secondary {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+    border: 2px solid var(--text-dark);
+}
+
+.btn-secondary:hover {
+    background-color: var(--text-dark);
+    color: var(--bg-white);
+}
+
+/* =========================================
+   Sección de Características (Cards)
+   ========================================= */
+.features-section {
+    max-width: 1200px;
+    margin: 80px auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    text-align: center;
+    font-size: 2.2rem;
+    color: var(--text-dark);
+    margin-bottom: 50px;
+    font-weight: 800;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+}
+
+.feature-card {
+    background: var(--bg-white);
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+}
+
+.icon-wrapper {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    display: inline-block;
+    padding: 15px;
+    background-color: var(--bg-salmon-light);
+    border-radius: 12px;
+}
+
+.feature-card h3 {
+    font-size: 1.4rem;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+}
+
+.feature-card p {
+    color: var(--text-light);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.feature-link {
+    color: var(--primary-salmon);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.feature-link:hover {
+    color: var(--salmon-hover);
+}
+
+/* =========================================
+   Banner Call To Action (Abajo)
+   ========================================= */
+.cta-banner {
+    background-color: var(--primary-salmon);
+    padding: 60px 20px;
+    text-align: center;
+    margin-top: 60px;
+}
+
+.cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.cta-content h2 {
+    color: var(--bg-white);
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+}
+
+.cta-content p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.btn-light {
+    background-color: var(--bg-white);
+    color: var(--primary-salmon);
+    font-size: 1.1rem;
+    padding: 15px 30px;
+}
+
+.btn-light:hover {
+    background-color: var(--bg-offwhite);
+    transform: scale(1.05);
+}
+
+/* =========================================
+   Responsive
+   ========================================= */
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero-section {
+        padding: 50px 20px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+    }
+
+    .cta-content h2 {
+        font-size: 1.8rem;
+    }
+}
