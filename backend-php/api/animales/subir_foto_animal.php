@@ -2,6 +2,8 @@
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';
+require_once '../../config/auth_middleware.php';
+requiere_rol('admin');
 
 // Iniciamos la respuesta con un mensaje más descriptivo para debug
 $response = ["status" => "error", "message" => "No se recibió una petición válida o el archivo es demasiado grande"];

@@ -2,6 +2,8 @@
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';
+require_once '../../config/auth_middleware.php';
+requiere_rol('admin');
 
 $data = json_decode(file_get_contents("php://input"));
 

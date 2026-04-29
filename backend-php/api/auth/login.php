@@ -1,7 +1,18 @@
 <?php
+// ================================================
+// auth/login.php  (versión con JWT)
+// Cambios respecto al original:
+//   - require_once jwt.php
+//   - Recuperamos también 'rol' del usuario
+//   - Generamos token con jwt_generar()
+//   - Añadimos 'token' a la respuesta
+// El resto es idéntico al original.
+// ================================================
+
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';
+require_once '../../config/jwt.php'; // <-- ÚNICO AÑADIDO EN LOS REQUIRES
 
 $json = file_get_contents('php://input');
 $data = json_decode($json);
@@ -16,6 +27,7 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
+    // Añadimos 'rol' a la SELECT (en el orsiginal ya estaba, sin cambios)
     $query = "SELECT id_usuario, nombre_completo, email, password, rol FROM usuarios WHERE email = :email LIMIT 1";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':email', $data->email);
@@ -26,11 +38,22 @@ try {
 
         if (password_verify($data->password, $user['password'])) {
             unset($user['password']);
+
+            // --- NUEVO: Generamos el token JWT ---
+            $token = jwt_generar([
+                'id_usuario' => $user['id_usuario'],
+                'email'      => $user['email'],
+                'rol'        => $user['rol']
+            ]);
+            // -------------------------------------
+
             http_response_code(200);
             echo json_encode([
                 "message" => "Login exitoso",
-                "user" => $user
+                "token"   => $token,   // <-- Angular lo guarda en localStorage
+                "user"    => $user
             ]);
+
         } else {
             http_response_code(401);
             echo json_encode(["message" => "Contraseña incorrecta."]);
@@ -39,6 +62,7 @@ try {
         http_response_code(404);
         echo json_encode(["message" => "El usuario no existe."]);
     }
+
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(["message" => "Error en el servidor: " . $e->getMessage()]);
