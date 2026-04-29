@@ -26,11 +26,24 @@ try {
         $animal = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($animal) {
+
+            // ---------------------------------------------------------------
+            // URL BASE DINÁMICA: detecta automáticamente el host y la ruta
+            // del proyecto, sin importar el nombre de carpeta que use cada dev.
+            // Ejemplo resultante: http://localhost/MiCarpeta/backend-php/public/img/animales/
+            // ---------------------------------------------------------------
+            $base_url  = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+            $base_path = str_replace('/api/animales', '', dirname($_SERVER['SCRIPT_NAME']));
+            $img_base  = $base_url . $base_path . '/public/img/animales/';
+
             // 1. Limpiar foto principal
             $ruta_limpia_principal = str_replace('fotos/', '', $animal['foto_portada']);
-            $animal['foto_portada'] = "http://127.0.0.1/refugioAnimalesMatchPet-main/backend-php/public/img/animales/" . $ruta_limpia_principal;
 
+            // ORIGINAL (hardcodeado - version hardcodeada):
+            // $animal['foto_portada'] = "http://127.0.0.1/refugioAnimalesMatchPet-main/backend-php/public/img/animales/" . $ruta_limpia_principal;
 
+            // NUEVO (dinámico):
+            $animal['foto_portada'] = $img_base . $ruta_limpia_principal;
 
             // 2. Consultar fotos de la galería
             $queryFotos = "SELECT ruta_foto FROM animal_fotos WHERE id_animal = :id AND es_principal = 0";
@@ -43,13 +56,18 @@ try {
             if ($galeria) {
                 foreach ($galeria as &$foto) {
                     $foto_limpia = str_replace('fotos/', '', $foto['ruta_foto']);
-                    $foto['url_completa'] = "http://127.0.0.1/refugioAnimalesMatchPet-main/backend-php/public/img/animales/" . $foto_limpia;
+
+                    // ORIGINAL (hardcodeado - comentado por si necesitas revertir):
+                    // $foto['url_completa'] = "http://127.0.0.1/refugioAnimalesMatchPet-main/backend-php/public/img/animales/" . $foto_limpia;
+
+                    // NUEVO (dinámico):
+                    $foto['url_completa'] = $img_base . $foto_limpia;
                 }
             } else {
                 $galeria = []; // Si no hay fotos, enviamos un array vacío en lugar de un error
             }
 
-            // 4. Adjuntamos la galería al objeto animal
+            // 3. Adjuntamos la galería al objeto animal
             $animal['galeria'] = $galeria;
 
             echo json_encode(["status" => "success", "data" => $animal]);
