@@ -1,21 +1,48 @@
 /* footer.component.css */
-:root {
-    --footer-bg: #1a1a2e;
-    /* Azul noche muy oscuro */
-    --accent-green: #2ecc71;
-    --accent-blue: #3498db;
-    --text-dim: #a0a0a0;
+:host {
+    --footer-bg: #1f2937;
+    /* Gris muy oscuro, más elegante y neutro */
+    --primary-salmon: #ff6b6b;
+    --salmon-hover: #fa5252;
+    --text-dim: #9ca3af;
+    /* Gris claro para textos secundarios */
     --text-light: #ffffff;
+    --border-line: #374151;
+    /* Gris medio para separadores */
 }
 
+/* =========================================
+   Logo (Adaptado para fondo oscuro)
+   ========================================= */
+.brand-logo {
+    margin: 0;
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: -0.5px;
+}
+
+.logo-match {
+    color: var(--primary-salmon);
+}
+
+.logo-pet {
+    color: var(--text-light);
+    /* En el footer oscuro, "Pet" debe ser blanco */
+}
+
+/* =========================================
+   Estructura del Footer
+   ========================================= */
 .simple-footer {
     background-color: var(--footer-bg);
     color: var(--text-light);
     padding: 40px 20px 20px;
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    /* Línea decorativa superior con degradado */
-    border-top: 3px solid;
-    border-image: linear-gradient(to right, var(--accent-green), var(--accent-blue)) 1;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /* Línea decorativa superior sólida usando tu color principal */
+    border-top: 4px solid var(--primary-salmon);
 }
 
 .footer-content {
@@ -28,22 +55,15 @@
     gap: 30px;
 }
 
-.footer-brand .logo-text {
-    font-size: 1.5rem;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-
-.footer-brand .dot {
-    color: var(--accent-green);
-}
-
 .footer-brand p {
     color: var(--text-dim);
     font-size: 0.9rem;
     margin-top: 5px;
 }
 
+/* =========================================
+   Enlaces y Navegación
+   ========================================= */
 .footer-links {
     display: flex;
     gap: 20px;
@@ -57,9 +77,13 @@
 }
 
 .footer-links a:hover {
-    color: var(--accent-blue);
+    color: var(--primary-salmon);
+    /* Efecto hover en salmón */
 }
 
+/* =========================================
+   Redes Sociales
+   ========================================= */
 .footer-social {
     display: flex;
     gap: 15px;
@@ -68,22 +92,24 @@
 .social-icon {
     font-size: 1.2rem;
     text-decoration: none;
-    color: var(--text-light);
-    opacity: 0.7;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    color: var(--text-dim);
+    transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .social-icon:hover {
-    opacity: 1;
     transform: translateY(-3px);
-    color: var(--accent-green);
+    /* Pequeño salto al pasar el mouse */
+    color: var(--primary-salmon);
 }
 
+/* =========================================
+   Créditos Finales
+   ========================================= */
 .footer-bottom {
     max-width: 1200px;
     margin: 40px auto 0;
     padding-top: 20px;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--border-line);
     text-align: center;
     color: var(--text-dim);
     font-size: 0.8rem;
