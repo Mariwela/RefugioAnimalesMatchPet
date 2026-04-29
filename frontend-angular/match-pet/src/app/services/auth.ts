@@ -18,7 +18,9 @@ export interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost/refugioAnimalesMatchPet-main/backend-php/api/auth/login.php';
+  // En tu auth.service.ts
+  private apiUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/auth/login.php';
+
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object // <-- Inyectamos el ID de la plataforma
