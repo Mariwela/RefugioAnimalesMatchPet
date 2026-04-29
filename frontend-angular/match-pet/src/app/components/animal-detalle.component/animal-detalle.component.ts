@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalService } from '../../services/animal'; // Ajusta esta ruta si es diferente
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-animal-detalle',
@@ -20,13 +21,14 @@ export class AnimalDetalleComponent implements OnInit {
     private route: ActivatedRoute, // Para leer el "?id=" de la URL
     private router: Router,        // Para poder volver atrás
     private animalService: AnimalService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef // Nuestro toque mágico
   ) { }
 
   ngOnInit(): void {
     // 1. Extraemos el ID de la barra de direcciones (ej: /animal/3 -> pilla el 3)
     const idString = this.route.snapshot.paramMap.get('id');
-    this.isAdmin = true;
+    this.verificarPermisos();
     if (idString) {
       // 2. Lo convertimos a número y ejecutamos la búsqueda
       const idAnimal = Number(idString);
@@ -37,7 +39,14 @@ export class AnimalDetalleComponent implements OnInit {
       this.cargando = false;
     }
   }
+  verificarPermisos() {
+    // 3. Obtenemos el rol desde el servicio
+    const rol = this.authService.getRol();
 
+    // Si el rol es 'admin', isAdmin será true. 
+    // Si no hay login (null) o es otro rol, será false.
+    this.isAdmin = (rol === 'admin');
+  }
   cargarPerfilAnimal(id: number): void {
     this.animalService.getAnimalById(id).subscribe({
       next: (res) => {

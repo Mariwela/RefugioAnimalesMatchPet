@@ -1,15 +1,23 @@
 <div class="edit-container">
+
     <div *ngIf="cargando" class="loading">
         <p>Cargando datos del animal...</p>
     </div>
 
-    <div *ngIf="!cargando">
+    <div *ngIf="!cargando && mensaje.includes('Acceso denegado')" style="text-align: center; padding: 40px;">
+        <h2>{{ mensaje }}</h2>
+        <p>Redirigiendo a un lugar seguro...</p>
+    </div>
+
+    <div *ngIf="!cargando && !mensaje.includes('Acceso denegado')">
+
         <div class="cabecera-form">
             <h2>✏️ Editar Ficha del Animal</h2>
             <button class="btn-cancelar" (click)="cancelar()">Volver</button>
         </div>
 
         <form [formGroup]="animalForm" (ngSubmit)="guardarCambios()" class="formulario-animal">
+            ```
 
             <input type="hidden" formControlName="id_animal">
 

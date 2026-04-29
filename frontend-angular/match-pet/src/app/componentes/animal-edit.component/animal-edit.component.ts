@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalService } from '../../services/animal';
 import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth';
 
 @Component({
   selector: 'app-animal-edit.component',
@@ -22,12 +23,27 @@ export class AnimalEditComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private animalService: AnimalService,
+    private authService: AuthService,
     private cdr: ChangeDetectorRef
   ) {
     this.iniciarFormulario();
   }
 
   ngOnInit(): void {
+    const rolActual = this.authService.getRol();
+
+    // 1. BARRERA DE SEGURIDAD: Si no es admin, lo bloqueamos inmediatamente
+    if (rolActual !== 'admin') {
+      this.mensaje = '⛔ Acceso denegado. No tienes permisos de administrador.';
+      this.cargando = false;
+
+      // Opcional: Lo expulsamos de vuelta a la lista tras 3 segundos
+      setTimeout(() => this.router.navigate(['/animales']), 3000);
+
+      return; // ¡ESTO ES CLAVE! Detiene la función aquí mismo. No lee más código.
+    }
+
+    // 2. Si pasa la barrera (es admin), entonces sí buscamos el ID y cargamos los datos
     const idString = this.route.snapshot.paramMap.get('id');
     if (idString) {
       this.idAnimal = Number(idString);
