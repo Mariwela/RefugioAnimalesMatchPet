@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -26,4 +26,21 @@ export class AnimalService {
   getAnimalByFoto(id: number): Observable<any> {
     return this.getAnimalById(id);
   }
+
+  actualizarAnimal(datosAnimal: any) {
+    // Obtenemos el token de localStorage (o donde guardes tu sesión)
+    const token = localStorage.getItem('auth_token') || '';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}` // Enviamos el token al PHP
+    });
+
+    return this.http.post<any>(
+      'http://tu-dominio/api/animales/editar_animal.php',
+      datosAnimal,
+      { headers }
+    );
+  }
+
 }

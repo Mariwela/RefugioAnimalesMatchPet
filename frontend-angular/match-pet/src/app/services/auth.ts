@@ -18,8 +18,7 @@ export interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://127.0.0.1/refugioAnimalesMatchPet-main/backend-php/api/auth/login.php';
-
+  private apiUrl = 'http://localhost/refugioAnimalesMatchPet-main/backend-php/api/auth/login.php';
   constructor(
     private http: HttpClient,
     @Inject(PLATFORM_ID) private platformId: Object // <-- Inyectamos el ID de la plataforma

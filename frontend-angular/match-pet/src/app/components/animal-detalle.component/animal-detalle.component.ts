@@ -15,6 +15,7 @@ export class AnimalDetalleComponent implements OnInit {
   cargando: boolean = true;
   errorMsg: string = '';
   fotosGaleria: any[] = [];
+  isAdmin: boolean = false;
   constructor(
     private route: ActivatedRoute, // Para leer el "?id=" de la URL
     private router: Router,        // Para poder volver atrás
@@ -25,7 +26,7 @@ export class AnimalDetalleComponent implements OnInit {
   ngOnInit(): void {
     // 1. Extraemos el ID de la barra de direcciones (ej: /animal/3 -> pilla el 3)
     const idString = this.route.snapshot.paramMap.get('id');
-
+    this.isAdmin = true;
     if (idString) {
       // 2. Lo convertimos a número y ejecutamos la búsqueda
       const idAnimal = Number(idString);
@@ -43,10 +44,10 @@ export class AnimalDetalleComponent implements OnInit {
         if (res.status === 'success') {
           // 1. Guardamos los datos básicos del animal
           this.animal = res.data;
-          
+
           // 2. Extraemos la galería que el PHP metió dentro de 'data'
           this.fotosGaleria = res.data.galeria || [];
-          
+
           this.cargando = false;
           this.cdr.detectChanges();
           console.log('Todo cargado:', this.animal);
@@ -64,13 +65,13 @@ export class AnimalDetalleComponent implements OnInit {
   }
 
   getEdad(fechaNacimiento: string): string | null {
-    if (!fechaNacimiento || fechaNacimiento === '0000-00-00'){
+    if (!fechaNacimiento || fechaNacimiento === '0000-00-00') {
       return null;
     }
 
     const nacimiento = new Date(fechaNacimiento);
     const hoy = new Date();
-    
+
     // Si la fecha es inválida (ej. texto mal formado)
     if (isNaN(nacimiento.getTime())) return null;
 
@@ -92,9 +93,16 @@ export class AnimalDetalleComponent implements OnInit {
       return textoAños;
     }
   }
-  
+
   // Función para el botón de "Volver"
   volver(): void {
     this.router.navigate(['/animales']);
+  }
+  // En tu animal-detalle.component.ts
+  irAEditar(): void {
+    if (this.animal && this.animal.id_animal) {
+      // Ajusta esta ruta a la que vayas a usar en tu app-routing
+      this.router.navigate(['/animales/editar', this.animal.id_animal]);
+    }
   }
 }
