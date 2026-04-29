@@ -1,16 +1,35 @@
+/* =========================================
+   Variables de color del tema MatchPet
+   ========================================= */
+:host {
+    --primary-salmon: #ff6b6b;
+    --salmon-hover: #fa5252;
+    --text-dark: #374151;
+    --text-light: #6b7280;
+    --bg-white: #FFFFFF;
+    --bg-offwhite: #f3f4f6;
+    /* Gris muy suave para fondos y etiquetas */
+    --border-light: #d1d5db;
+    --error-red: #ef4444;
+}
+
 .contenedor-animales {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h2 {
     text-align: center;
-    color: #333;
+    color: var(--text-dark);
     margin-bottom: 30px;
+    font-size: 2rem;
 }
 
+/* =========================================
+   Grid y Tarjetas de Animales
+   ========================================= */
 .grid-animales {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -18,22 +37,23 @@ h2 {
 }
 
 .tarjeta-animal {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background: var(--bg-white);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .tarjeta-animal:hover {
     transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
 }
 
 .foto-animal {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    background-color: #f0f0f0;
+    background-color: var(--bg-offwhite);
 }
 
 .info-animal {
@@ -42,49 +62,62 @@ h2 {
 
 .info-animal h3 {
     margin: 0 0 10px 0;
-    color: #ff6b6b;
-    /* Un color cálido para la plataforma */
+    color: var(--primary-salmon);
+    font-size: 1.4rem;
 }
 
 .etiqueta {
-    background: #eee;
-    padding: 4px 8px;
+    background: var(--bg-offwhite);
+    padding: 4px 10px;
     border-radius: 15px;
-    font-size: 0.8em;
-    color: #555;
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--text-light);
     display: inline-block;
     margin-bottom: 10px;
 }
 
+/* =========================================
+   Botón Adoptar
+   ========================================= */
 .btn-adoptar {
     display: block;
     width: 100%;
-    padding: 10px;
+    padding: 0.75rem;
     margin-top: 15px;
-    background-color: #4CAF50;
-    color: white;
+    background-color: var(--primary-salmon);
+    color: var(--bg-white);
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
+    font-size: 1rem;
     font-weight: bold;
+    transition: background-color 0.3s ease;
 }
 
 .btn-adoptar:hover {
-    background-color: #45a049;
+    background-color: var(--salmon-hover);
 }
 
+/* =========================================
+   Mensajes de estado
+   ========================================= */
 .mensaje-carga,
 .mensaje-error,
 .sin-resultados {
     text-align: center;
     padding: 40px;
-    font-size: 1.2em;
+    font-size: 1.1rem;
+    color: var(--text-light);
 }
 
 .mensaje-error {
-    color: red;
+    color: var(--error-red);
 }
 
+/* =========================================
+   Paginación
+   ========================================= */
 .paginacion {
     display: flex;
     justify-content: center;
@@ -95,32 +128,29 @@ h2 {
 }
 
 .paginacion button {
-    background-color: #ff6b6b;
-    /* Reutilizamos tu color cálido */
-    color: white;
+    background-color: var(--primary-salmon);
+    color: var(--bg-white);
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s ease;
 }
 
 .paginacion button:hover:not([disabled]) {
-    background-color: #e55a5a;
-    /* Un tono un poco más oscuro al pasar el mouse */
+    background-color: var(--salmon-hover);
 }
 
 .paginacion button[disabled] {
-    background-color: #eee;
-    /* Tu color de etiqueta para elementos inactivos */
-    color: #aaa;
+    background-color: var(--bg-offwhite);
+    color: var(--text-light);
     cursor: not-allowed;
     box-shadow: none;
 }
 
 .paginacion span {
-    font-size: 1.1em;
+    font-size: 1.1rem;
     font-weight: bold;
-    color: #333;
+    color: var(--text-dark);
 }
