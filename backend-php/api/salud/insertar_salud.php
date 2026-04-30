@@ -1,18 +1,4 @@
 <?php
-// ================================================
-// api/salud/insertar.php
-// POST — solo admin y vet
-// Body JSON:
-// {
-//   "id_animal": 1,
-//   "evento": "Vacuna",          (Vacuna|Cirugía|Revisión|Tratamiento|Desparasitación)
-//   "titulo": "Vacuna antirrábica",
-//   "detalles": "Dosis anual",   (opcional)
-//   "fecha_evento": "2024-05-01",
-//   "estado": "Completado"       (opcional, default Completado)
-// }
-// ================================================
-
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';
@@ -22,7 +8,6 @@ $payload = requiere_rol('admin', 'vet');
 
 $data = json_decode(file_get_contents('php://input'));
 
-// Validar campos obligatorios
 if (empty($data->id_animal) || empty($data->evento) || empty($data->titulo) || empty($data->fecha_evento)) {
     http_response_code(400);
     echo json_encode(["message" => "Faltan datos obligatorios: id_animal, evento, titulo y fecha_evento."]);
@@ -44,7 +29,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Verificamos que el animal existe
     $stmtCheck = $db->prepare("SELECT id_animal FROM animales WHERE id_animal = :id");
     $stmtCheck->execute([':id' => (int)$data->id_animal]);
 
@@ -62,7 +46,7 @@ try {
     $stmt = $db->prepare($query);
     $stmt->execute([
         ':id_animal'   => (int)$data->id_animal,
-        ':id_usuario'  => $payload['id_usuario'], // el vet/admin que lo registra
+        ':id_usuario'  => $payload['id_usuario'],
         ':evento'      => $data->evento,
         ':titulo'      => $data->titulo,
         ':detalles'    => $data->detalles    ?? null,

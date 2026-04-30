@@ -30,20 +30,19 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       const { email, password } = this.loginForm.value;
 
-      this.authService.login(email, password).subscribe({
-        next: (response: any) => {
-          // Verificamos si el PHP devolvió éxito
-          if (response.user) {
-              this.authService.guardarDatosSesion(
-                  response.token || 'token_ficticio', 
-                  response.user.nombre_completo, // <-- Aquí añadimos .user
-                  response.user.rol              // <-- Aquí también
-              );
-
-              alert('¡Bienvenido ' + response.user.nombre_completo + '!');
-              this.router.navigate(['/home']);
-          }
-        },
+  this.authService.login(email, password).subscribe({
+    next: (res) => {
+      if (res.token && res.user) {
+        // Pasamos los 4 datos necesarios
+        this.authService.guardarDatosSesion(
+          res.token, 
+          res.user.nombre_completo, 
+          res.user.rol, 
+          res.user.avatar
+        );
+        this.router.navigate(['/home']);
+      }
+    },
         error: (err) => {
           this.errorMessage = err.error?.message || 'Error al conectar con el servidor';
         }

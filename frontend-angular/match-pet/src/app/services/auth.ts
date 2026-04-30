@@ -10,6 +10,7 @@ export interface AuthResponse {
     nombre_completo: string;
     email: string;
     rol: string;
+    avatar: string;
   };
   token?: string; // Por si en el futuro usas JWT
 }
@@ -30,21 +31,21 @@ export class AuthService {
     return this.http.post<AuthResponse>(this.apiUrl, { email, password });
   }
 
-  guardarDatosSesion(token: string, nombre: string, rol: string): void {
-    // Solo guardamos si estamos en el navegador
+
+  guardarDatosSesion(token: string, nombre: string, rol: string, avatar: string): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('auth_token', token);
       localStorage.setItem('usuario_nombre', nombre);
       localStorage.setItem('usuario_rol', rol);
+      localStorage.setItem('usuario_avatar', avatar);
     }
   }
 
   getToken(): string | null {
-    // Solo leemos si estamos en el navegador
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem('auth_token');
     }
-    return null; // Si estamos en el servidor, devolvemos null
+    return null; 
   }
 
   isLoggedIn(): boolean {
@@ -63,6 +64,7 @@ export class AuthService {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('usuario_nombre');
       localStorage.removeItem('usuario_rol');
+      localStorage.removeItem('usuario_avatar');
     }
   }
 }

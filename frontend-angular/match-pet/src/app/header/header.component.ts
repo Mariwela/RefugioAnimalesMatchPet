@@ -12,6 +12,7 @@ import { isPlatformBrowser, CommonModule } from '@angular/common';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+  private readonly URL_BASE_AVATARS = 'http://localhost/refugioAnimalesMatchPet/backend-php/public/avatars/';
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -24,6 +25,18 @@ export class HeaderComponent {
       return localStorage.getItem('usuario_nombre') || 'Usuario';
     }
     return 'Usuario'; // Valor por defecto durante el renderizado del servidor
+  }
+
+  // Getter para la URL del Avatar
+  get urlAvatar(): string {
+    if (isPlatformBrowser(this.platformId)) {
+      const avatarGuardado = localStorage.getItem('usuario_avatar');
+      
+      if (avatarGuardado) {
+        return '${this.URL_BASE_AVATARS}${avatarGuardado}';
+      }
+    }
+    return '${this.URL_BASE_AVATARS}default_avatar.png';
   }
 
   cerrarSesion() {

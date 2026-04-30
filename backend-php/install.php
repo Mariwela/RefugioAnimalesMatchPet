@@ -40,7 +40,8 @@ try {
         pref_vivienda ENUM('Piso', 'Casa con jardín') DEFAULT NULL,
         bio_experiencia TEXT,
         estado_acogida ENUM('no_disponible', 'disponible', 'ocupado', 'pausa') DEFAULT 'no_disponible',
-        fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        avatar VARCHAR(255) DEFAULT 'default_avatar.png'
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -103,6 +104,7 @@ try {
         id_animal INT NOT NULL,
         fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         estado_solicitud ENUM('Pendiente', 'Aprobada', 'Rechazada') DEFAULT 'Pendiente',
+        comentario_admin TEXT,
         UNIQUE (id_usuario, id_animal),
         CONSTRAINT fk_usuario 
             FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
@@ -118,8 +120,21 @@ try {
         titulo VARCHAR(150) NOT NULL,
         contenido TEXT NOT NULL,
         imagen_url VARCHAR(255),
+        estado ENUM('Pendiente', 'Aprobada', 'Rechazada') DEFAULT 'Pendiente',
+        comentario_admin TEXT,
         fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL,
+        FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+    CREATE TABLE IF NOT EXISTS favoritos (
+        id_favorito INT AUTO_INCREMENT PRIMARY KEY,
+        id_usuario INT NOT NULL,
+        id_animal INT NOT NULL,
+        fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        UNIQUE KEY unico_favorito (id_usuario, id_animal),
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
         FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 

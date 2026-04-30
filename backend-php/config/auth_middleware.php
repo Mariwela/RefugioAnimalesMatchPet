@@ -1,6 +1,5 @@
 <?php
 // ================================================
-// config/auth_middleware.php
 // Protege un endpoint con una sola línea:
 //   require_once '../../config/auth_middleware.php';
 //

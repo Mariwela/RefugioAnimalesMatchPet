@@ -1,18 +1,8 @@
 <?php
-// ================================================
-// auth/login.php  (versión con JWT)
-// Cambios respecto al original:
-//   - require_once jwt.php
-//   - Recuperamos también 'rol' del usuario
-//   - Generamos token con jwt_generar()
-//   - Añadimos 'token' a la respuesta
-// El resto es idéntico al original.
-// ================================================
-
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';
-require_once '../../config/jwt.php'; // <-- ÚNICO AÑADIDO EN LOS REQUIRES
+require_once '../../config/jwt.php';
 
 $json = file_get_contents('php://input');
 $data = json_decode($json);

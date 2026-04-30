@@ -33,8 +33,7 @@
 
                 <div class="user-profile">
                     <span class="user-greeting">Hola, {{ nombreUsuario }}</span>
-                    <img src="assets/user-avatar.jpg" alt="Usuario" class="avatar">
-
+                    <img [src]="urlAvatar" [alt]="nombreUsuario" class="avatar">
                     <button (click)="cerrarSesion()" class="btn-logout" title="Cerrar sesión">
                         <i class="fa fa-sign-out"></i> Salir
                     </button>

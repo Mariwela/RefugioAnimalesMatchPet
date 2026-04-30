@@ -1,17 +1,10 @@
 <?php
-// ================================================
-// api/salud/listar.php
-// GET ?id_animal=X
-// Cualquier usuario autenticado puede consultar
-// el historial de salud de un animal.
-// ================================================
-
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
-autenticar();
+$payload = requiere_rol('admin', 'vet');
 
 $id_animal = isset($_GET['id_animal']) ? (int)$_GET['id_animal'] : 0;
 
@@ -35,9 +28,10 @@ try {
         exit;
     }
 
-    // Traemos el historial ordenado por fecha descendente
     $query = "SELECT 
                 sh.id_libro,
+                sh.id_animal,
+                sh.id_usuario,
                 sh.evento,
                 sh.titulo,
                 sh.detalles,

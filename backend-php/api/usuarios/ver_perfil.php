@@ -1,11 +1,4 @@
 <?php
-// ================================================
-// api/usuarios/perfil.php
-// GET — cualquier usuario autenticado
-// Devuelve el perfil del usuario que hace la petición
-// (lo sabemos por el token, no hace falta pasar ID)
-// ================================================
-
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';
@@ -34,6 +27,7 @@ try {
                 pref_vivienda,
                 bio_experiencia,
                 estado_acogida,
+                avatar,
                 fecha_registro
               FROM usuarios
               WHERE id_usuario = :id";

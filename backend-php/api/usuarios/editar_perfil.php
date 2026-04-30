@@ -1,18 +1,4 @@
 <?php
-// ================================================
-// api/usuarios/editar_perfil.php
-// PUT — cualquier usuario autenticado
-// Solo puede editar SU PROPIO perfil.
-// Campos editables por el usuario:
-//   nombre_completo, telefono, direccion, poblacion,
-//   provincia, codigo_postal, pref_especie,
-//   pref_energia, pref_vivienda, bio_experiencia,
-//   estado_acogida
-//
-// Campos NO editables desde aquí (por seguridad):
-//   email, password, rol, dni_nie
-// ================================================
-
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';
@@ -32,6 +18,8 @@ if (empty($data)) {
 // Cualquier otro campo que venga en el JSON lo ignoramos
 $campos_permitidos = [
     'nombre_completo',
+    'dni_nie',
+    'fecha_nacimiento',
     'telefono',
     'direccion',
     'poblacion',
@@ -41,7 +29,8 @@ $campos_permitidos = [
     'pref_energia',
     'pref_vivienda',
     'bio_experiencia',
-    'estado_acogida'
+    'estado_acogida',
+    'avatar'
 ];
 
 // Construimos el UPDATE solo con los campos permitidos que llegaron
@@ -65,16 +54,32 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
+    // COMPROBACIÓN DE DNI/NIE
+    if (isset($data['dni_nie'])) {
+        // Buscamos si el DNI ya existe, pero que NO sea el del usuario actual
+        $stmtCheck = $db->prepare("SELECT id_usuario FROM usuarios WHERE dni_nie = :dni AND id_usuario != :id");
+        $stmtCheck->execute([
+            ':dni' => $data['dni_nie'],
+            ':id'  => $payload['id_usuario']
+        ]);
+
+        if ($stmtCheck->rowCount() > 0) {
+            http_response_code(409);
+            echo json_encode(["message" => "El DNI/NIE ya pertenece a otra cuenta."]);
+            exit;
+        }
+    }    
+
     $sql = "UPDATE usuarios SET " . implode(', ', $fields) . " WHERE id_usuario = :id";
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
 
     // Devolvemos el perfil actualizado (misma lógica que perfil.php)
     $stmtPerfil = $db->prepare("SELECT 
-        id_usuario, nombre_completo, email, telefono,
-        direccion, poblacion, provincia, codigo_postal,
-        rol, pref_especie, pref_energia, pref_vivienda,
-        bio_experiencia, estado_acogida, fecha_registro
+        id_usuario, nombre_completo, dni_nie, fecha_nacimiento,
+        email, telefono, direccion, poblacion, provincia,
+        codigo_postal, rol, pref_especie, pref_energia, pref_vivienda,
+        bio_experiencia, estado_acogida, avatar, fecha_registro
         FROM usuarios WHERE id_usuario = :id");
 
     $stmtPerfil->execute([':id' => $payload['id_usuario']]);
