@@ -19,7 +19,8 @@
                 <i class="fa fa-heart-broken"></i>
             </button>
 
-            <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
+            <!-- Busca la etiqueta img y cámbiala por esto: -->
+            <img [src]="getImagenUrl(animal.foto_portada)" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
             <div class="info-animal">
                 <h3>{{ animal.nombre }}</h3>
                 <span class="etiqueta">{{ animal.especie }}</span>

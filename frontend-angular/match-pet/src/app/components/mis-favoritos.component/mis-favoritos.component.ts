@@ -14,7 +14,7 @@ export class MisFavoritosComponent implements OnInit {
   animalesFavoritos: any[] = [];
   cargando: boolean = true;
   errorMsg: string = '';
-
+  baseUrlImagenes = 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/img/animales/';
   // Usamos inject para seguir tu estilo de código
   private favoritosService = inject(Favoritos);
   private router = inject(Router);
@@ -57,5 +57,17 @@ export class MisFavoritosComponent implements OnInit {
 
   verDetalles(id_animal: number) {
     this.router.navigate(['/animal', id_animal]);
+  }
+
+  getImagenUrl(foto: string): string {
+    if (!foto) return 'assets/img/default_animal.jpg'; // Imagen por defecto si no hay foto
+
+    // Si la foto ya es una URL completa (empieza por http), la devolvemos tal cual
+    if (foto.startsWith('http')) {
+      return foto;
+    }
+
+    // Si no, le pegamos la base de nuestro servidor
+    return `${this.baseUrlImagenes}${foto}`;
   }
 }
