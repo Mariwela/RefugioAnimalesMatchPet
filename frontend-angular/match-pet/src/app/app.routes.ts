@@ -4,12 +4,12 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AnimalComponent } from './components/animal.component/animal.component';
 import { AnimalDetalleComponent } from './components/animal-detalle.component/animal-detalle.component';
-
-// 1. IMPORTANTE: Importar tu nuevo componente de Login
-// (Asegúrate de que la ruta coincida con la ubicación real de tu archivo)
 import { LoginComponent } from './components/login.component/login.component';
 import { AnimalEditComponent } from './components/animal-edit.component/animal-edit.component';
 import { AnimalCrearComponent } from './components/animal-crear.component/animal-crear.component';
+
+// 👇 1. NUEVO: Importa el componente de Favoritos 👇
+import { MisFavoritosComponent } from './components/mis-favoritos.component/mis-favoritos.component';
 
 export const routes: Routes = [
     // Rutas públicas que ya tenías
@@ -17,23 +17,16 @@ export const routes: Routes = [
     { path: 'animales', component: AnimalComponent },
     { path: 'animal/:id', component: AnimalDetalleComponent },
 
-    // 2. Agregamos la ruta del Login
+    // Agregamos la ruta del Login
     { path: 'login', component: LoginComponent },
 
-    // 3. Aquí irás agregando los demás componentes a medida que los crees.
-    // Por ahora los dejamos comentados para que no te dé error si aún no existen los archivos:
-
-    // { path: 'eventos', component: EventosComponent },
-    // { path: 'comunidad', component: ComunidadComponent },
-
     // -- Paneles de usuario (Rutas que deberían ser privadas) --
-    // { path: 'admin-panel', component: AdminPanelComponent },
-    // { path: 'veterinaria-panel', component: VetPanelComponent },
-    // { path: 'acogida-dashboard', component: AcogidaComponent },
     { path: 'animales/editar/:id', component: AnimalEditComponent },
     { path: 'animales/crear', component: AnimalCrearComponent },
-    // 4. RUTA COMODÍN (Wildcard)
-    // Es una buena práctica poner esto al final. Si el usuario escribe una URL 
-    // que no existe (ej: localhost:4200/rutainventada), lo redirige al inicio.
+
+    // 👇 2. NUEVO: Añadimos la ruta para "Mis Favoritos" 👇
+    { path: 'mis-favoritos', component: MisFavoritosComponent },
+
+    // RUTA COMODÍN (Wildcard) - Siempre al final
     { path: '**', redirectTo: '' }
 ];

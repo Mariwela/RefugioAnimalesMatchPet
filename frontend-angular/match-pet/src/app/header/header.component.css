@@ -245,3 +245,37 @@
         display: none;
     }
 }
+
+.fav-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #333;
+    /* O el color de tus iconos */
+    margin-right: 15px;
+    transition: color 0.3s ease;
+}
+
+.fav-link i {
+    font-size: 1.2rem;
+    color: #e74c3c;
+    /* Color rojo para el corazón */
+}
+
+.fav-text {
+    margin-left: 5px;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.fav-link:hover {
+    color: #e74c3c;
+    transform: scale(1.05);
+}
+
+/* Ocultar texto en móviles si el espacio es poco */
+@media (max-width: 768px) {
+    .fav-text {
+        display: none;
+    }
+}

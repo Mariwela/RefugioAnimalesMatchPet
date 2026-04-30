@@ -1,1 +1,41 @@
-<p>mis-favoritos.component works!</p>
+<div class="contenedor-animales">
+    <h2>❤️ Mis Peludos Favoritos</h2>
+
+    <div *ngIf="cargando" class="mensaje-carga">
+        <p>Cargando tu lista de favoritos...</p>
+    </div>
+
+    <div *ngIf="errorMsg" class="mensaje-error">
+        <p>{{ errorMsg }}</p>
+    </div>
+
+    <!-- Si no hay errores, no está cargando y hay animales -->
+    <div *ngIf="!cargando && !errorMsg && animalesFavoritos.length > 0" class="grid-animales">
+        <div class="tarjeta-animal" *ngFor="let animal of animalesFavoritos">
+
+            <!-- Botón para quitar de favoritos (Corazón roto o papelera) -->
+            <button class="btn-quitar-favorito" (click)="quitarDeFavoritos(animal.id_animal)"
+                title="Quitar de favoritos">
+                <i class="fa fa-heart-broken"></i>
+            </button>
+
+            <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
+            <div class="info-animal">
+                <h3>{{ animal.nombre }}</h3>
+                <span class="etiqueta">{{ animal.especie }}</span>
+                <p><strong>Raza:</strong> {{ animal.raza }}</p>
+                <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
+
+                <div class="acciones-tarjeta">
+                    <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensaje si la lista está vacía -->
+    <div *ngIf="!cargando && !errorMsg && animalesFavoritos.length === 0" class="sin-resultados">
+        <p>Aún no tienes ningún animal en tu lista de favoritos.</p>
+        <button class="btn-adoptar" routerLink="/animales">Explorar Animales</button>
+    </div>
+</div>

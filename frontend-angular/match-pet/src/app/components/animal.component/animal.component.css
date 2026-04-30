@@ -228,3 +228,23 @@ h2 {
     /* Le ponemos una sombra negra para que se vea bien aunque la foto sea blanca */
     text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.8);
 }
+
+.tarjeta-animal {
+    position: relative;
+    /* Obligatorio para que el botón se quede dentro */
+}
+
+.btn-favorito {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 50;
+    /* Para que esté siempre por encima de la foto */
+    background: rgba(255, 255, 255, 0.7);
+    /* Un fondo ligero para verlo */
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+}

@@ -13,7 +13,11 @@ export class Favoritos {
 
   // Método auxiliar para obtener los headers con el token
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    // 👇 CAMBIA 'token' POR 'auth_token' (o el nombre que uses al hacer login)
+    const token = localStorage.getItem('auth_token');
+
+    console.log("Token recuperado para la petición:", token);
+
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
@@ -30,4 +34,5 @@ export class Favoritos {
   eliminarFavorito(id_animal: number): Observable<any> {
     return this.http.post(`${this.apiUrl}/eliminar_favorito.php`, { id_animal }, { headers: this.getHeaders() });
   }
+
 }

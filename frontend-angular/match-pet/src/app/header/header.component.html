@@ -32,8 +32,13 @@
             <div class="auth-buttons" *ngIf="!authService.isLoggedIn()">
                 <a routerLink="/login" class="btn-login">Entrar</a>
             </div>
-
             <div class="user-icons" *ngIf="authService.isLoggedIn()">
+                <!-- 👇 NUEVO ENLACE A MIS FAVORITOS 👇 -->
+                <a routerLink="/mis-favoritos" routerLinkActive="active" class="fav-link" title="Mis Favoritos">
+                    <i class="fa fa-heart"></i>
+                    <span class="fav-text">Favoritos</span>
+                </a>
+
                 <i class="fa fa-bell notification-icon"></i>
 
                 <div class="user-profile">

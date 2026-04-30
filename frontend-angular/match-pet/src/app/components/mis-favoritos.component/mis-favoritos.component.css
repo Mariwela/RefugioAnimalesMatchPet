@@ -1,0 +1,174 @@
+/* Contenedor principal */
+.contenedor-animales {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+}
+
+h2 {
+    color: #333;
+    font-size: 2rem;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 700;
+}
+
+/* Grid de Tarjetas */
+.grid-animales {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 25px;
+    padding-bottom: 50px;
+}
+
+/* Tarjeta Individual */
+.tarjeta-animal {
+    background: #fff;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    position: relative;
+    /* Necesario para el botón flotante */
+    display: flex;
+    flex-direction: column;
+}
+
+.tarjeta-animal:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Imagen del Animal */
+.foto-animal {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Botón flotante para quitar de favoritos */
+.btn-quitar-favorito {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #e74c3c;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.btn-quitar-favorito:hover {
+    background: #e74c3c;
+    color: white;
+    transform: scale(1.1);
+}
+
+.btn-quitar-favorito i {
+    font-size: 1.1rem;
+}
+
+/* Información del animal */
+.info-animal {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.info-animal h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.4rem;
+    color: #2c3e50;
+}
+
+.etiqueta {
+    display: inline-block;
+    background: #f1f8ff;
+    color: #3498db;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    align-self: flex-start;
+}
+
+.info-animal p {
+    margin: 5px 0;
+    color: #666;
+    font-size: 0.95rem;
+}
+
+/* Botones de acción */
+.acciones-tarjeta {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.btn-adoptar {
+    width: 100%;
+    padding: 10px;
+    background: #ff6b6b;
+    /* Color MatchPet */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.btn-adoptar:hover {
+    background: #ee5253;
+}
+
+/* Estados: Carga, Error y Vacío */
+.mensaje-carga,
+.mensaje-error,
+.sin-resultados {
+    text-align: center;
+    padding: 60px 20px;
+    background: #f9f9f9;
+    border-radius: 15px;
+    margin: 20px 0;
+}
+
+.sin-resultados p {
+    font-size: 1.2rem;
+    color: #7f8c8d;
+    margin-bottom: 20px;
+}
+
+/* Animación de carga simple */
+.mensaje-carga p::after {
+    content: '...';
+    animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+
+    0%,
+    20% {
+        content: '.';
+    }
+
+    40% {
+        content: '..';
+    }
+
+    60%,
+    100% {
+        content: '...';
+    }
+}

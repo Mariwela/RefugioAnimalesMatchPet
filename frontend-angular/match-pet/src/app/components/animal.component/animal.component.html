@@ -12,14 +12,22 @@
     <div *ngIf="!cargando && !errorMsg" class="grid-animales">
         <div class="tarjeta-animal" *ngFor="let animal of animales">
 
-            <!-- 👇 NUEVO BOTÓN DE FAVORITO (SOLO SI ESTÁ LOGUEADO) 👇 -->
-            <button class="btn-favorito" *ngIf="authService.isLoggedIn()" (click)="toggleFavorito(animal.id_animal)">
+            <!-- 👇 ESTE ES EL BOTÓN QUE DEBES ASEGURARTE DE TENER 👇 -->
+            <button class="btn-favorito" *ngIf="authService.getToken()" (click)="toggleFavorito(animal.id_animal)">
                 <i class="fa"
-                    [ngClass]="isFavorito(animal.id_animal) ? 'fa-heart corazon-rojo' : 'fa-heart-o corazon-blanco'"></i>
+                    [ngClass]="isFavorito(animal.id_animal) ? 'fas fa-heart corazon-rojo' : 'far fa-heart corazon-blanco'"></i>
             </button>
-            <!-- 👆 FIN BOTÓN FAVORITO 👆 -->
+            <button class="btn-favorito" (click)="toggleFavorito(animal.id_animal)"
+                style="position: absolute; top: 5px; right: 5px; z-index: 999; background: white; border: 1px solid red;">
+                <!-- Si ves el texto "SI" o "NO", la lógica funciona y el problema son los iconos -->
+                <b *ngIf="isFavorito(animal.id_animal)" style="color: red;">SI ❤️</b>
+                <b *ngIf="!isFavorito(animal.id_animal)" style="color: gray;">NO 🤍</b>
+            </button>
+            <!-- 👆 ---------------------------------------------- 👆 -->
 
             <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
+
+            <!-- ... resto de la info del animal ... -->
             <div class="info-animal">
                 <h3>{{ animal.nombre }}</h3>
                 <span class="etiqueta">{{ animal.especie }}</span>
