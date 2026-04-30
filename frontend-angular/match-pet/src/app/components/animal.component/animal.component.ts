@@ -114,4 +114,43 @@ export class AnimalComponent implements OnInit {
       }
     });
   }
+  // Define este array en tu componente para guardar los IDs de los favoritos
+  favoritosIds: number[] = [];
+
+  // En tu ngOnInit, si el usuario está logueado, llama a la API de lista de favoritos
+  cargarFavoritosUsuario() {
+    if (this.authService.isLoggedIn()) {
+      this.favoritosService.getFavoritos().subscribe({
+        next: (res) => {
+          if (res.status === 'success') {
+            // Extraemos solo los IDs para hacer la comprobación más rápida
+            this.favoritosIds = res.data.map((fav: any) => fav.id_animal);
+          }
+        },
+        error: (err) => console.error("Error al cargar favoritos", err)
+      });
+    }
+  }
+
+  // Método para que el HTML compruebe si el corazón va en rojo o blanco
+  isFavorito(id_animal: number): boolean {
+    return this.favoritosIds.includes(id_animal);
+  }
+
+  // Método que se ejecuta al hacer clic en el corazón
+  toggleFavorito(id_animal: number) {
+    if (this.isFavorito(id_animal)) {
+      // Si ya es favorito, llamamos a la API de ELIMINAR
+      this.favoritosService.eliminarFavorito(id_animal).subscribe(() => {
+        // Lo quitamos del array local para que el corazón se ponga blanco de inmediato
+        this.favoritosIds = this.favoritosIds.filter(id => id !== id_animal);
+      });
+    } else {
+      // Si no es favorito, llamamos a la API de AGREGAR
+      this.favoritosService.agregarFavorito(id_animal).subscribe(() => {
+        // Lo añadimos al array local para que el corazón se ponga rojo de inmediato
+        this.favoritosIds.push(id_animal);
+      });
+    }
+  }
 }

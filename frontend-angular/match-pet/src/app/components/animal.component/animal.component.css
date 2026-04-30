@@ -191,3 +191,40 @@ h2 {
 .btn-eliminar i {
     font-size: 1.1rem;
 }
+
+/* Asegúrate de que tu tarjeta tenga position: relative para que el corazón flote dentro de ella */
+.tarjeta-animal {
+    position: relative;
+    /* ... el resto de tus estilos ... */
+}
+
+/* Estilos del botón del corazón */
+.btn-favorito {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    /* Tamaño del corazón */
+    cursor: pointer;
+    z-index: 10;
+    transition: transform 0.2s ease-in-out;
+}
+
+/* Pequeño efecto de zoom al pasar el ratón por encima */
+.btn-favorito:hover {
+    transform: scale(1.15);
+}
+
+/* Colores */
+.corazon-rojo {
+    color: #e74c3c;
+    /* Un rojo agradable */
+}
+
+.corazon-blanco {
+    color: white;
+    /* Le ponemos una sombra negra para que se vea bien aunque la foto sea blanca */
+    text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.8);
+}

@@ -11,6 +11,14 @@
 
     <div *ngIf="!cargando && !errorMsg" class="grid-animales">
         <div class="tarjeta-animal" *ngFor="let animal of animales">
+
+            <!-- 👇 NUEVO BOTÓN DE FAVORITO (SOLO SI ESTÁ LOGUEADO) 👇 -->
+            <button class="btn-favorito" *ngIf="authService.isLoggedIn()" (click)="toggleFavorito(animal.id_animal)">
+                <i class="fa"
+                    [ngClass]="isFavorito(animal.id_animal) ? 'fa-heart corazon-rojo' : 'fa-heart-o corazon-blanco'"></i>
+            </button>
+            <!-- 👆 FIN BOTÓN FAVORITO 👆 -->
+
             <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
             <div class="info-animal">
                 <h3>{{ animal.nombre }}</h3>
@@ -22,12 +30,10 @@
                 <div class="acciones-tarjeta">
                     <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
 
-                    <!-- 👇 NUEVO BOTÓN DE ELIMINAR (SOLO ADMIN) 👇 -->
                     <button class="btn-eliminar" *ngIf="authService.isAdmin()"
                         (click)="eliminarAnimal(animal.id_animal, animal.nombre)">
                         <i class="fa fa-trash"></i> Eliminar
                     </button>
-                    <!-- 👆 FIN BOTÓN ELIMINAR 👆 -->
                 </div>
             </div>
         </div>
@@ -37,9 +43,7 @@
         <button [disabled]="paginaActual === 1" (click)="cambiarPagina(paginaActual - 1)">
             Anterior
         </button>
-
         <span>Página {{ paginaActual }}</span>
-
         <button [disabled]="animales.length < 20" (click)="cambiarPagina(paginaActual + 1)">
             Siguiente
         </button>
@@ -48,5 +52,4 @@
     <div *ngIf="!cargando && !errorMsg && animales.length === 0" class="sin-resultados">
         <p>Actualmente no hay animales disponibles para adopción.</p>
     </div>
-
 </div>
