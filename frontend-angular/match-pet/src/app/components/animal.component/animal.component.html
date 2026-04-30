@@ -18,10 +18,21 @@
                 <p><strong>Raza:</strong> {{ animal.raza }}</p>
                 <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
                 <p><strong>Tamaño:</strong> {{ animal.tamano }}</p>
-                <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
+
+                <div class="acciones-tarjeta">
+                    <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
+
+                    <!-- 👇 NUEVO BOTÓN DE ELIMINAR (SOLO ADMIN) 👇 -->
+                    <button class="btn-eliminar" *ngIf="authService.isAdmin()"
+                        (click)="eliminarAnimal(animal.id_animal, animal.nombre)">
+                        <i class="fa fa-trash"></i> Eliminar
+                    </button>
+                    <!-- 👆 FIN BOTÓN ELIMINAR 👆 -->
+                </div>
             </div>
         </div>
     </div>
+
     <div class="paginacion" *ngIf="!cargando && !errorMsg && animales.length > 0">
         <button [disabled]="paginaActual === 1" (click)="cambiarPagina(paginaActual - 1)">
             Anterior

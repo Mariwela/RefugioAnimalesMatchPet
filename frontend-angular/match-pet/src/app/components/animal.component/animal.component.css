@@ -154,3 +154,40 @@ h2 {
     font-weight: bold;
     color: var(--text-dark);
 }
+
+/* Contenedor para alinear los botones uno al lado del otro o en columna */
+.acciones-tarjeta {
+    display: flex;
+    flex-direction: column;
+    /* Cambia a 'row' si los prefieres uno al lado del otro */
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Estilo del botón eliminar */
+.btn-eliminar {
+    background-color: var(--bg-white);
+    color: var(--error-red);
+    border: 2px solid var(--error-red);
+    padding: 8px 15px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    /* Ocupará todo el ancho disponible */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-eliminar:hover {
+    background-color: var(--error-red);
+    color: var(--bg-white);
+}
+
+.btn-eliminar i {
+    font-size: 1.1rem;
+}

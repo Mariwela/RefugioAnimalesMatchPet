@@ -1,7 +1,10 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core'; // 1. Importamos ChangeDetectorRef
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core'; // 👇 NUEVO: importamos inject
 import { CommonModule } from '@angular/common';
 import { AnimalService } from '../../services/animal';
 import { Router } from '@angular/router';
+// 👇 NUEVO: Importamos el servicio de Auth y el cliente HTTP
+import { AuthService } from '../../services/auth'; // ⚠️ Ajusta esta ruta si tu servicio de auth está en otra carpeta
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Component({
   selector: 'app-animal',
@@ -15,9 +18,11 @@ export class AnimalComponent implements OnInit {
   cargando: boolean = true;
   errorMsg: string = '';
   animalIdSeleccionado: number | null = null;
-
-  // 1. NUEVO: Variable para controlar la página actual
   paginaActual: number = 1;
+
+  // 👇 NUEVO: Inyectamos authService como público para el HTML y http para hacer la petición
+  public authService = inject(AuthService);
+  private http = inject(HttpClient);
 
   constructor(
     private animalService: AnimalService,
@@ -41,9 +46,8 @@ export class AnimalComponent implements OnInit {
   }
 
   cargarAnimales(): void {
-    this.cargando = true; // 2. IMPORTANTE: Ponemos esto en true para mostrar el "Cargando..." al cambiar de página
+    this.cargando = true;
 
-    // 3. Pasamos la página actual al servicio
     this.animalService.getAnimalesDisponibles(this.paginaActual).subscribe({
       next: (res) => {
         this.animales = res.data;
@@ -60,14 +64,54 @@ export class AnimalComponent implements OnInit {
     });
   }
 
-  // 4. NUEVO: Función para cambiar de página
   cambiarPagina(nuevaPagina: number): void {
     if (nuevaPagina >= 1) {
       this.paginaActual = nuevaPagina;
-      this.cargarAnimales(); // Volvemos a llamar a la base de datos con la nueva página
-
-      // Opcional: Hace que la pantalla suba al principio de la lista al cambiar de página
+      this.cargarAnimales();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  }
+
+  // 👇 NUEVO: Método para eliminar un animal
+  eliminarAnimal(idAnimal: number, nombreAnimal: string) {
+    const confirmacion = window.confirm(`¿Estás seguro de que deseas eliminar a ${nombreAnimal}? Esta acción borrará todas sus fotos y no se puede deshacer.`);
+
+    if (!confirmacion) {
+      return;
+    }
+
+    // ⚠️ Asegúrate de que esta URL coincida con la ruta de tu proyecto PHP
+    const apiUrlEliminar = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/eliminar_animal.php';
+    const token = this.authService.getToken() || '';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    this.http.post<any>(apiUrlEliminar, { id_animal: idAnimal }, { headers }).subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          alert(`¡${nombreAnimal} ha sido eliminado correctamente!`);
+
+          // Filtramos el array para quitar la tarjeta instantáneamente sin recargar la página
+          this.animales = this.animales.filter(a => a.id_animal !== idAnimal);
+
+          // Le avisamos a Angular que repinte la vista porque quitamos un animal
+          this.cdr.detectChanges();
+
+          // (Opcional) Si la página se quedó vacía, volvemos a la anterior
+          if (this.animales.length === 0 && this.paginaActual > 1) {
+            this.cambiarPagina(this.paginaActual - 1);
+          }
+        } else {
+          alert('Error: ' + response.message);
+        }
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Error de conexión al intentar eliminar.');
+      }
+    });
   }
 }
