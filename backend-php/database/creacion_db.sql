@@ -126,3 +126,21 @@ CREATE TABLE IF NOT EXISTS historias_adopcion (
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL,
     FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- 7. Favoritos
+CREATE TABLE IF NOT EXISTS favoritos (
+    id_usuario INT NOT NULL,
+    id_animal INT NOT NULL,
+    fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    
+    PRIMARY KEY (id_usuario, id_animal),
+
+    CONSTRAINT fk_fav_usuario 
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+
+    CONSTRAINT fk_fav_animal 
+        FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Ahora sí (cuando ya existe la tabla)
+INSERT INTO favoritos (id_usuario, id_animal) VALUES (1, 1);
