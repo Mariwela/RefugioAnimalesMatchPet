@@ -11,47 +11,30 @@
 
     <div *ngIf="!cargando && !errorMsg" class="grid-animales">
         <div class="tarjeta-animal" *ngFor="let animal of animales">
-
-            <!-- 👇 ESTE ES EL BOTÓN QUE DEBES ASEGURARTE DE TENER 👇 -->
-            <button class="btn-favorito" *ngIf="authService.getToken()" (click)="toggleFavorito(animal.id_animal)">
-                <i class="fa"
-                    [ngClass]="isFavorito(animal.id_animal) ? 'fas fa-heart corazon-rojo' : 'far fa-heart corazon-blanco'"></i>
-            </button>
-            <button class="btn-favorito" (click)="toggleFavorito(animal.id_animal)"
-                style="position: absolute; top: 5px; right: 5px; z-index: 999; background: white; border: 1px solid red;">
-                <!-- Si ves el texto "SI" o "NO", la lógica funciona y el problema son los iconos -->
-                <b *ngIf="isFavorito(animal.id_animal)" style="color: red;">SI ❤️</b>
-                <b *ngIf="!isFavorito(animal.id_animal)" style="color: gray;">NO 🤍</b>
-            </button>
-            <!-- 👆 ---------------------------------------------- 👆 -->
-
             <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
-
-            <!-- ... resto de la info del animal ... -->
             <div class="info-animal">
                 <h3>{{ animal.nombre }}</h3>
                 <span class="etiqueta">{{ animal.especie }}</span>
                 <p><strong>Raza:</strong> {{ animal.raza }}</p>
                 <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
                 <p><strong>Tamaño:</strong> {{ animal.tamano }}</p>
-
-                <div class="acciones-tarjeta">
-                    <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
-
-                    <button class="btn-eliminar" *ngIf="authService.isAdmin()"
-                        (click)="eliminarAnimal(animal.id_animal, animal.nombre)">
-                        <i class="fa fa-trash"></i> Eliminar
-                    </button>
-                </div>
+                <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
+                <button class="btn-favorito" (click)="toggleFavorito(animal.id_animal)"
+                    style="position: absolute; top: 5px; right: 5px; z-index: 999; background: white; border: 1px solid red;">
+                    <!-- Si ves el texto "SI" o "NO", la lógica funciona y el problema son los iconos -->
+                    <b *ngIf="isFavorito(animal.id_animal)" style="color: red;">SI ❤️</b>
+                    <b *ngIf="!isFavorito(animal.id_animal)" style="color: gray;">NO 🤍</b>
+                </button>
             </div>
         </div>
     </div>
-
     <div class="paginacion" *ngIf="!cargando && !errorMsg && animales.length > 0">
         <button [disabled]="paginaActual === 1" (click)="cambiarPagina(paginaActual - 1)">
             Anterior
         </button>
+
         <span>Página {{ paginaActual }}</span>
+
         <button [disabled]="animales.length < 20" (click)="cambiarPagina(paginaActual + 1)">
             Siguiente
         </button>
@@ -60,4 +43,5 @@
     <div *ngIf="!cargando && !errorMsg && animales.length === 0" class="sin-resultados">
         <p>Actualmente no hay animales disponibles para adopción.</p>
     </div>
+
 </div>
