@@ -13,7 +13,6 @@ export class AnimalCrearComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
 
-  // Creamos el formulario haciendo coincidir los nombres con los que espera tu PHP ($data->nombre, etc.)
   animalForm: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
     especie: ['', Validators.required],
@@ -28,8 +27,18 @@ export class AnimalCrearComponent {
   esError: boolean = false;
   cargando: boolean = false;
 
+  // 👇 Variable para guardar la foto que selecciona el usuario
+  fotoSeleccionada: File | null = null;
+
+  // 👇 Método que se ejecuta cuando el usuario elige una imagen
+  onFileSeleccionada(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      this.fotoSeleccionada = file;
+    }
+  }
+
   guardarAnimal() {
-    // Si el formulario es inválido, marcamos los campos para que se muestren los errores en el HTML
     if (this.animalForm.invalid) {
       this.animalForm.markAllAsTouched();
       return;
@@ -38,27 +47,31 @@ export class AnimalCrearComponent {
     this.cargando = true;
     this.mensaje = '';
 
-    // Reemplaza esto con la URL real donde tengas tu archivo PHP
-    const apiUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/insertar_animal.php';
-
-    // Aquí enviamos el token de autorización que necesita tu auth_middleware.php
-    const token = localStorage.getItem('token') || '';
+    const apiUrlCrear = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/crear_animal.php';
+    const token = localStorage.getItem('auth_token') || '';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}` // Asegúrate de que el formato coincida con lo que espera tu backend
+      'Authorization': `Bearer ${token}`
     });
 
-    // Enviamos los valores del formulario al PHP
-    this.http.post<any>(apiUrl, this.animalForm.value, { headers }).subscribe({
+    // 1️⃣ PRIMER PASO: Crear el animal con los datos de texto
+    this.http.post<any>(apiUrlCrear, this.animalForm.value, { headers }).subscribe({
       next: (response) => {
-        this.cargando = false;
-
         if (response.status === 'success') {
-          this.mensaje = response.message;
-          this.esError = false;
-          this.animalForm.reset(); // Limpiamos el formulario
-          console.log('URL de la foto asignada:', response.url_completa);
+
+          // 2️⃣ SEGUNDO PASO: Si hay foto, la subimos usando el nuevo ID
+          if (this.fotoSeleccionada) {
+            this.subirFoto(response.id_animal);
+          } else {
+            // Si no hay foto, terminamos aquí
+            this.cargando = false;
+            this.mensaje = 'Animal creado con éxito (Sin foto).';
+            this.esError = false;
+            this.reiniciarFormulario();
+          }
+
         } else {
+          this.cargando = false;
           this.mensaje = response.message || 'Error al guardar el animal.';
           this.esError = true;
         }
@@ -66,9 +79,59 @@ export class AnimalCrearComponent {
       error: (err) => {
         this.cargando = false;
         this.esError = true;
-        this.mensaje = 'Error de comunicación con el servidor (Revisa si el middleware te está bloqueando por falta de token).';
+        this.mensaje = 'Error de comunicación con el servidor.';
         console.error(err);
       }
     });
   }
+
+  // 👇 Método para subir la foto usando FormData
+  subirFoto(idAnimal: number) {
+    const apiUrlFoto = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/subir_foto_animal.php'; // Ajusta la ruta
+    const token = localStorage.getItem('auth_token') || '';
+
+    // Usamos FormData porque vamos a enviar un archivo físico, no JSON
+    const formData = new FormData();
+    formData.append('foto', this.fotoSeleccionada as Blob);
+    formData.append('id_animal', idAnimal.toString());
+    formData.append('es_portada', '1'); // 1 = Es la foto principal
+
+    // ⚠️ ATENCIÓN: Al usar FormData, NO debes enviar 'Content-Type'. 
+    // El navegador lo asigna automáticamente como 'multipart/form-data'.
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    this.http.post<any>(apiUrlFoto, formData, { headers }).subscribe({
+      next: (response) => {
+        this.cargando = false;
+        if (response.status === 'success') {
+          this.mensaje = '¡Animal y foto creados correctamente!';
+          this.esError = false;
+          this.reiniciarFormulario();
+        } else {
+          this.mensaje = 'Animal creado, pero hubo un error con la foto: ' + response.message;
+          this.esError = true;
+        }
+      },
+      error: (err) => {
+        this.cargando = false;
+        this.mensaje = 'Animal creado, pero falló la conexión al subir la foto.';
+        this.esError = true;
+        console.error(err);
+      }
+    });
+  }
+
+  // Limpia los campos después de un guardado exitoso
+  reiniciarFormulario() {
+    this.animalForm.reset();
+    this.fotoSeleccionada = null;
+
+    // Limpiamos el input file en el HTML manualmente
+    const fileInput = document.getElementById('foto') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
 }
+
