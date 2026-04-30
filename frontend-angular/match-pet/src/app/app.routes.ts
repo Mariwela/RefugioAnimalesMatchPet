@@ -8,7 +8,8 @@ import { AnimalDetalleComponent } from './components/animal-detalle.component/an
 // 1. IMPORTANTE: Importar tu nuevo componente de Login
 // (Asegúrate de que la ruta coincida con la ubicación real de tu archivo)
 import { LoginComponent } from './components/login.component/login.component';
-import { AnimalEditComponent } from './componentes/animal-edit.component/animal-edit.component';
+import { AnimalEditComponent } from './components/animal-edit.component/animal-edit.component';
+import { AnimalCrearComponent } from './components/animal-crear.component/animal-crear.component';
 
 export const routes: Routes = [
     // Rutas públicas que ya tenías
@@ -30,6 +31,7 @@ export const routes: Routes = [
     // { path: 'veterinaria-panel', component: VetPanelComponent },
     // { path: 'acogida-dashboard', component: AcogidaComponent },
     { path: 'animales/editar/:id', component: AnimalEditComponent },
+    { path: 'animales/crear', component: AnimalCrearComponent },
     // 4. RUTA COMODÍN (Wildcard)
     // Es una buena práctica poner esto al final. Si el usuario escribe una URL 
     // que no existe (ej: localhost:4200/rutainventada), lo redirige al inicio.

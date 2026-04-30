@@ -1,4 +1,4 @@
-import { Component, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, inject, Inject, PLATFORM_ID } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../services/auth';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
@@ -12,10 +12,13 @@ import { isPlatformBrowser, CommonModule } from '@angular/common';
   styleUrl: './header.component.css',
 })
 export class HeaderComponent {
+
   private readonly URL_BASE_AVATARS = 'http://localhost/refugioAnimalesMatchPet/backend-php/public/avatars/';
+
   constructor(
     public authService: AuthService,
     private router: Router,
+
     @Inject(PLATFORM_ID) private platformId: Object // <-- Inyectar plataforma aquí también
   ) { }
 
@@ -31,7 +34,7 @@ export class HeaderComponent {
   get urlAvatar(): string {
     if (isPlatformBrowser(this.platformId)) {
       const avatarGuardado = localStorage.getItem('usuario_avatar');
-      
+
       if (avatarGuardado) {
         return '${this.URL_BASE_AVATARS}${avatarGuardado}';
       }

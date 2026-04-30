@@ -1,1 +1,66 @@
-<p>animal-crear.component works!</p>
+<div class="contenedor-formulario">
+    <h2>Añadir Nuevo Animal</h2>
+
+    <!-- Mostramos mensajes de éxito o error -->
+    <div *ngIf="mensaje" [ngClass]="{'alerta-error': esError, 'alerta-exito': !esError}">
+        {{ mensaje }}
+    </div>
+
+    <form [formGroup]="animalForm" (ngSubmit)="guardarAnimal()">
+
+        <div>
+            <label for="nombre">Nombre *</label>
+            <input type="text" id="nombre" formControlName="nombre">
+            <small class="error" *ngIf="animalForm.get('nombre')?.invalid && animalForm.get('nombre')?.touched">
+                El nombre es obligatorio.
+            </small>
+        </div>
+
+        <div>
+            <label for="especie">Especie *</label>
+            <input type="text" id="especie" formControlName="especie" placeholder="Ej: Perro, Gato...">
+            <small class="error" *ngIf="animalForm.get('especie')?.invalid && animalForm.get('especie')?.touched">
+                La especie es obligatoria.
+            </small>
+        </div>
+
+        <div>
+            <label for="raza">Raza</label>
+            <input type="text" id="raza" formControlName="raza">
+        </div>
+
+        <div>
+            <label for="sexo">Sexo</label>
+            <select id="sexo" formControlName="sexo">
+                <option value="">Seleccionar...</option>
+                <option value="Macho">Macho</option>
+                <option value="Hembra">Hembra</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+            <input type="date" id="fecha_nacimiento" formControlName="fecha_nacimiento">
+        </div>
+
+        <div>
+            <label for="tamano">Tamaño</label>
+            <select id="tamano" formControlName="tamano">
+                <option value="">Seleccionar...</option>
+                <option value="Pequeño">Pequeño</option>
+                <option value="Mediano">Mediano</option>
+                <option value="Grande">Grande</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" formControlName="descripcion" rows="4"></textarea>
+        </div>
+
+        <button type="submit" [disabled]="cargando">
+            {{ cargando ? 'Guardando...' : 'Guardar Animal' }}
+        </button>
+
+    </form>
+</div>

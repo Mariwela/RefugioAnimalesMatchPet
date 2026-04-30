@@ -15,6 +15,11 @@
                 <li><a routerLink="/pareja" routerLinkActive="active">Encontrar Pareja</a></li>
                 <li><a routerLink="/eventos" routerLinkActive="active">Eventos</a></li>
                 <li><a routerLink="/comunidad" routerLinkActive="active">Comunidad</a></li>
+                <li *ngIf="authService.isAdmin()">
+                    <a routerLink="/animales/crear" routerLinkActive="active" class="admin-link">
+                        <i class="fa fa-plus"></i> Añadir Animal
+                    </a>
+                </li>
             </ul>
         </nav>
 

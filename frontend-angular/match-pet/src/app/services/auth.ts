@@ -45,7 +45,7 @@ export class AuthService {
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem('auth_token');
     }
-    return null; 
+    return null;
   }
 
   isLoggedIn(): boolean {
@@ -57,6 +57,10 @@ export class AuthService {
       return localStorage.getItem('usuario_rol');
     }
     return null;
+  }
+  isAdmin(): boolean {
+    // Retorna true solo si el rol guardado en localStorage es exactamente 'admin'
+    return this.getRol() === 'admin';
   }
 
   logout(): void {

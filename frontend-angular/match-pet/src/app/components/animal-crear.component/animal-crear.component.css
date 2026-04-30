@@ -1,0 +1,182 @@
+/* =========================================
+   Variables Locales (Heredadas de MatchPet)
+   ========================================= */
+:host {
+    display: block;
+    --primary-salmon: #ff6b6b;
+    --salmon-hover: #fa5252;
+    --salmon-light: rgba(255, 107, 107, 0.15);
+    --text-dark: #374151;
+    --text-light: #6b7280;
+    --bg-white: #FFFFFF;
+    --bg-page: #f8f9fa;
+    /* Fondo gris muy suave para que resalte la tarjeta */
+    --error-red: #ef4444;
+    --success-green: #10b981;
+    --border-color: #e5e7eb;
+}
+
+/* =========================================
+   Contenedor Principal
+   ========================================= */
+.contenedor-formulario {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--bg-white);
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+.contenedor-formulario h2 {
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 25px;
+    text-align: center;
+    border-bottom: 2px solid var(--salmon-light);
+    padding-bottom: 15px;
+}
+
+/* =========================================
+   Alertas (Mensajes de Éxito / Error)
+   ========================================= */
+.alerta-exito,
+.alerta-error {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.alerta-exito {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--success-green);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.alerta-error {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--error-red);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+/* =========================================
+   Estructura del Formulario
+   ========================================= */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* =========================================
+   Inputs, Selects y Textareas
+   ========================================= */
+label {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    color: var(--text-dark);
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    /* Para evitar que el padding rompa el ancho */
+}
+
+input[type="text"]:focus,
+input[type="date"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-salmon);
+    background-color: var(--bg-white);
+    box-shadow: 0 0 0 3px var(--salmon-light);
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+/* Estilos para el placeholder */
+::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+}
+
+/* =========================================
+   Mensajes de Error en Inputs
+   ========================================= */
+small.error {
+    color: var(--error-red);
+    font-size: 0.85rem;
+    margin-top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* =========================================
+   Botón de Submit
+   ========================================= */
+button[type="submit"] {
+    margin-top: 10px;
+    background-color: var(--primary-salmon);
+    color: var(--bg-white);
+    border: none;
+    padding: 14px 20px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    width: 100%;
+}
+
+button[type="submit"]:hover:not(:disabled) {
+    background-color: var(--salmon-hover);
+}
+
+button[type="submit"]:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+button[type="submit"]:disabled {
+    background-color: #d1d5db;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+
+/* =========================================
+   Diseño Responsivo (Móviles)
+   ========================================= */
+@media (max-width: 600px) {
+    .contenedor-formulario {
+        margin: 20px;
+        padding: 20px;
+    }
+
+    .contenedor-formulario h2 {
+        font-size: 1.5rem;
+    }
+}
