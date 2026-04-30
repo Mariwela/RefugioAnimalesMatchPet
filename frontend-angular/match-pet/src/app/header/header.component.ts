@@ -31,15 +31,19 @@ export class HeaderComponent {
   }
 
   // Getter para la URL del Avatar
+  // Getter para la URL del Avatar
+  // Getter para la URL del Avatar
+  // Getter para la URL del Avatar
   get urlAvatar(): string {
     if (isPlatformBrowser(this.platformId)) {
       const avatarGuardado = localStorage.getItem('usuario_avatar');
 
-      if (avatarGuardado) {
-        return '${this.URL_BASE_AVATARS}${avatarGuardado}';
+      if (avatarGuardado && avatarGuardado !== 'undefined' && avatarGuardado !== 'null') {
+        return `${this.URL_BASE_AVATARS}${avatarGuardado}`;
       }
     }
-    return '${this.URL_BASE_AVATARS}default_avatar.png';
+    // 👇 Cambiado para coincidir exactamente con tu servidor 👇
+    return `${this.URL_BASE_AVATARS}default_avarar.PNG`;
   }
 
   cerrarSesion() {

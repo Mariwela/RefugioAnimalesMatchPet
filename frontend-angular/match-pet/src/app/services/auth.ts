@@ -38,6 +38,11 @@ export class AuthService {
       localStorage.setItem('usuario_nombre', nombre);
       localStorage.setItem('usuario_rol', rol);
       localStorage.setItem('usuario_avatar', avatar);
+      if (avatar) {
+        localStorage.setItem('usuario_avatar', avatar);
+      } else {
+        localStorage.removeItem('usuario_avatar'); // Lo borramos por si había uno viejo
+      }
     }
   }
 
