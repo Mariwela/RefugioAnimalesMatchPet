@@ -1,116 +1,158 @@
-/* =========================================
-   Variables de color del tema MatchPet
-   ========================================= */
 :host {
-    --primary-salmon: #ff6b6b;
-    --salmon-hover: #fa5252;
-    --text-dark: #374151;
-    --text-light: #6b7280;
-    --bg-white: #FFFFFF;
-    --bg-offwhite: #f3f4f6;
-    --bg-salmon-light: #fff0f0;
-    /* Un tono salmón super suave para fondos */
+    --primary: #FF7E67;
+    --primary-hover: #E86A55;
+    --secondary: #2C3E50;
+    --bg-body: #f4f7f6;
+    --white: #ffffff;
+    --text-main: #333333;
+    --text-muted: #666666;
+    --border: #e0e6ed;
+    --shadow-sm: 0 5px 15px rgba(0, 0, 0, 0.05);
+    --shadow-lg: 0 15px 35px rgba(0, 0, 0, 0.08);
 }
 
 .home-wrapper {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
 }
 
 /* =========================================
-   Hero Section (Cabecera principal)
+   HERO SECTION
    ========================================= */
 .hero-section {
-    background-color: var(--bg-salmon-light);
-    padding: 80px 20px;
+    background: linear-gradient(135deg, #fff0ed 0%, #ffffff 100%);
+    padding: 80px 20px 100px;
     text-align: center;
-    border-bottom-left-radius: 40px;
-    border-bottom-right-radius: 40px;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
 }
 
 .hero-content {
     max-width: 800px;
     margin: 0 auto;
+    position: relative;
+    z-index: 2;
 }
 
-.hero-content h1 {
-    font-size: 3rem;
-    color: var(--text-dark);
-    margin-bottom: 20px;
-    line-height: 1.2;
+.hero-badge {
+    display: inline-block;
+    background-color: rgba(255, 126, 103, 0.15);
+    color: var(--primary);
+    font-weight: 700;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    color: var(--secondary);
     font-weight: 800;
-    letter-spacing: -1px;
+    line-height: 1.2;
+    margin: 0 0 25px 0;
 }
 
 .highlight {
-    color: var(--primary-salmon);
+    color: var(--primary);
+    position: relative;
 }
 
-.hero-content p {
-    font-size: 1.2rem;
-    color: var(--text-light);
-    margin-bottom: 40px;
+/* Subrayado curvado para resaltar */
+.highlight::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 8px;
+    background-color: rgba(255, 126, 103, 0.3);
+    bottom: 5px;
+    left: 0;
+    border-radius: 10px;
+    z-index: -1;
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--text-muted);
     line-height: 1.6;
+    margin-bottom: 40px;
 }
 
+/* Botones Hero */
 .hero-buttons {
     display: flex;
-    gap: 20px;
     justify-content: center;
-    flex-wrap: wrap;
+    gap: 20px;
 }
 
-/* =========================================
-   Botones Globales del Home
-   ========================================= */
 .btn {
-    padding: 14px 28px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px 35px;
     border-radius: 30px;
     font-size: 1.1rem;
     font-weight: bold;
     text-decoration: none;
+    transition: all 0.3s;
     cursor: pointer;
-    transition: all 0.3s ease;
-    border: none;
 }
 
 .btn-primary {
-    background-color: var(--primary-salmon);
-    color: var(--bg-white);
-    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+    background-color: var(--primary);
+    color: var(--white);
+    box-shadow: 0 8px 20px rgba(255, 126, 103, 0.3);
 }
 
 .btn-primary:hover {
-    background-color: var(--salmon-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+    background-color: var(--primary-hover);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 25px rgba(255, 126, 103, 0.4);
 }
 
 .btn-secondary {
-    background-color: var(--bg-white);
-    color: var(--text-dark);
-    border: 2px solid var(--text-dark);
+    background-color: var(--white);
+    color: var(--secondary);
+    border: 2px solid var(--border);
 }
 
 .btn-secondary:hover {
-    background-color: var(--text-dark);
-    color: var(--bg-white);
+    border-color: var(--secondary);
+    color: var(--secondary);
+    background-color: #f8f9fa;
+    transform: translateY(-3px);
 }
 
 /* =========================================
-   Sección de Características (Cards)
+   FEATURES SECTION (Servicios)
    ========================================= */
 .features-section {
     max-width: 1200px;
-    margin: 80px auto;
-    padding: 0 20px;
+    margin: 0 auto;
+    padding: 80px 20px;
+}
+
+.section-header {
+    text-align: center;
+    margin-bottom: 50px;
 }
 
 .section-title {
-    text-align: center;
     font-size: 2.2rem;
-    color: var(--text-dark);
-    margin-bottom: 50px;
+    color: var(--secondary);
     font-weight: 800;
+    margin: 0 0 15px 0;
+}
+
+.title-underline {
+    width: 80px;
+    height: 4px;
+    background-color: var(--primary);
+    margin: 0 auto;
+    border-radius: 2px;
 }
 
 .features-grid {
@@ -120,110 +162,169 @@
 }
 
 .feature-card {
-    background: var(--bg-white);
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: var(--white);
+    padding: 40px 30px;
+    border-radius: 24px;
+    text-align: left;
+    box-shadow: var(--shadow-sm);
     border: 1px solid rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .feature-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.08);
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-lg);
 }
 
 .icon-wrapper {
-    font-size: 2.5rem;
-    margin-bottom: 20px;
-    display: inline-block;
-    padding: 15px;
-    background-color: var(--bg-salmon-light);
-    border-radius: 12px;
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+}
+
+/* Colores específicos para cada icono */
+.icon-adoptar {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.icon-pareja {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.icon-eventos {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.icon-comunidad {
+    background: #fff8e1;
+    color: #f57f17;
 }
 
 .feature-card h3 {
     font-size: 1.4rem;
-    color: var(--text-dark);
-    margin-bottom: 15px;
+    color: var(--secondary);
+    margin: 0 0 15px 0;
+    font-weight: 700;
 }
 
 .feature-card p {
-    color: var(--text-light);
-    line-height: 1.5;
-    margin-bottom: 20px;
+    color: var(--text-muted);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0 0 25px 0;
+    flex-grow: 1;
+    /* Empuja el enlace al fondo */
 }
 
 .feature-link {
-    color: var(--primary-salmon);
+    color: var(--primary);
+    font-weight: 700;
     text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: gap 0.3s;
 }
 
-.feature-link:hover {
-    color: var(--salmon-hover);
+.feature-card:hover .feature-link {
+    gap: 12px;
+    /* La flechita se mueve a la derecha al hacer hover */
 }
 
 /* =========================================
-   Banner Call To Action (Abajo)
+   CALL TO ACTION (Banner inferior)
    ========================================= */
-.cta-banner {
-    background-color: var(--primary-salmon);
-    padding: 60px 20px;
-    text-align: center;
-    margin-top: 60px;
-}
-
-.cta-content {
-    max-width: 700px;
+.cta-section {
+    padding: 0 20px 80px;
+    max-width: 1200px;
     margin: 0 auto;
 }
 
+.cta-banner {
+    background: var(--primary);
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
+    border-radius: 30px;
+    padding: 60px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 20px 40px rgba(255, 126, 103, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.cta-content {
+    position: relative;
+    z-index: 2;
+    max-width: 600px;
+}
+
 .cta-content h2 {
-    color: var(--bg-white);
+    color: var(--white);
     font-size: 2.2rem;
-    margin-bottom: 20px;
+    font-weight: 800;
+    margin: 0 0 15px 0;
 }
 
 .cta-content p {
     color: rgba(255, 255, 255, 0.9);
     font-size: 1.1rem;
-    margin-bottom: 30px;
     line-height: 1.6;
+    margin: 0 0 30px 0;
 }
 
 .btn-light {
-    background-color: var(--bg-white);
-    color: var(--primary-salmon);
-    font-size: 1.1rem;
-    padding: 15px 30px;
+    background-color: var(--white);
+    color: var(--primary);
+    border: none;
 }
 
 .btn-light:hover {
-    background-color: var(--bg-offwhite);
-    transform: scale(1.05);
+    background-color: var(--bg-body);
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.cta-decoration {
+    position: absolute;
+    right: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10rem;
+    color: rgba(255, 255, 255, 0.1);
+    z-index: 1;
 }
 
 /* =========================================
-   Responsive
+   RESPONSIVE (Móviles)
    ========================================= */
 @media (max-width: 768px) {
-    .hero-content h1 {
-        font-size: 2.2rem;
-    }
-
-    .hero-section {
-        padding: 50px 20px;
-        border-bottom-left-radius: 20px;
-        border-bottom-right-radius: 20px;
+    .hero-section h1 {
+        font-size: 2.5rem;
     }
 
     .hero-buttons {
         flex-direction: column;
     }
 
-    .cta-content h2 {
-        font-size: 1.8rem;
+    .cta-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 40px 20px;
+    }
+
+    .cta-decoration {
+        display: none;
+        /* Ocultamos el icono grande en móviles */
     }
 }
