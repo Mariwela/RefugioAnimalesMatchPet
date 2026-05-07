@@ -28,16 +28,16 @@ export class AnimalService {
   }
 
   actualizarAnimal(datosAnimal: any) {
-    // Obtenemos el token de localStorage (o donde guardes tu sesión)
     const token = localStorage.getItem('auth_token') || '';
 
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}` // Enviamos el token al PHP
+      'Authorization': `Bearer ${token}`
     });
 
+    // CORRECCIÓN: Usamos this.baseUrl en lugar de 'http://tu-dominio/...'
     return this.http.post<any>(
-      'http://tu-dominio/api/animales/editar_animal.php',
+      `${this.baseUrl}/editar_animal.php`,
       datosAnimal,
       { headers }
     );
