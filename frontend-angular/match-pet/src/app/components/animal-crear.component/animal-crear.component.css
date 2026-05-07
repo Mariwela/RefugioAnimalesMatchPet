@@ -1,182 +1,242 @@
-/* =========================================
-   Variables Locales (Heredadas de MatchPet)
-   ========================================= */
 :host {
-    display: block;
-    --primary-salmon: #ff6b6b;
-    --salmon-hover: #fa5252;
-    --salmon-light: rgba(255, 107, 107, 0.15);
-    --text-dark: #374151;
-    --text-light: #6b7280;
-    --bg-white: #FFFFFF;
-    --bg-page: #f8f9fa;
-    /* Fondo gris muy suave para que resalte la tarjeta */
-    --error-red: #ef4444;
-    --success-green: #10b981;
-    --border-color: #e5e7eb;
+    --primary: #FF7E67;
+    --secondary: #2C3E50;
+    --bg-body: #f4f7f6;
+    --white: #ffffff;
+    --text-main: #444;
+    --border: #e0e6ed;
+    --error: #e74c3c;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
-/* =========================================
-   Contenedor Principal
-   ========================================= */
-.contenedor-formulario {
-    max-width: 600px;
+.add-container {
+    max-width: 850px;
     margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Cabecera */
+.cabecera-form {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.cabecera-form h2 {
+    color: var(--secondary);
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+}
+
+.subtitulo {
+    color: #666;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Secciones (Tarjetas) */
+.form-seccion {
+    background: var(--white);
     padding: 30px;
-    background-color: var(--bg-white);
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-}
-
-.contenedor-formulario h2 {
-    color: var(--text-dark);
-    font-size: 1.8rem;
-    margin-top: 0;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
     margin-bottom: 25px;
-    text-align: center;
-    border-bottom: 2px solid var(--salmon-light);
-    padding-bottom: 15px;
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
-/* =========================================
-   Alertas (Mensajes de Éxito / Error)
-   ========================================= */
-.alerta-exito,
-.alerta-error {
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-weight: 500;
-    text-align: center;
-}
-
-.alerta-exito {
-    background-color: rgba(16, 185, 129, 0.1);
-    color: var(--success-green);
-    border: 1px solid rgba(16, 185, 129, 0.2);
-}
-
-.alerta-error {
-    background-color: rgba(239, 68, 68, 0.1);
-    color: var(--error-red);
-    border: 1px solid rgba(239, 68, 68, 0.2);
-}
-
-/* =========================================
-   Estructura del Formulario
-   ========================================= */
-form {
+.seccion-titulo {
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-body);
+}
+
+.seccion-titulo i {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.seccion-titulo h3 {
+    margin: 0;
+    color: var(--secondary);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Grids */
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 20px;
 }
 
-.form-group {
+@media (max-width: 600px) {
+    .grid-2-col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Campos e Inputs */
+.campo {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    margin-bottom: 15px;
 }
 
-/* =========================================
-   Inputs, Selects y Textareas
-   ========================================= */
-label {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: var(--text-dark);
+.campo label {
+    font-weight: 700;
+    color: var(--secondary);
+    font-size: 0.9rem;
 }
 
 input[type="text"],
 input[type="date"],
 select,
 textarea {
-    width: 100%;
     padding: 12px 15px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
     font-size: 1rem;
-    color: var(--text-dark);
+    transition: all 0.3s;
     background-color: #fafafa;
-    transition: all 0.3s ease;
+    width: 100%;
     box-sizing: border-box;
-    /* Para evitar que el padding rompa el ancho */
 }
 
-input[type="text"]:focus,
-input[type="date"]:focus,
+input:focus,
 select:focus,
 textarea:focus {
     outline: none;
-    border-color: var(--primary-salmon);
-    background-color: var(--bg-white);
-    box-shadow: 0 0 0 3px var(--salmon-light);
+    border-color: var(--primary);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(255, 126, 103, 0.1);
 }
 
-textarea {
-    resize: vertical;
-    min-height: 100px;
-}
-
-/* Estilos para el placeholder */
-::placeholder {
-    color: #9ca3af;
-    opacity: 1;
-}
-
-/* =========================================
-   Mensajes de Error en Inputs
-   ========================================= */
-small.error {
-    color: var(--error-red);
+/* Manejo de errores de validación */
+.error-text {
+    color: var(--error);
     font-size: 0.85rem;
-    margin-top: 2px;
+    font-weight: 600;
+    margin-top: 4px;
     display: flex;
     align-items: center;
     gap: 5px;
 }
 
-/* =========================================
-   Botón de Submit
-   ========================================= */
-button[type="submit"] {
-    margin-top: 10px;
-    background-color: var(--primary-salmon);
-    color: var(--bg-white);
-    border: none;
-    padding: 14px 20px;
-    font-size: 1.05rem;
-    font-weight: bold;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.1s ease;
+/* Estilizador de Input File (Dropzone) */
+.file-upload-wrapper {
+    position: relative;
     width: 100%;
+    height: 120px;
+    border: 2px dashed var(--border);
+    border-radius: 12px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    overflow: hidden;
 }
 
-button[type="submit"]:hover:not(:disabled) {
-    background-color: var(--salmon-hover);
+.file-upload-wrapper:hover {
+    border-color: var(--primary);
+    background-color: rgba(255, 126, 103, 0.02);
 }
 
-button[type="submit"]:active:not(:disabled) {
-    transform: scale(0.98);
+.file-upload-design {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #888;
+    pointer-events: none;
+    /* Para que el clic pase al input */
 }
 
-button[type="submit"]:disabled {
-    background-color: #d1d5db;
-    color: #9ca3af;
+.file-upload-design i {
+    font-size: 2rem;
+    color: var(--primary);
+    margin-bottom: 10px;
+}
+
+.file-upload-design p {
+    margin: 0;
+    font-weight: 600;
+    color: var(--secondary);
+}
+
+.file-upload-design span {
+    font-size: 0.8rem;
+    margin-top: 5px;
+}
+
+.file-input-oculto {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    /* Ocultamos el feo input nativo pero lo dejamos clickeable */
+    cursor: pointer;
+}
+
+/* Alertas Globales */
+.alerta {
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
+}
+
+.alerta-exito {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.alerta-error {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+}
+
+/* Botón Guardar */
+.acciones-finales {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.btn-guardar {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 16px 50px;
+    border-radius: 30px;
+    font-size: 1.15rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(255, 126, 103, 0.3);
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-guardar:hover:not(:disabled) {
+    background: #e86a55;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 126, 103, 0.4);
+}
+
+.btn-guardar:disabled {
+    background: #ccc;
     cursor: not-allowed;
-}
-
-/* =========================================
-   Diseño Responsivo (Móviles)
-   ========================================= */
-@media (max-width: 600px) {
-    .contenedor-formulario {
-        margin: 20px;
-        padding: 20px;
-    }
-
-    .contenedor-formulario h2 {
-        font-size: 1.5rem;
-    }
+    box-shadow: none;
 }

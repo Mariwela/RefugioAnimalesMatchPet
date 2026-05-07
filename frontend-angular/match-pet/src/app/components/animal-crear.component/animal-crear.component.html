@@ -1,72 +1,112 @@
-<div class="contenedor-formulario">
-    <h2>Añadir Nuevo Animal</h2>
+<div class="add-container">
 
-    <!-- Mostramos mensajes de éxito o error -->
-    <div *ngIf="mensaje" [ngClass]="{'alerta-error': esError, 'alerta-exito': !esError}">
-        {{ mensaje }}
+    <div class="cabecera-form">
+        <h2>✨ Añadir Nuevo Animal</h2>
+        <p class="subtitulo">Registra a un nuevo peludo para ayudarle a encontrar su familia ideal.</p>
     </div>
 
-    <form [formGroup]="animalForm" (ngSubmit)="guardarAnimal()">
+    @if (mensaje) {
+    <div class="alerta" [class.alerta-error]="esError" [class.alerta-exito]="!esError">
+        <i class="fa" [class.fa-exclamation-circle]="esError" [class.fa-check-circle]="!esError"></i>
+        {{ mensaje }}
+    </div>
+    }
 
-        <div>
-            <label for="nombre">Nombre *</label>
-            <input type="text" id="nombre" formControlName="nombre">
-            <small class="error" *ngIf="animalForm.get('nombre')?.invalid && animalForm.get('nombre')?.touched">
-                El nombre es obligatorio.
-            </small>
+    <form [formGroup]="animalForm" (ngSubmit)="guardarAnimal()" class="formulario-animal">
+
+        <div class="form-seccion">
+            <div class="seccion-titulo">
+                <i class="fa fa-paw"></i>
+                <h3>Datos Principales</h3>
+            </div>
+
+            <div class="grid-2-col">
+                <div class="campo">
+                    <label for="nombre">Nombre *</label>
+                    <input type="text" id="nombre" formControlName="nombre" placeholder="Ej. Toby">
+                    @if (animalForm.get('nombre')?.invalid && animalForm.get('nombre')?.touched) {
+                    <small class="error-text"><i class="fa fa-times-circle"></i> El nombre es obligatorio.</small>
+                    }
+                </div>
+
+                <div class="campo">
+                    <label for="especie">Especie *</label>
+                    <input type="text" id="especie" formControlName="especie" placeholder="Ej. Perro, Gato...">
+                    @if (animalForm.get('especie')?.invalid && animalForm.get('especie')?.touched) {
+                    <small class="error-text"><i class="fa fa-times-circle"></i> La especie es obligatoria.</small>
+                    }
+                </div>
+
+                <div class="campo">
+                    <label for="raza">Raza</label>
+                    <input type="text" id="raza" formControlName="raza" placeholder="Ej. Mestizo">
+                </div>
+
+                <div class="campo">
+                    <label for="sexo">Sexo</label>
+                    <div class="select-wrapper">
+                        <select id="sexo" formControlName="sexo">
+                            <option value="" disabled selected>Seleccionar...</option>
+                            <option value="Macho">Macho</option>
+                            <option value="Hembra">Hembra</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="campo">
+                    <label for="fecha_nacimiento">Fecha de Nacimiento</label>
+                    <input type="date" id="fecha_nacimiento" formControlName="fecha_nacimiento">
+                </div>
+
+                <div class="campo">
+                    <label for="tamano">Tamaño</label>
+                    <div class="select-wrapper">
+                        <select id="tamano" formControlName="tamano">
+                            <option value="" disabled selected>Seleccionar...</option>
+                            <option value="Pequeño">Pequeño</option>
+                            <option value="Mediano">Mediano</option>
+                            <option value="Grande">Grande</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div>
-            <label for="especie">Especie *</label>
-            <input type="text" id="especie" formControlName="especie" placeholder="Ej: Perro, Gato...">
-            <small class="error" *ngIf="animalForm.get('especie')?.invalid && animalForm.get('especie')?.touched">
-                La especie es obligatoria.
-            </small>
+        <div class="form-seccion">
+            <div class="seccion-titulo">
+                <i class="fa fa-file-text"></i>
+                <h3>Detalles y Fotografía</h3>
+            </div>
+
+            <div class="campo">
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" formControlName="descripcion" rows="4"
+                    placeholder="Cuenta un poco sobre su carácter, historia..."></textarea>
+            </div>
+
+            <div class="campo">
+                <label for="foto">Foto de Portada (Opcional)</label>
+                <div class="file-upload-wrapper">
+                    <div class="file-upload-design">
+                        <i class="fa fa-cloud-upload"></i>
+                        <p>Haz clic para seleccionar una imagen</p>
+                        <span>Formatos aceptados: PNG, JPG, WEBP</span>
+                    </div>
+                    <input type="file" id="foto" class="file-input-oculto" (change)="onFileSeleccionada($event)"
+                        accept="image/png, image/jpeg, image/jpg, image/webp">
+                </div>
+            </div>
         </div>
 
-        <div>
-            <label for="raza">Raza</label>
-            <input type="text" id="raza" formControlName="raza">
+        <div class="acciones-finales">
+            <button type="submit" class="btn-guardar" [disabled]="animalForm.invalid || cargando">
+                @if (cargando) {
+                <i class="fa fa-spinner fa-spin"></i> Guardando...
+                } @else {
+                <i class="fa fa-plus-circle"></i> Guardar Animal
+                }
+            </button>
         </div>
-
-        <div>
-            <label for="sexo">Sexo</label>
-            <select id="sexo" formControlName="sexo">
-                <option value="">Seleccionar...</option>
-                <option value="Macho">Macho</option>
-                <option value="Hembra">Hembra</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="fecha_nacimiento">Fecha de Nacimiento</label>
-            <input type="date" id="fecha_nacimiento" formControlName="fecha_nacimiento">
-        </div>
-
-        <div>
-            <label for="tamano">Tamaño</label>
-            <select id="tamano" formControlName="tamano">
-                <option value="">Seleccionar...</option>
-                <option value="Pequeño">Pequeño</option>
-                <option value="Mediano">Mediano</option>
-                <option value="Grande">Grande</option>
-            </select>
-        </div>
-
-        <div>
-            <label for="descripcion">Descripción</label>
-            <textarea id="descripcion" formControlName="descripcion" rows="4"></textarea>
-        </div>
-        <div class="form-group">
-            <label for="foto">Foto de Portada (Opcional)</label>
-            <!-- Usamos (change) para detectar cuando el usuario selecciona un archivo -->
-            <input type="file" id="foto" (change)="onFileSeleccionada($event)"
-                accept="image/png, image/jpeg, image/jpg, image/webp">
-        </div>
-
-        <button type="submit" [disabled]="cargando">
-            {{ cargando ? 'Guardando...' : 'Guardar Animal' }}
-        </button>
 
     </form>
 </div>
