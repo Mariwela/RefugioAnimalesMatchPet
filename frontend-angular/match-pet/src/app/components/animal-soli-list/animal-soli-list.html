@@ -43,10 +43,17 @@
                     <td *ngIf="isAdmin">
                         <ng-container
                             *ngIf="solicitud.estado_solicitud === 'Pendiente' || !solicitud.estado_solicitud; else procesada">
-                            <button class="btn-aprobar" (click)="cambiarEstado(solicitud, 'Aprobada')"
-                                [disabled]="procesandoId === solicitud.id_solicitud">✅ Aprobar</button>
+
+                            <button class="btn-aprobar" (click)="aprobarAdopcion(solicitud)"
+                                [disabled]="procesandoId === solicitud.id_solicitud">
+                                ✅ Aprobar Adopción
+                            </button>
+
                             <button class="btn-rechazar" (click)="cambiarEstado(solicitud, 'Rechazada')"
-                                [disabled]="procesandoId === solicitud.id_solicitud">❌ Rechazar</button>
+                                [disabled]="procesandoId === solicitud.id_solicitud">
+                                ❌ Rechazar
+                            </button>
+
                         </ng-container>
                         <ng-template #procesada>
                             <span style="color: #666; font-size: 0.9em;">Procesada</span>

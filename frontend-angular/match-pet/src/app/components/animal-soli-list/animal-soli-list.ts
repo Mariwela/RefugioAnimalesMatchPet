@@ -73,4 +73,31 @@ export class AnimalSoliList implements OnInit {
       }
     });
   }
+  // Nueva función exclusiva para la validación completa
+  aprobarAdopcion(solicitud: any): void {
+    const confirmacion = confirm(`¿Estás seguro de aprobar la adopción de ${solicitud.nombre_animal} para este usuario?\n\n⚠️ IMPORTANTE: Esto marcará al animal como adoptado y rechazará automáticamente las demás solicitudes pendientes.`);
+
+    if (confirmacion) {
+      this.procesandoId = solicitud.id_solicitud;
+
+      this.animalService.validarAdopcion(solicitud.id_solicitud, solicitud.id_animal).subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            alert(`✅ ${response.message}`);
+            // RECARGAMOS LA LISTA COMPLETA
+            // Esto es vital porque otras solicitudes en pantalla acaban de pasar a "Rechazada" en la BD
+            this.cargarSolicitudes();
+          } else {
+            alert(`❌ Error: ${response.message}`);
+          }
+          this.procesandoId = null;
+        },
+        error: (error) => {
+          console.error(error);
+          alert('❌ Error al procesar la adopción en el servidor.');
+          this.procesandoId = null;
+        }
+      });
+    }
+  }
 }
