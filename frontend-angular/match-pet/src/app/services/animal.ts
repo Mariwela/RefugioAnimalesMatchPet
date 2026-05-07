@@ -44,15 +44,14 @@ export class AnimalService {
   }
   // ... (resto de tu código arriba)
 
+  // animal.service.ts
   getSolicitudes(): Observable<any> {
     const token = localStorage.getItem('auth_token') || '';
-
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    // CORRECCIÓN: Ponemos la ruta exacta hacia la carpeta de solicitudes
-    // (Ajusta 'listar.php' si el archivo PHP se llama de otra manera)
+    // REVISA ESTA LÍNEA: debe coincidir con el nombre de tu archivo en la carpeta
     const urlSolicitudes = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/solicitudes/listar_solicitudes.php';
 
     return this.http.get<any>(urlSolicitudes, { headers });
@@ -72,6 +71,27 @@ export class AnimalService {
 
     // Enviamos el id_animal en el cuerpo (body) de la petición como espera tu PHP
     return this.http.post<any>(url, { id_animal: id_animal }, { headers });
+  }
+
+  // Gestionar el estado de una solicitud (Solo Admin)
+  gestionarSolicitud(id_solicitud: number, nuevo_estado: string, comentario: string = ''): Observable<any> {
+    const token = localStorage.getItem('auth_token') || '';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    // Asegúrate de que el nombre del archivo sea exacto
+    const url = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/solicitudes/gestionar_solicitud.php';
+
+    const body = {
+      id_solicitud: id_solicitud,
+      nuevo_estado: nuevo_estado,
+      comentario_admin: comentario
+    };
+
+    return this.http.post<any>(url, body, { headers });
   }
 
 }
