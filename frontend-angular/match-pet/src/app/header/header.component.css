@@ -285,12 +285,13 @@
     display: inline-flex;
     align-items: center;
     cursor: pointer;
-    margin-right: 15px;
+    margin: 0 15px;
 }
 
 .notification-icon {
-    font-size: 1.2rem;
-    color: #333;
+    font-size: 1.4rem;
+    color: #444;
+    /* Color gris oscuro/negro */
 }
 
 .badge-notificacion {
@@ -298,7 +299,7 @@
     top: -5px;
     right: -8px;
     background-color: #ff4d4d;
-    /* Rojo */
+    /* Rojo vibrante */
     color: white;
     font-size: 0.7rem;
     font-weight: bold;
