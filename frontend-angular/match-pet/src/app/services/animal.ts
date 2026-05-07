@@ -112,6 +112,17 @@ export class AnimalService {
 
     return this.http.post<any>(url, body, { headers });
   }
+  getResumenNotificaciones(): Observable<any> {
+    const token = localStorage.getItem('auth_token') || '';
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // 👇 AQUÍ ESTÁ EL CAMBIO: apuntamos a notificaciones.php 👇
+    const url = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/notificaciones/notificaciones.php';
+
+    return this.http.get<any>(url, { headers });
+  }
 
 }
 

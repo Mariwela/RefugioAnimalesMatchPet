@@ -34,20 +34,28 @@
             </div>
 
             <div class="user-icons" *ngIf="authService.isLoggedIn()">
-                <!-- ENLACE A MIS FAVORITOS -->
+
                 <a routerLink="/mis-favoritos" routerLinkActive="active" class="fav-link" title="Mis Favoritos">
                     <i class="fa fa-heart"></i>
                     <span class="fav-text">Favoritos</span>
                 </a>
 
-                <!-- 👇 NUEVO ENLACE A MIS SOLICITUDES 👇 -->
                 <a routerLink="/mis-solicitudes" routerLinkActive="active" class="soli-link" title="Mis Solicitudes">
-                    <i class="fa fa-list-alt"></i> <!-- Puedes cambiar este ícono por fa-envelope o fa-file-text -->
+                    <i class="fa fa-list-alt"></i>
                     <span class="soli-text">Solicitudes</span>
                 </a>
-                <!-- 👆 FIN DEL NUEVO ENLACE 👆 -->
-
-                <i class="fa fa-bell notification-icon"></i>
+                <div class="notification-wrapper">
+                    <i class="fa fa-bell notification-icon"></i> HOLA MUNDO <span class="badge-notificacion"
+                        *ngIf="totalNotificaciones > 0">
+                        {{ totalNotificaciones }}
+                    </span>
+                </div>
+                <div class="notification-wrapper" [title]="mensajeNotificaciones">
+                    <i class="fa fa-bell notification-icon"></i>
+                    <span class="badge-notificacion" *ngIf="totalNotificaciones > 0">
+                        {{ totalNotificaciones }}
+                    </span>
+                </div>
 
                 <div class="user-profile">
                     <span class="user-greeting">Hola, {{ nombreUsuario }}</span>
