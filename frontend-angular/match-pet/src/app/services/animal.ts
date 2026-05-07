@@ -58,5 +58,21 @@ export class AnimalService {
     return this.http.get<any>(urlSolicitudes, { headers });
   }
 
+  // Enviar una nueva solicitud de adopción
+  enviarSolicitud(id_animal: number): Observable<any> {
+    const token = localStorage.getItem('auth_token') || '';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    // Ajusta 'crear.php' al nombre real de tu archivo
+    const url = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/solicitudes/enviar_solicitud.php';
+
+    // Enviamos el id_animal en el cuerpo (body) de la petición como espera tu PHP
+    return this.http.post<any>(url, { id_animal: id_animal }, { headers });
+  }
+
 }
 

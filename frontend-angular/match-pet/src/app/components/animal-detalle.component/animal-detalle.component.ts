@@ -17,46 +17,43 @@ export class AnimalDetalleComponent implements OnInit {
   errorMsg: string = '';
   fotosGaleria: any[] = [];
   isAdmin: boolean = false;
+
+  // 👇 NUEVAS VARIABLES PARA LA SOLICITUD 👇
+  enviandoSolicitud: boolean = false;
+  mensajeSolicitud: string = '';
+  errorSolicitud: string = '';
+
   constructor(
     private route: ActivatedRoute, // Para leer el "?id=" de la URL
     private router: Router,        // Para poder volver atrás
     private animalService: AnimalService,
-    private authService: AuthService,
+    public authService: AuthService, // Cambiado a 'public' si lo usas en el HTML
     private cdr: ChangeDetectorRef // Nuestro toque mágico
   ) { }
 
   ngOnInit(): void {
-    // 1. Extraemos el ID de la barra de direcciones (ej: /animal/3 -> pilla el 3)
     const idString = this.route.snapshot.paramMap.get('id');
     this.verificarPermisos();
     if (idString) {
-      // 2. Lo convertimos a número y ejecutamos la búsqueda
       const idAnimal = Number(idString);
       this.cargarPerfilAnimal(idAnimal);
     } else {
-      // Si por algún motivo entra sin ID
       this.errorMsg = 'No se encontró el perfil del animal.';
       this.cargando = false;
     }
   }
-  verificarPermisos() {
-    // 3. Obtenemos el rol desde el servicio
-    const rol = this.authService.getRol();
 
-    // Si el rol es 'admin', isAdmin será true. 
-    // Si no hay login (null) o es otro rol, será false.
+  verificarPermisos() {
+    const rol = this.authService.getRol();
     this.isAdmin = (rol === 'admin');
   }
+
   cargarPerfilAnimal(id: number): void {
     this.animalService.getAnimalById(id).subscribe({
       next: (res) => {
         if (res.status === 'success') {
-          // 1. Guardamos los datos básicos del animal
           this.animal = res.data;
-
-          // 2. Extraemos la galería que el PHP metió dentro de 'data'
           this.fotosGaleria = res.data.galeria || [];
-
           this.cargando = false;
           this.cdr.detectChanges();
           console.log('Todo cargado:', this.animal);
@@ -81,7 +78,6 @@ export class AnimalDetalleComponent implements OnInit {
     const nacimiento = new Date(fechaNacimiento);
     const hoy = new Date();
 
-    // Si la fecha es inválida (ej. texto mal formado)
     if (isNaN(nacimiento.getTime())) return null;
 
     let años = hoy.getFullYear() - nacimiento.getFullYear();
@@ -103,15 +99,54 @@ export class AnimalDetalleComponent implements OnInit {
     }
   }
 
-  // Función para el botón de "Volver"
   volver(): void {
     this.router.navigate(['/animales']);
   }
-  // En tu animal-detalle.component.ts
+
   irAEditar(): void {
     if (this.animal && this.animal.id_animal) {
-      // Ajusta esta ruta a la que vayas a usar en tu app-routing
       this.router.navigate(['/animales/editar', this.animal.id_animal]);
+    }
+  }
+
+  // 👇 NUEVA FUNCIÓN PARA SOLICITAR ADOPCIÓN 👇
+  solicitarAdopcion(): void {
+    // 1. Verificamos si el usuario ha iniciado sesión
+    if (!this.authService.isLoggedIn()) {
+      this.errorSolicitud = 'Debes iniciar sesión para poder adoptar.';
+      this.cdr.detectChanges();
+      return;
+    }
+
+    // 2. Preparamos el estado de carga
+    this.enviandoSolicitud = true;
+    this.mensajeSolicitud = '';
+    this.errorSolicitud = '';
+
+    // 3. Llamamos al servicio
+    if (this.animal && this.animal.id_animal) {
+      this.animalService.enviarSolicitud(this.animal.id_animal).subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.mensajeSolicitud = response.message || 'Solicitud enviada correctamente.';
+          } else {
+            this.errorSolicitud = response.message || 'Error al enviar la solicitud.';
+          }
+          this.enviandoSolicitud = false;
+          this.cdr.detectChanges(); // Actualizamos la vista
+        },
+        error: (error) => {
+          if (error.status === 409) {
+            this.errorSolicitud = 'Ya has enviado una solicitud para este animal anteriormente.';
+          } else if (error.status === 401) {
+            this.errorSolicitud = 'Tu sesión ha expirado. Por favor, inicia sesión de nuevo.';
+          } else {
+            this.errorSolicitud = error.error?.message || 'Ocurrió un error al enviar la solicitud.';
+          }
+          this.enviandoSolicitud = false;
+          this.cdr.detectChanges(); // Actualizamos la vista
+        }
+      });
     }
   }
 }

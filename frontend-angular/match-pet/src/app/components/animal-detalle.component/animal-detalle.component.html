@@ -78,7 +78,27 @@
                 <div class="zona-adopcion">
                     <h3>¿Te has enamorado?</h3>
                     <p>Si crees que puedes darle el hogar que se merece, ¡inicia el proceso!</p>
-                    <button class="btn-adoptar-principal">Adoptar a {{ animal.nombre }}</button>
+
+                    <!-- Mensaje de éxito -->
+                    <div *ngIf="mensajeSolicitud" class="alerta alerta-exito"
+                        style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #c3e6cb;">
+                        ✅ <strong>¡Éxito!</strong> {{ mensajeSolicitud }}
+                    </div>
+
+                    <!-- Mensaje de error -->
+                    <div *ngIf="errorSolicitud" class="alerta alerta-error"
+                        style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
+                        ❌ <strong>Aviso:</strong> {{ errorSolicitud }}
+                    </div>
+
+                    <!-- Botón de adopción (desaparece si la solicitud fue exitosa) -->
+                    <button *ngIf="!mensajeSolicitud" class="btn-adoptar-principal" (click)="solicitarAdopcion()"
+                        [disabled]="enviandoSolicitud" [style.opacity]="enviandoSolicitud ? '0.6' : '1'"
+                        [style.cursor]="enviandoSolicitud ? 'not-allowed' : 'pointer'">
+
+                        <span *ngIf="enviandoSolicitud">⏳ Procesando solicitud...</span>
+                        <span *ngIf="!enviandoSolicitud">🐾 Adoptar a {{ animal.nombre }}</span>
+                    </button>
                 </div>
             </div>
         </div>
