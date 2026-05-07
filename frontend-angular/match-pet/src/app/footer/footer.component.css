@@ -1,116 +1,167 @@
-/* footer.component.css */
 :host {
-    --footer-bg: #1f2937;
-    /* Gris muy oscuro, más elegante y neutro */
-    --primary-salmon: #ff6b6b;
-    --salmon-hover: #fa5252;
-    --text-dim: #9ca3af;
-    /* Gris claro para textos secundarios */
-    --text-light: #ffffff;
-    --border-line: #374151;
-    /* Gris medio para separadores */
+    --primary: #FF7E67;
+    --primary-hover: #E86A55;
+    --secondary: #2C3E50;
+    /* Azul oscuro */
+    --text-light: #ecf0f1;
+    --text-muted-dark: #aeb6bf;
 }
 
-/* =========================================
-   Logo (Adaptado para fondo oscuro)
-   ========================================= */
+/* Contenedor principal del footer */
+.simple-footer {
+    background-color: var(--secondary);
+    color: var(--text-light);
+    padding: 60px 0 20px 0;
+    font-family: 'Segoe UI', sans-serif;
+    margin-top: auto;
+    /* Ideal si tienes tu app en un flexbox vertical, empuja el footer al fondo */
+}
+
+.footer-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Distribución del contenido superior */
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 40px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 40px;
+}
+
+/* Marca (Logo y Slogan) */
+.footer-brand {
+    max-width: 350px;
+}
+
 .brand-logo {
-    margin: 0;
-    font-size: 1.8rem;
-    font-weight: 800;
     display: flex;
     align-items: center;
     gap: 8px;
-    letter-spacing: -0.5px;
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0 0 12px 0;
+    user-select: none;
 }
 
 .logo-match {
-    color: var(--primary-salmon);
+    color: var(--text-light);
+    /* En fondo oscuro, 'Match' es blanco */
 }
 
 .logo-pet {
-    color: var(--text-light);
-    /* En el footer oscuro, "Pet" debe ser blanco */
-}
-
-/* =========================================
-   Estructura del Footer
-   ========================================= */
-.simple-footer {
-    background-color: var(--footer-bg);
-    color: var(--text-light);
-    padding: 40px 20px 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    /* Línea decorativa superior sólida usando tu color principal */
-    border-top: 4px solid var(--primary-salmon);
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    align-items: center;
-    gap: 30px;
+    color: var(--primary);
+    /* 'Pet' se mantiene salmón */
 }
 
 .footer-brand p {
-    color: var(--text-dim);
-    font-size: 0.9rem;
-    margin-top: 5px;
+    color: var(--text-muted-dark);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin: 0;
 }
 
-/* =========================================
-   Enlaces y Navegación
-   ========================================= */
+/* Enlaces (Privacidad, Términos...) */
 .footer-links {
     display: flex;
-    gap: 20px;
+    gap: 25px;
 }
 
 .footer-links a {
-    color: var(--text-dim);
+    color: var(--text-light);
     text-decoration: none;
-    font-size: 0.9rem;
+    font-weight: 600;
+    font-size: 1rem;
     transition: color 0.3s ease;
+    position: relative;
+}
+
+/* Subrayado animado al hacer hover */
+.footer-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -4px;
+    left: 0;
+    background-color: var(--primary);
+    transition: width 0.3s ease;
 }
 
 .footer-links a:hover {
-    color: var(--primary-salmon);
-    /* Efecto hover en salmón */
+    color: var(--primary);
 }
 
-/* =========================================
-   Redes Sociales
-   ========================================= */
+.footer-links a:hover::after {
+    width: 100%;
+}
+
+/* Redes Sociales */
 .footer-social {
     display: flex;
     gap: 15px;
 }
 
 .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 45px;
+    height: 45px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--text-light);
+    border-radius: 50%;
     font-size: 1.2rem;
     text-decoration: none;
-    color: var(--text-dim);
-    transition: transform 0.3s ease, color 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .social-icon:hover {
-    transform: translateY(-3px);
-    /* Pequeño salto al pasar el mouse */
-    color: var(--primary-salmon);
+    background-color: var(--primary);
+    color: #fff;
+    transform: translateY(-5px);
+    /* Salta un poquito hacia arriba */
+    border-color: var(--primary);
+    box-shadow: 0 5px 15px rgba(255, 126, 103, 0.4);
+}
+
+/* Copyright (Parte inferior) */
+.footer-bottom {
+    text-align: center;
+    padding-top: 25px;
+}
+
+.footer-bottom p {
+    color: var(--text-muted-dark);
+    font-size: 0.95rem;
+    margin: 0;
 }
 
 /* =========================================
-   Créditos Finales
+   RESPONSIVO (Móviles y Tablets)
    ========================================= */
-.footer-bottom {
-    max-width: 1200px;
-    margin: 40px auto 0;
-    padding-top: 20px;
-    border-top: 1px solid var(--border-line);
-    text-align: center;
-    color: var(--text-dim);
-    font-size: 0.8rem;
+@media (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 30px;
+    }
+
+    .footer-brand {
+        max-width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 15px;
+    }
 }
