@@ -1,39 +1,45 @@
 <div class="contenedor-perfil-animal">
 
-    <div *ngIf="cargando" class="estado-carga">
+    @if (cargando) {
+    <div class="estado-carga">
         <div class="spinner"></div>
         <p>Buscando ficha del peludo...</p>
     </div>
+    }
 
-    <div *ngIf="errorMsg" class="estado-error">
+    @if (errorMsg) {
+    <div class="estado-error">
         <p>❌ {{ errorMsg }}</p>
         <button class="btn-secundario" (click)="volver()">Volver a la lista</button>
     </div>
+    }
 
-    <div *ngIf="!cargando && animal" class="perfil-contenido">
+    @if (!cargando && animal) {
+    <div class="perfil-contenido">
 
-        <div class="cabecera-perfil" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="cabecera-perfil">
             <button class="btn-volver" (click)="volver()">
-                ← Volver a todos los animales
+                <i class="fa fa-arrow-left"></i> Volver a todos los animales
             </button>
 
-            <button *ngIf="isAdmin" class="btn-editar-admin" (click)="irAEditar()"
-                style="background-color: #ff9800; color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-weight: bold;">
-                ✏️ Editar Ficha del Animal
+            @if (isAdmin) {
+            <button class="btn-editar-admin" (click)="irAEditar()">
+                <i class="fa fa-pencil"></i> Editar Ficha del Animal
             </button>
+            }
         </div>
+
         <div class="grid-perfil">
             <div class="columna-foto">
                 <div class="marco-foto">
                     <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-principal">
-
                 </div>
             </div>
 
             <div class="columna-info">
                 <div class="titulo-animal">
                     <h2>{{ animal.nombre }}</h2>
-                    <span class="etiqueta-estado">Disponible para Adopción</span>
+                    <span class="etiqueta-estado"><i class="fa fa-check-circle"></i> Disponible para Adopción</span>
                 </div>
 
                 <div class="datos-rapidos">
@@ -45,13 +51,15 @@
                         </div>
                     </div>
 
-                    <div class="dato-item" *ngIf="animal.fecha_nacimiento && getEdad(animal.fecha_nacimiento)">
+                    @if (animal.fecha_nacimiento && getEdad(animal.fecha_nacimiento)) {
+                    <div class="dato-item">
                         <span class="icono">🎂</span>
                         <div class="dato-texto">
                             <strong>Edad</strong>
                             <p>{{ getEdad(animal.fecha_nacimiento) }}</p>
                         </div>
                     </div>
+                    }
 
                     <div class="dato-item">
                         <span class="icono">🚻</span>
@@ -79,39 +87,48 @@
                     <h3>¿Te has enamorado?</h3>
                     <p>Si crees que puedes darle el hogar que se merece, ¡inicia el proceso!</p>
 
-                    <!-- Mensaje de éxito -->
-                    <div *ngIf="mensajeSolicitud" class="alerta alerta-exito"
-                        style="background-color: #d4edda; color: #155724; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #c3e6cb;">
+                    @if (mensajeSolicitud) {
+                    <div class="alerta alerta-exito">
                         ✅ <strong>¡Éxito!</strong> {{ mensajeSolicitud }}
                     </div>
+                    }
 
-                    <!-- Mensaje de error -->
-                    <div *ngIf="errorSolicitud" class="alerta alerta-error"
-                        style="background-color: #f8d7da; color: #721c24; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #f5c6cb;">
+                    @if (errorSolicitud) {
+                    <div class="alerta alerta-error">
                         ❌ <strong>Aviso:</strong> {{ errorSolicitud }}
                     </div>
+                    }
 
-                    <!-- Botón de adopción (desaparece si la solicitud fue exitosa) -->
-                    <button *ngIf="!mensajeSolicitud" class="btn-adoptar-principal" (click)="solicitarAdopcion()"
-                        [disabled]="enviandoSolicitud" [style.opacity]="enviandoSolicitud ? '0.6' : '1'"
-                        [style.cursor]="enviandoSolicitud ? 'not-allowed' : 'pointer'">
+                    @if (!mensajeSolicitud) {
+                    <button class="btn-adoptar-principal" (click)="solicitarAdopcion()" [disabled]="enviandoSolicitud"
+                        [class.btn-cargando]="enviandoSolicitud">
 
-                        <span *ngIf="enviandoSolicitud">⏳ Procesando solicitud...</span>
-                        <span *ngIf="!enviandoSolicitud">🐾 Adoptar a {{ animal.nombre }}</span>
+                        @if (enviandoSolicitud) {
+                        <i class="fa fa-spinner fa-spin"></i> Procesando solicitud...
+                        } @else {
+                        <i class="fa fa-paw"></i> Adoptar a {{ animal.nombre }}
+                        }
                     </button>
+                    }
                 </div>
             </div>
         </div>
 
-        <div *ngIf="animal.galeria && animal.galeria.length > 0" class="seccion-galeria">
+        @if (animal.galeria && animal.galeria.length > 0) {
+        <div class="seccion-galeria">
             <hr class="separador">
             <h3>Conoce un poco más a {{ animal.nombre }}</h3>
 
             <div class="grid-galeria">
-                <div *ngFor="let foto of animal.galeria" class="item-galeria">
+                @for (foto of animal.galeria; track foto.url_completa) {
+                <div class="item-galeria">
                     <img [src]="foto.url_completa" [alt]="animal.nombre" class="foto-extra">
                 </div>
+                }
             </div>
         </div>
+        }
+
     </div>
+    }
 </div>
