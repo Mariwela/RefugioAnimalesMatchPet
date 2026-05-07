@@ -94,5 +94,24 @@ export class AnimalService {
     return this.http.post<any>(url, body, { headers });
   }
 
+  // Validar adopción (Aprueba solicitud, adopta animal y rechaza las demás)
+  validarAdopcion(id_solicitud: number, id_animal: number): Observable<any> {
+    const token = localStorage.getItem('auth_token') || '';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/solicitudes/validar_adopcion.php';
+
+    const body = {
+      id_solicitud: id_solicitud,
+      id_animal: id_animal
+    };
+
+    return this.http.post<any>(url, body, { headers });
+  }
+
 }
 
