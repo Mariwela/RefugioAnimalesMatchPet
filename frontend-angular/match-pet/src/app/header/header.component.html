@@ -32,12 +32,20 @@
             <div class="auth-buttons" *ngIf="!authService.isLoggedIn()">
                 <a routerLink="/login" class="btn-login">Entrar</a>
             </div>
+
             <div class="user-icons" *ngIf="authService.isLoggedIn()">
-                <!-- 👇 NUEVO ENLACE A MIS FAVORITOS 👇 -->
+                <!-- ENLACE A MIS FAVORITOS -->
                 <a routerLink="/mis-favoritos" routerLinkActive="active" class="fav-link" title="Mis Favoritos">
                     <i class="fa fa-heart"></i>
                     <span class="fav-text">Favoritos</span>
                 </a>
+
+                <!-- 👇 NUEVO ENLACE A MIS SOLICITUDES 👇 -->
+                <a routerLink="/mis-solicitudes" routerLinkActive="active" class="soli-link" title="Mis Solicitudes">
+                    <i class="fa fa-list-alt"></i> <!-- Puedes cambiar este ícono por fa-envelope o fa-file-text -->
+                    <span class="soli-text">Solicitudes</span>
+                </a>
+                <!-- 👆 FIN DEL NUEVO ENLACE 👆 -->
 
                 <i class="fa fa-bell notification-icon"></i>
 

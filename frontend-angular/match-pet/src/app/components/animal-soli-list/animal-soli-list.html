@@ -1,1 +1,55 @@
-<p>animal-soli-list works!</p>
+<div class="solicitudes-container">
+    <h2>Mis Solicitudes de Adopción</h2>
+
+    <!-- 1. Estado de carga -->
+    @if (cargando) {
+    <div class="alerta alerta-info">
+        <p>⏳ Cargando las solicitudes, por favor espera...</p>
+    </div>
+    }
+
+    <!-- 2. Mensaje de error (si falla el servidor o el token) -->
+    @if (errorMensaje) {
+    <div class="alerta alerta-error">
+        <p>❌ {{ errorMensaje }}</p>
+    </div>
+    }
+
+    <!-- 3. Tabla de datos (solo se muestra si no está cargando y no hay error) -->
+    @if (!cargando && !errorMensaje) {
+    <div class="table-responsive">
+        <table class="tabla-solicitudes">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Animal</th>
+                    <th>Solicitante</th>
+                    <th>Fecha de Solicitud</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Recorremos el arreglo de solicitudes -->
+                @for (solicitud of solicitudes; track solicitud.id_solicitud) {
+                <tr>
+                    <td>#{{ solicitud.id_solicitud || 'N/A' }}</td>
+
+                    <!-- Nombre del animal que viene de tu JOIN en PHP -->
+                    <td><strong>{{ solicitud.nombre_animal }}</strong></td>
+
+                    <!-- Si el PHP trae nombre_completo (es admin), lo muestra. Si no, muestra "Tú" -->
+                    <td>{{ solicitud.nombre_completo ? solicitud.nombre_completo : 'Tú' }}</td>
+
+                    <!-- Formateamos la fecha gracias al CommonModule que importamos en el TS -->
+                    <td>{{ solicitud.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}</td>
+                </tr>
+                } @empty {
+                <!-- Este mensaje aparece automáticamente si el arreglo 'solicitudes' está vacío -->
+                <tr>
+                    <td colspan="4" class="text-center">No se encontraron solicitudes.</td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }
+</div>

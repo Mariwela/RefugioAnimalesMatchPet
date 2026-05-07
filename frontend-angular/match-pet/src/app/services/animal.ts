@@ -42,5 +42,21 @@ export class AnimalService {
       { headers }
     );
   }
+  // ... (resto de tu código arriba)
+
+  getSolicitudes(): Observable<any> {
+    const token = localStorage.getItem('auth_token') || '';
+
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // CORRECCIÓN: Ponemos la ruta exacta hacia la carpeta de solicitudes
+    // (Ajusta 'listar.php' si el archivo PHP se llama de otra manera)
+    const urlSolicitudes = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/solicitudes/listar_solicitudes.php';
+
+    return this.http.get<any>(urlSolicitudes, { headers });
+  }
 
 }
+

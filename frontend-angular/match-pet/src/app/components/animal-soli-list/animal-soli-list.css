@@ -1,0 +1,66 @@
+.solicitudes-container {
+    padding: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.alerta {
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.alerta-info {
+    background-color: #e9f5ff;
+    color: #0056b3;
+    border: 1px solid #b8daff;
+}
+
+.alerta-error {
+    background-color: #ffeaea;
+    color: #c80000;
+    border: 1px solid #ffb3b3;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.tabla-solicitudes {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tabla-solicitudes th,
+.tabla-solicitudes td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.tabla-solicitudes th {
+    background-color: #f8f9fa;
+    color: #333;
+    font-weight: 600;
+}
+
+.tabla-solicitudes tbody tr:hover {
+    background-color: #f1f5f9;
+}
+
+.text-center {
+    text-align: center !important;
+    color: #666;
+    padding: 20px !important;
+}
