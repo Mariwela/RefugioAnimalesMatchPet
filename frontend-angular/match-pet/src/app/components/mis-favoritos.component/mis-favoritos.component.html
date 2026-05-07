@@ -1,26 +1,39 @@
 <div class="contenedor-animales">
-    <h2>❤️ Mis Peludos Favoritos</h2>
 
-    <div *ngIf="cargando" class="mensaje-carga">
-        <p>Cargando tu lista de favoritos...</p>
+    <div class="cabecera-seccion">
+        <h2><i class="fa fa-heart icon-salmon"></i> Mis Peludos Favoritos</h2>
+        <p>Los candidatos perfectos para robarte el corazón y formar parte de tu familia.</p>
     </div>
 
-    <div *ngIf="errorMsg" class="mensaje-error">
+    @if (cargando) {
+    <div class="estado-box cargando">
+        <i class="fa fa-spinner fa-spin"></i>
+        <p>Buscando tus favoritos...</p>
+    </div>
+    }
+
+    @if (errorMsg) {
+    <div class="estado-box error">
+        <i class="fa fa-exclamation-circle"></i>
         <p>{{ errorMsg }}</p>
     </div>
+    }
 
-    <!-- Si no hay errores, no está cargando y hay animales -->
-    <div *ngIf="!cargando && !errorMsg && animalesFavoritos.length > 0" class="grid-animales">
-        <div class="tarjeta-animal" *ngFor="let animal of animalesFavoritos">
+    @if (!cargando && !errorMsg) {
+    <div class="grid-animales">
 
-            <!-- Botón para quitar de favoritos (Corazón roto o papelera) -->
+        @for (animal of animalesFavoritos; track animal.id_animal) {
+        <div class="tarjeta-animal">
+
             <button class="btn-quitar-favorito" (click)="quitarDeFavoritos(animal.id_animal)"
                 title="Quitar de favoritos">
                 <i class="fa fa-heart-broken"></i>
             </button>
 
-            <!-- Busca la etiqueta img y cámbiala por esto: -->
-            <img [src]="getImagenUrl(animal.foto_portada)" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
+            <div class="marco-foto">
+                <img [src]="getImagenUrl(animal.foto_portada)" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
+            </div>
+
             <div class="info-animal">
                 <h3>{{ animal.nombre }}</h3>
                 <span class="etiqueta">{{ animal.especie }}</span>
@@ -32,11 +45,19 @@
                 </div>
             </div>
         </div>
-    </div>
+        } @empty {
+        <div class="empty-state-card">
+            <div class="empty-state-content">
+                <i class="fa fa-heart-o"></i>
+                <h3>Aún no tienes favoritos</h3>
+                <p>Explora nuestra lista de peludos, ¡seguro que alguno te enamora!</p>
+                <button class="btn-explorar" routerLink="/animales">
+                    <i class="fa fa-search"></i> Explorar Animales
+                </button>
+            </div>
+        </div>
+        }
 
-    <!-- Mensaje si la lista está vacía -->
-    <div *ngIf="!cargando && !errorMsg && animalesFavoritos.length === 0" class="sin-resultados">
-        <p>Aún no tienes ningún animal en tu lista de favoritos.</p>
-        <button class="btn-adoptar" routerLink="/animales">Explorar Animales</button>
     </div>
+    }
 </div>
