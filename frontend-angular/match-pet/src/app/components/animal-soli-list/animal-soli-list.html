@@ -1,70 +1,110 @@
 <div class="solicitudes-container">
-    <h2>Mis Solicitudes de Adopción</h2>
 
-    <div *ngIf="cargando" class="alerta alerta-info">
-        <p>⏳ Cargando las solicitudes, por favor espera...</p>
+    <div class="cabecera-seccion">
+        <h2><i class="fa fa-list-alt"></i> Mis Solicitudes de Adopción</h2>
+        <p>Gestiona y revisa el estado de las peticiones.</p>
     </div>
 
-    <div *ngIf="errorMensaje" class="alerta alerta-error">
-        <p>❌ {{ errorMensaje }}</p>
+    @if (cargando) {
+    <div class="estado-box cargando">
+        <i class="fa fa-spinner fa-spin"></i>
+        <p>Cargando las solicitudes, por favor espera...</p>
     </div>
+    }
 
-    <div *ngIf="!cargando && !errorMensaje" class="table-responsive">
-        <table class="tabla-solicitudes">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Animal</th>
-                    <th>Solicitante</th>
-                    <th>Fecha</th>
-                    <th>Estado</th>
-                    <th *ngIf="isAdmin">Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let solicitud of solicitudes">
-                    <td>#{{ solicitud.id_solicitud }}</td>
-                    <td><strong>{{ solicitud.nombre_animal }}</strong></td>
-                    <td>
-                        {{ solicitud.nombre_completo ? solicitud.nombre_completo : 'Tú' }}
-                        <span *ngIf="solicitud.comentario_admin" [title]="solicitud.comentario_admin"> 💬</span>
-                    </td>
-                    <td>{{ solicitud.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}</td>
-                    <td>
-                        <span class="badge" [ngClass]="{
+    @if (errorMensaje) {
+    <div class="estado-box error">
+        <i class="fa fa-exclamation-circle"></i>
+        <p>{{ errorMensaje }}</p>
+    </div>
+    }
+
+    @if (!cargando && !errorMensaje) {
+    <div class="tarjeta-tabla">
+        <div class="table-responsive">
+            <table class="tabla-solicitudes">
+
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Animal</th>
+                        <th>Solicitante</th>
+                        <th>Fecha</th>
+                        <th>Estado</th>
+                        @if (isAdmin) {
+                        <th class="th-centro">Acciones</th>
+                        }
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for (solicitud of solicitudes; track solicitud.id_solicitud) {
+                    <tr>
+                        <td class="col-id"><span class="id-badge">#{{ solicitud.id_solicitud }}</span></td>
+                        <td class="col-animal"><strong>{{ solicitud.nombre_animal }}</strong></td>
+
+                        <td class="col-solicitante">
+                            <div class="solicitante-info">
+                                <i class="fa fa-user-circle avatar-placeholder"></i>
+                                <span>{{ solicitud.nombre_completo ? solicitud.nombre_completo : 'Tú' }}</span>
+
+                                @if (solicitud.comentario_admin) {
+                                <span class="icono-comentario" [title]="solicitud.comentario_admin">
+                                    <i class="fa fa-comment-dots"></i>
+                                </span>
+                                }
+                            </div>
+                        </td>
+
+                        <td class="col-fecha">{{ solicitud.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}</td>
+
+                        <td class="col-estado">
+                            <span class="badge" [ngClass]="{
                     'badge-pendiente': solicitud.estado_solicitud === 'Pendiente' || !solicitud.estado_solicitud,
                     'badge-aprobada': solicitud.estado_solicitud === 'Aprobada',
                     'badge-rechazada': solicitud.estado_solicitud === 'Rechazada'
                   }">
-                            {{ solicitud.estado_solicitud || 'Pendiente' }}
-                        </span>
-                    </td>
+                                @if (solicitud.estado_solicitud === 'Aprobada') { <i class="fa fa-check"></i> }
+                                @if (solicitud.estado_solicitud === 'Rechazada') { <i class="fa fa-times"></i> }
+                                @if (solicitud.estado_solicitud === 'Pendiente' || !solicitud.estado_solicitud) { <i
+                                    class="fa fa-clock-o"></i> }
+                                {{ solicitud.estado_solicitud || 'Pendiente' }}
+                            </span>
+                        </td>
 
-                    <td *ngIf="isAdmin">
-                        <ng-container
-                            *ngIf="solicitud.estado_solicitud === 'Pendiente' || !solicitud.estado_solicitud; else procesada">
+                        @if (isAdmin) {
+                        <td class="col-acciones">
+                            @if (solicitud.estado_solicitud === 'Pendiente' || !solicitud.estado_solicitud) {
+                            <div class="botones-accion">
+                                <button class="btn-accion btn-aprobar" (click)="aprobarAdopcion(solicitud)"
+                                    [disabled]="procesandoId === solicitud.id_solicitud" title="Aprobar Adopción">
+                                    <i class="fa fa-check"></i> Aprobar
+                                </button>
 
-                            <button class="btn-aprobar" (click)="aprobarAdopcion(solicitud)"
-                                [disabled]="procesandoId === solicitud.id_solicitud">
-                                ✅ Aprobar Adopción
-                            </button>
-
-                            <button class="btn-rechazar" (click)="cambiarEstado(solicitud, 'Rechazada')"
-                                [disabled]="procesandoId === solicitud.id_solicitud">
-                                ❌ Rechazar
-                            </button>
-
-                        </ng-container>
-                        <ng-template #procesada>
-                            <span style="color: #666; font-size: 0.9em;">Procesada</span>
-                        </ng-template>
-                    </td>
-                </tr>
-
-                <tr *ngIf="solicitudes.length === 0">
-                    <td [attr.colspan]="isAdmin ? 6 : 5" class="text-center">No se encontraron solicitudes.</td>
-                </tr>
-            </tbody>
-        </table>
+                                <button class="btn-accion btn-rechazar" (click)="cambiarEstado(solicitud, 'Rechazada')"
+                                    [disabled]="procesandoId === solicitud.id_solicitud" title="Rechazar Adopción">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                            } @else {
+                            <span class="texto-procesada"><i class="fa fa-lock"></i> Procesada</span>
+                            }
+                        </td>
+                        }
+                    </tr>
+                    } @empty {
+                    <tr>
+                        <td [attr.colspan]="isAdmin ? 6 : 5" class="sin-registros">
+                            <div class="empty-state">
+                                <i class="fa fa-inbox"></i>
+                                <p>No se encontraron solicitudes de adopción.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
+    }
 </div>

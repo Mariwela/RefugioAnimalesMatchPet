@@ -1,66 +1,278 @@
+:host {
+    --primary: #FF7E67;
+    --secondary: #2C3E50;
+    --bg-body: #f4f7f6;
+    --white: #ffffff;
+    --border: #e0e6ed;
+    --text-main: #444;
+    --text-muted: #888;
+    --shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+}
+
 .solicitudes-container {
-    padding: 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', sans-serif;
 }
 
-h2 {
-    color: #333;
+/* Cabecera */
+.cabecera-seccion {
+    margin-bottom: 30px;
+}
+
+.cabecera-seccion h2 {
+    color: var(--secondary);
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0 0 5px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.cabecera-seccion h2 i {
+    color: var(--primary);
+}
+
+.cabecera-seccion p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Estados (Carga / Error) */
+.estado-box {
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 600;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
 }
 
-.alerta {
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    font-weight: bold;
+.estado-box i {
+    font-size: 2.5rem;
 }
 
-.alerta-info {
-    background-color: #e9f5ff;
-    color: #0056b3;
-    border: 1px solid #b8daff;
+.estado-box.cargando {
+    background: var(--white);
+    color: var(--secondary);
+    box-shadow: var(--shadow);
 }
 
-.alerta-error {
-    background-color: #ffeaea;
-    color: #c80000;
-    border: 1px solid #ffb3b3;
+.estado-box.cargando i {
+    color: var(--primary);
+}
+
+.estado-box.error {
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+}
+
+/* Contenedor de la Tabla */
+.tarjeta-tabla {
+    background: var(--white);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    /* Importante para que los bordes de la tabla se redondeen */
+    border: 1px solid rgba(0, 0, 0, 0.02);
 }
 
 .table-responsive {
+    width: 100%;
     overflow-x: auto;
+    /* Scroll horizontal en móviles */
 }
 
 .tabla-solicitudes {
     width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
+    white-space: nowrap;
 }
 
-.tabla-solicitudes th,
-.tabla-solicitudes td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
+/* Encabezados */
 .tabla-solicitudes th {
     background-color: #f8f9fa;
-    color: #333;
-    font-weight: 600;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 18px 20px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+}
+
+.tabla-solicitudes th.th-centro {
+    text-align: center;
+}
+
+/* Filas y Celdas */
+.tabla-solicitudes td {
+    padding: 18px 20px;
+    color: var(--text-main);
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+}
+
+.tabla-solicitudes tbody tr {
+    transition: background-color 0.2s;
 }
 
 .tabla-solicitudes tbody tr:hover {
-    background-color: #f1f5f9;
+    background-color: #fafcfc;
 }
 
-.text-center {
-    text-align: center !important;
-    color: #666;
-    padding: 20px !important;
+.tabla-solicitudes tbody tr:last-child td {
+    border-bottom: none;
+}
+
+/* Estilos específicos de columnas */
+.id-badge {
+    background: var(--bg-body);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.col-animal strong {
+    color: var(--secondary);
+    font-size: 1.05rem;
+}
+
+.solicitante-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.avatar-placeholder {
+    font-size: 1.5rem;
+    color: #bdc3c7;
+}
+
+.icono-comentario {
+    color: var(--primary);
+    cursor: help;
+    font-size: 1.1rem;
+}
+
+/* Badges de Estado */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-pendiente {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.badge-aprobada {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-rechazada {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Botones de Acción (Admin) */
+.col-acciones {
+    text-align: center;
+}
+
+.botones-accion {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+}
+
+.btn-accion {
+    border: none;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-aprobar {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
+.btn-aprobar:hover:not(:disabled) {
+    background-color: #4caf50;
+    color: white;
+}
+
+.btn-rechazar {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 8px 12px;
+    /* Un poco más pequeño que aprobar para jerarquía */
+}
+
+.btn-rechazar:hover:not(:disabled) {
+    background-color: #e53935;
+    color: white;
+}
+
+.btn-accion:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.texto-procesada {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background: var(--bg-body);
+    padding: 6px 12px;
+    border-radius: 8px;
+    display: inline-flex;
+}
+
+/* Estado Vacío (Sin resultados) */
+.empty-state {
+    padding: 50px 20px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: #dcdde1;
+    margin-bottom: 15px;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin: 0;
 }
