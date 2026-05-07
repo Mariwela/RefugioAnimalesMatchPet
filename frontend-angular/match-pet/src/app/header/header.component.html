@@ -12,14 +12,15 @@
                 <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
                 </li>
                 <li><a routerLink="/animales" routerLinkActive="active">Adoptar</a></li>
-                <li><a routerLink="/pareja" routerLinkActive="active">Encontrar Pareja</a></li>
-                <li><a routerLink="/eventos" routerLinkActive="active">Eventos</a></li>
-                <li><a routerLink="/comunidad" routerLinkActive="active">Comunidad</a></li>
-                <li *ngIf="authService.isAdmin()">
+                <li><a routerLink="/historias" routerLinkActive="active">Historias</a></li>
+
+                @if (authService.isAdmin()) {
+                <li>
                     <a routerLink="/animales/crear" routerLinkActive="active" class="admin-link">
                         <i class="fa fa-plus"></i> Añadir Animal
                     </a>
                 </li>
+                }
             </ul>
         </nav>
 
@@ -29,27 +30,33 @@
                 <i class="fa fa-search"></i>
             </div>
 
-            <div class="auth-buttons" *ngIf="!authService.isLoggedIn()">
+            @if (!authService.isLoggedIn()) {
+
+            <div class="auth-buttons">
                 <a routerLink="/login" class="btn-login">Entrar</a>
             </div>
 
-            <div class="user-icons" *ngIf="authService.isLoggedIn()">
+            } @else {
 
-                <a routerLink="/mis-favoritos" routerLinkActive="active" class="fav-link" title="Mis Favoritos">
-                    <i class="fa fa-heart"></i>
-                    <span class="fav-text">Favoritos</span>
+            <div class="user-icons">
+                <a routerLink="/mis-favoritos" routerLinkActive="active" class="action-link" title="Mis Favoritos">
+                    <i class="fa fa-heart icon-salmon"></i>
+                    <span class="action-text">Favoritos</span>
                 </a>
 
-                <a routerLink="/mis-solicitudes" routerLinkActive="active" class="soli-link" title="Mis Solicitudes">
-                    <i class="fa fa-list-alt"></i>
-                    <span class="soli-text">Solicitudes</span>
+                <a routerLink="/mis-solicitudes" routerLinkActive="active" class="action-link" title="Mis Solicitudes">
+                    <i class="fa fa-list-alt icon-dark"></i>
+                    <span class="action-text">Solicitudes</span>
                 </a>
 
                 <div class="notification-wrapper" [title]="mensajeNotificaciones">
-                    <i class="fa-solid fa-bell notification-icon"></i> <span class="badge-notificacion"
-                        *ngIf="totalNotificaciones > 0">
+                    <i class="fa-solid fa-bell notification-icon"></i>
+
+                    @if (totalNotificaciones > 0) {
+                    <span class="badge-notificacion">
                         {{ totalNotificaciones }}
                     </span>
+                    }
                 </div>
 
                 <div class="user-profile">
@@ -60,10 +67,8 @@
                     </button>
                 </div>
             </div>
+
+            }
         </div>
     </div>
 </header>
-
-<main>
-    <router-outlet></router-outlet>
-</main>

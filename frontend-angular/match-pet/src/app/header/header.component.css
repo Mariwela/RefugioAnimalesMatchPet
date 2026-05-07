@@ -1,97 +1,120 @@
 /* =========================================
-   Variables de color encapsuladas 
-   (Actualizadas al tema MatchPet)
+   VARIABLES DE COLOR Y DISEÑO
    ========================================= */
 :host {
-    --primary-salmon: #ff6b6b;
-    --salmon-hover: #fa5252;
-    --salmon-light: rgba(255, 107, 107, 0.15);
-    --text-dark: #374151;
-    /* Gris oscuro para contrastes */
-    --text-light: #6b7280;
-    /* Gris suave para subtítulos e iconos */
+    --primary: #FF7E67;
+    /* Color principal (Salmón/Coral) */
+    --primary-hover: #E86A55;
+    /* Salmón oscuro para hovers */
+    --secondary: #2C3E50;
+    /* Azul oscuro elegante */
     --bg-white: #FFFFFF;
-    --error-red: #ef4444;
+    --bg-light: #F8F9FA;
+    --text-main: #333333;
+    --text-muted: #888888;
+    --border-color: #EAEAEA;
+    --shadow-sm: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --shadow-hover: 0 6px 20px rgba(255, 126, 103, 0.2);
 }
 
 /* =========================================
-   Contenedor Principal del Header
+   HEADER PRINCIPAL
    ========================================= */
 .main-header {
     background-color: var(--bg-white);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    box-shadow: var(--shadow-sm);
     position: sticky;
     top: 0;
     z-index: 1000;
+    padding: 10px 0;
     font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1280px;
     margin: 0 auto;
     padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 75px;
 }
 
 /* =========================================
-   Logo y Marca (Actualizado)
+   LOGOTIPO
    ========================================= */
-.logo-container {
-    display: flex;
-    align-items: center;
-}
-
 .brand-logo {
-    margin: 0;
     font-size: 1.8rem;
     font-weight: 800;
+    margin: 0;
     display: flex;
     align-items: center;
     gap: 8px;
     cursor: pointer;
-    letter-spacing: -0.5px;
+    user-select: none;
+}
+
+.logo-icon {
+    font-size: 1.6rem;
 }
 
 .logo-match {
-    color: var(--primary-salmon);
+    color: var(--secondary);
 }
 
 .logo-pet {
-    color: var(--text-dark);
+    color: var(--primary);
 }
 
 /* =========================================
-   Navegación Principal
+   NAVEGACIÓN PRINCIPAL
    ========================================= */
 .main-nav ul {
-    list-style: none;
     display: flex;
-    gap: 30px;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
     margin: 0;
     padding: 0;
 }
 
 .main-nav a {
     text-decoration: none;
-    color: var(--text-light);
+    color: var(--text-main);
     font-weight: 600;
     font-size: 1rem;
+    padding: 8px 16px;
+    border-radius: 20px;
     transition: all 0.3s ease;
-    padding-bottom: 5px;
-    border-bottom: 3px solid transparent;
 }
 
 .main-nav a:hover,
 .main-nav a.active {
-    color: var(--text-dark);
-    border-bottom: 3px solid var(--primary-salmon);
+    background-color: var(--bg-light);
+    color: var(--primary);
+}
+
+.main-nav a.admin-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    /* Espacio entre el icono y el texto */
+    border: 2px dashed var(--primary);
+    color: var(--primary);
+    background: transparent;
+    white-space: nowrap;
+    /* 🔥 ESTA ES LA MAGIA: Evita que el texto salte a la segunda línea */
+    padding: 8px 20px;
+}
+
+.main-nav a.admin-link:hover {
+    background-color: var(--primary);
+    color: var(--bg-white);
+    border-style: solid;
+    /* Pasa de punteado a sólido al pasar el ratón */
 }
 
 /* =========================================
-   Acciones (Buscador y Usuario)
+   ACCIONES DE USUARIO Y BÚSQUEDA
    ========================================= */
 .user-actions {
     display: flex;
@@ -99,6 +122,7 @@
     gap: 25px;
 }
 
+/* Buscador */
 .search-box {
     position: relative;
     display: flex;
@@ -106,71 +130,125 @@
 }
 
 .search-box input {
-    padding: 10px 40px 10px 15px;
-    border: 1px solid #E0E0E0;
+    padding: 10px 15px 10px 35px;
+    border: 1px solid var(--border-color);
     border-radius: 25px;
+    width: 200px;
     font-size: 0.9rem;
-    outline: none;
     transition: all 0.3s ease;
-    width: 220px;
-    background-color: #F8F9FA;
+    background-color: var(--bg-light);
+    outline: none;
 }
 
 .search-box input:focus {
-    border-color: var(--primary-salmon);
-    background-color: var(--bg-white);
-    box-shadow: 0 0 0 3px var(--salmon-light);
     width: 250px;
+    border-color: var(--primary);
+    background-color: var(--bg-white);
+    box-shadow: 0 0 0 3px rgba(255, 126, 103, 0.15);
 }
 
 .search-box i {
     position: absolute;
-    right: 15px;
-    color: var(--text-light);
-    cursor: pointer;
+    left: 12px;
+    color: var(--text-muted);
+    font-size: 0.9rem;
     transition: color 0.3s;
 }
 
 .search-box input:focus+i {
-    color: var(--primary-salmon);
+    color: var(--primary);
 }
 
+/* =========================================
+   ICONOS Y NOTIFICACIONES
+   ========================================= */
 .user-icons {
     display: flex;
     align-items: center;
-    gap: 18px;
+    gap: 20px;
+}
+
+.action-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.action-link i {
+    font-size: 1.3rem;
+    color: var(--secondary);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.action-link .icon-salmon {
+    color: var(--primary);
+}
+
+.action-link:hover i {
+    transform: scale(1.2);
+    color: var(--primary);
+}
+
+.action-link:hover .action-text {
+    color: var(--primary);
+}
+
+/* Notificaciones */
+.notification-wrapper {
+    position: relative;
+    cursor: pointer;
 }
 
 .notification-icon {
-    font-size: 1.3rem;
-    color: var(--text-light);
-    cursor: pointer;
-    transition: color 0.3s ease;
-    position: relative;
+    font-size: 1.4rem;
+    color: var(--secondary);
+    transition: transform 0.2s ease;
 }
 
-.notification-icon:hover {
-    color: var(--primary-salmon);
+.notification-wrapper:hover .notification-icon {
+    transform: rotate(15deg);
+    color: var(--primary);
 }
 
-.notification-icon::after {
-    content: '';
+.badge-notificacion {
     position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 9px;
-    height: 9px;
-    background-color: var(--primary-salmon);
+    top: -6px;
+    right: -8px;
+    background-color: var(--primary);
+    color: var(--bg-white);
+    font-size: 0.7rem;
+    font-weight: bold;
+    height: 18px;
+    min-width: 18px;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 2px solid var(--bg-white);
+    padding: 0 4px;
 }
 
+/* =========================================
+   PERFIL Y BOTONES
+   ========================================= */
 .user-profile {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-left: 10px;
-    cursor: pointer;
+    gap: 12px;
+    padding-left: 20px;
+    border-left: 1px solid var(--border-color);
+}
+
+.user-greeting {
+    font-weight: 600;
+    color: var(--secondary);
+    font-size: 0.95rem;
 }
 
 .avatar {
@@ -178,133 +256,85 @@
     height: 42px;
     border-radius: 50%;
     object-fit: cover;
-    border: 2px solid transparent;
-    transition: border-color 0.3s ease;
+    border: 2px solid var(--primary);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.3s ease;
 }
 
-.user-profile:hover .avatar {
-    border-color: var(--primary-salmon);
+.avatar:hover {
+    transform: scale(1.1);
 }
 
-.user-greeting {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--text-dark);
-}
-
-/* =========================================
-   Botones de Autenticación
-   ========================================= */
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin-left: 15px;
-}
-
+/* Botón Entrar */
 .btn-login {
+    background-color: var(--primary);
+    color: var(--bg-white);
     text-decoration: none;
-    color: var(--primary-salmon);
     font-weight: bold;
-    padding: 8px 16px;
-    border: 2px solid var(--primary-salmon);
-    border-radius: 20px;
+    padding: 10px 24px;
+    border-radius: 25px;
     transition: all 0.3s ease;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-login:hover {
-    background-color: var(--primary-salmon);
-    color: var(--bg-white);
+    background-color: var(--primary-hover);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
 }
 
+/* Botón Salir */
 .btn-logout {
-    background: none;
+    background: transparent;
     border: none;
-    color: var(--text-light);
-    cursor: pointer;
+    color: var(--text-muted);
+    font-weight: 600;
     font-size: 0.9rem;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 5px;
-    transition: color 0.2s;
+    gap: 6px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+}
+
+.btn-logout i {
+    font-size: 1rem;
 }
 
 .btn-logout:hover {
-    color: var(--error-red);
+    background-color: #FFF0F0;
+    color: #E74C3C;
+    /* Rojo suave para indicar salida */
 }
 
 /* =========================================
-   Diseño Responsivo (Tablets y Móviles)
+   RESPONSIVO BÁSICO
    ========================================= */
-@media (max-width: 950px) {
+@media (max-width: 992px) {
+    .search-box input {
+        width: 150px;
+    }
+
+    .search-box input:focus {
+        width: 180px;
+    }
+
+    .user-greeting {
+        display: none;
+    }
+
+    /* Ocultar saludo en móviles para ahorrar espacio */
+}
+
+@media (max-width: 768px) {
     .main-nav {
         display: none;
     }
 
+    /* Idealmente aquí pondrías un menú hamburguesa */
     .search-box {
         display: none;
     }
-}
-
-.fav-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #333;
-    /* O el color de tus iconos */
-    margin-right: 15px;
-    transition: color 0.3s ease;
-}
-
-.fav-link i {
-    font-size: 1.2rem;
-    color: #e74c3c;
-    /* Color rojo para el corazón */
-}
-
-.fav-text {
-    margin-left: 5px;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-.fav-link:hover {
-    color: #e74c3c;
-    transform: scale(1.05);
-}
-
-/* Ocultar texto en móviles si el espacio es poco */
-@media (max-width: 768px) {
-    .fav-text {
-        display: none;
-    }
-}
-
-.notification-wrapper {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    cursor: pointer;
-    margin: 0 15px;
-}
-
-.notification-icon {
-    font-size: 1.4rem;
-    color: #444;
-    /* Color gris oscuro/negro */
-}
-
-.badge-notificacion {
-    position: absolute;
-    top: -5px;
-    right: -8px;
-    background-color: #ff4d4d;
-    /* Rojo vibrante */
-    color: white;
-    font-size: 0.7rem;
-    font-weight: bold;
-    padding: 2px 6px;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
