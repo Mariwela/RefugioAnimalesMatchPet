@@ -1,111 +1,245 @@
-.edit-container {
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
+:host {
+    --primary: #FF7E67;
+    --secondary: #2C3E50;
+    --bg-body: #f4f7f6;
+    --white: #ffffff;
+    --text-main: #444;
+    --border: #e0e6ed;
+    --shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
 }
 
+.edit-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* Cabecera */
 .cabecera-form {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 2px solid #ddd;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
+    margin-bottom: 30px;
 }
 
-.form-seccion {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+.cabecera-form h2 {
+    color: var(--secondary);
+    font-weight: 800;
+    margin: 0;
 }
 
-.form-seccion h3 {
-    margin-top: 0;
-    color: #333;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-}
-
-.grid-2-col {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 15px;
-}
-
-.grid-checkboxes {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-}
-
-.campo {
-    display: flex;
-    flex-direction: column;
-}
-
-.campo label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 14px;
-}
-
-.campo input,
-.campo select,
-.campo textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-family: inherit;
-}
-
-.acciones-finales {
-    text-align: right;
-    margin-top: 20px;
-}
-
-.btn-guardar {
-    background-color: #4CAF50;
-    color: white;
-    padding: 12px 25px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    font-weight: bold;
-}
-
-.btn-guardar:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
+.nombre-resaltado {
+    color: var(--primary);
 }
 
 .btn-cancelar {
-    background-color: #666;
-    color: white;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 4px;
+    background: var(--white);
+    border: 2px solid var(--border);
+    color: var(--secondary);
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.3s;
 }
 
+.btn-cancelar:hover {
+    border-color: var(--secondary);
+    background: var(--secondary);
+    color: white;
+}
+
+/* Secciones del Formulario */
+.form-seccion {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+    border: 1px solid rgba(0, 0, 0, 0.02);
+}
+
+.seccion-titulo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-body);
+}
+
+.seccion-titulo i {
+    color: var(--primary);
+    font-size: 1.2rem;
+}
+
+.seccion-titulo h3 {
+    margin: 0;
+    color: var(--secondary);
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Grids */
+.grid-2-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.grid-3-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 600px) {
+
+    .grid-2-col,
+    .grid-3-col {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Campos de entrada */
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.campo label {
+    font-weight: 700;
+    color: var(--secondary);
+    font-size: 0.9rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+    padding: 12px 15px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s;
+    background-color: #fafafa;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    background-color: white;
+    box-shadow: 0 0 0 4px rgba(255, 126, 103, 0.1);
+}
+
+/* Checkboxes personalizados */
+.grid-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    padding: 10px;
+    border-radius: 10px;
+    transition: background 0.2s;
+}
+
+.checkbox-container:hover {
+    background: var(--bg-body);
+}
+
+.checkbox-container input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--primary);
+}
+
+/* Alertas */
 .alerta {
-    padding: 15px;
-    margin-top: 20px;
-    border-radius: 4px;
-    font-weight: bold;
-    text-align: center;
+    padding: 15px 25px;
+    border-radius: 15px;
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-weight: 600;
 }
 
 .alerta-exito {
-    background-color: #d4edda;
-    color: #155724;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
 }
 
 .alerta-error {
-    background-color: #f8d7da;
-    color: #721c24;
+    background: #ffebee;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+}
+
+/* Botón Guardar */
+.acciones-finales {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.btn-guardar {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(255, 126, 103, 0.3);
+    transition: all 0.3s;
+}
+
+.btn-guardar:hover:not(:disabled) {
+    background: #e86a55;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 126, 103, 0.4);
+}
+
+.btn-guardar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Loading Spinner */
+.loading {
+    text-align: center;
+    padding: 100px 0;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 20px;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

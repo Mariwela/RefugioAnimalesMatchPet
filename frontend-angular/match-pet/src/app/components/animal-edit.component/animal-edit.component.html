@@ -1,157 +1,204 @@
 <div class="edit-container">
 
-    <div *ngIf="cargando" class="loading">
+    @if (cargando) {
+    <div class="loading">
+        <div class="spinner"></div>
         <p>Cargando datos del animal...</p>
     </div>
+    }
 
-    <div *ngIf="!cargando && mensaje.includes('Acceso denegado')" style="text-align: center; padding: 40px;">
-        <h2>{{ mensaje }}</h2>
+    @if (!cargando && mensaje.includes('Acceso denegado')) {
+    <div class="acceso-denegado">
+        <h2>🚫 {{ mensaje }}</h2>
         <p>Redirigiendo a un lugar seguro...</p>
     </div>
+    }
 
-    <div *ngIf="!cargando && !mensaje.includes('Acceso denegado')">
+    @if (!cargando && !mensaje.includes('Acceso denegado')) {
+    <div class="cabecera-form">
+        <h2>✏️ Editar Ficha de <span class="nombre-resaltado">{{ animalForm.get('nombre')?.value }}</span></h2>
+        <button class="btn-cancelar" (click)="cancelar()">
+            <i class="fa fa-arrow-left"></i> Volver
+        </button>
+    </div>
 
-        <div class="cabecera-form">
-            <h2>✏️ Editar Ficha del Animal</h2>
-            <button class="btn-cancelar" (click)="cancelar()">Volver</button>
+    <form [formGroup]="animalForm" (ngSubmit)="guardarCambios()" class="formulario-animal">
+
+        <input type="hidden" formControlName="id_animal">
+
+        <div class="form-seccion">
+            <div class="seccion-titulo">
+                <i class="fa fa-info-circle"></i>
+                <h3>Datos Básicos</h3>
+            </div>
+
+            <div class="grid-2-col">
+                <div class="campo">
+                    <label>Nombre *</label>
+                    <input type="text" formControlName="nombre" placeholder="Ej. Max">
+                </div>
+
+                <div class="campo">
+                    <label>Especie *</label>
+                    <select formControlName="especie">
+                        <option value="Perro">Perro</option>
+                        <option value="Gato">Gato</option>
+                        <option value="Exótico">Exótico</option>
+                        <option value="Otro">Otro</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Raza</label>
+                    <input type="text" formControlName="raza" placeholder="Ej. Mestizo">
+                </div>
+
+                <div class="campo">
+                    <label>Sexo *</label>
+                    <select formControlName="sexo">
+                        <option value="Macho">Macho</option>
+                        <option value="Hembra">Hembra</option>
+                        <option value="Desconocido">Desconocido</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Fecha de Nacimiento</label>
+                    <input type="date" formControlName="fecha_nacimiento">
+                </div>
+
+                <div class="campo">
+                    <label>Microchip</label>
+                    <input type="text" formControlName="microchip" placeholder="Número de chip">
+                </div>
+
+                <div class="campo">
+                    <label>Tamaño</label>
+                    <select formControlName="tamano">
+                        <option value="Pequeño">Pequeño</option>
+                        <option value="Mediano">Mediano</option>
+                        <option value="Grande">Grande</option>
+                        <option value="Gigante">Gigante</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Peso (kg)</label>
+                    <input type="number" step="0.1" formControlName="peso" placeholder="Ej. 12.5">
+                </div>
+            </div>
         </div>
 
-        <form [formGroup]="animalForm" (ngSubmit)="guardarCambios()" class="formulario-animal">
-            ```
-
-            <input type="hidden" formControlName="id_animal">
-
-            <div class="form-seccion">
-                <h3>Datos Básicos</h3>
-                <div class="grid-2-col">
-                    <div class="campo">
-                        <label>Nombre *</label>
-                        <input type="text" formControlName="nombre" placeholder="Ej. Max">
-                    </div>
-
-                    <div class="campo">
-                        <label>Especie *</label>
-                        <select formControlName="especie">
-                            <option value="Perro">Perro</option>
-                            <option value="Gato">Gato</option>
-                            <option value="Exótico">Exótico</option>
-                            <option value="Otro">Otro</option>
-                        </select>
-                    </div>
-
-                    <div class="campo">
-                        <label>Raza</label>
-                        <input type="text" formControlName="raza" placeholder="Ej. Mestizo">
-                    </div>
-
-                    <div class="campo">
-                        <label>Sexo *</label>
-                        <select formControlName="sexo">
-                            <option value="Macho">Macho</option>
-                            <option value="Hembra">Hembra</option>
-                            <option value="Desconocido">Desconocido</option>
-                        </select>
-                    </div>
-
-                    <div class="campo">
-                        <label>Fecha de Nacimiento</label>
-                        <input type="date" formControlName="fecha_nacimiento">
-                    </div>
-
-                    <div class="campo">
-                        <label>Microchip</label>
-                        <input type="text" formControlName="microchip">
-                    </div>
-
-                    <div class="campo">
-                        <label>Tamaño</label>
-                        <select formControlName="tamano">
-                            <option value="Pequeño">Pequeño</option>
-                            <option value="Mediano">Mediano</option>
-                            <option value="Grande">Grande</option>
-                            <option value="Gigante">Gigante</option>
-                        </select>
-                    </div>
-
-                    <div class="campo">
-                        <label>Peso (kg)</label>
-                        <input type="number" step="0.1" formControlName="peso" placeholder="Ej. 12.5">
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-seccion">
+        <div class="form-seccion">
+            <div class="seccion-titulo">
+                <i class="fa fa-heartbeat"></i>
                 <h3>Comportamiento y Estado</h3>
-                <div class="grid-2-col">
-                    <div class="campo">
-                        <label>Estado de Adopción</label>
-                        <select formControlName="estado">
-                            <option value="Disponible">Disponible</option>
-                            <option value="Adoptado">Adoptado</option>
-                            <option value="En Acogida">En Acogida</option>
-                            <option value="Reservado">Reservado</option>
-                        </select>
-                    </div>
-
-                    <div class="campo">
-                        <label>Nivel de Energía</label>
-                        <select formControlName="nivel_energia">
-                            <option value="Baja">Baja</option>
-                            <option value="Media">Media</option>
-                            <option value="Alta">Alta</option>
-                        </select>
-                    </div>
-
-                    <div class="campo">
-                        <label>Nivel de Paciencia requerido</label>
-                        <select formControlName="nivel_paciencia">
-                            <option value="Baja">Baja</option>
-                            <option value="Media">Media</option>
-                            <option value="Alta">Alta</option>
-                        </select>
-                    </div>
-                </div>
             </div>
-
-            <div class="form-seccion">
-                <h3>Salud y Sociabilidad (Marca las opciones correctas)</h3>
-                <div class="grid-checkboxes">
-                    <label><input type="checkbox" formControlName="apto_pisos"> Apto para pisos</label>
-                    <label><input type="checkbox" formControlName="sociable_ninos"> Sociable con niños</label>
-                    <label><input type="checkbox" formControlName="sociable_perros"> Sociable con perros</label>
-                    <label><input type="checkbox" formControlName="sociable_gatos"> Sociable con gatos</label>
-                    <label><input type="checkbox" formControlName="esterilizado"> Esterilizado</label>
-                    <label><input type="checkbox" formControlName="enfermedad_cronica"> Enfermedad crónica</label>
-                    <label><input type="checkbox" formControlName="es_para_principiantes"> Ideal para
-                        principiantes</label>
-                </div>
-            </div>
-
-            <div class="form-seccion">
-                <h3>Textos Descriptivos</h3>
+            <div class="grid-3-col">
                 <div class="campo">
-                    <label>Aviso Importante (Se mostrará destacado si hay algo urgente)</label>
-                    <input type="text" formControlName="aviso_importante" placeholder="Ej. Necesita licencia PPP">
+                    <label>Estado de Adopción</label>
+                    <select formControlName="estado" class="select-estado">
+                        <option value="Disponible">Disponible</option>
+                        <option value="Adoptado">Adoptado</option>
+                        <option value="En Acogida">En Acogida</option>
+                        <option value="Reservado">Reservado</option>
+                    </select>
                 </div>
 
                 <div class="campo">
-                    <label>Descripción detallada</label>
-                    <textarea formControlName="descripcion" rows="5"
-                        placeholder="Cuenta la historia del peludo..."></textarea>
+                    <label>Nivel de Energía</label>
+                    <select formControlName="nivel_energia">
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+
+                <div class="campo">
+                    <label>Paciencia requerida</label>
+                    <select formControlName="nivel_paciencia">
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta">Alta</option>
+                    </select>
                 </div>
             </div>
+        </div>
 
-            <div *ngIf="mensaje" class="alerta"
-                [ngClass]="{'alerta-exito': mensaje.includes('correctamente'), 'alerta-error': !mensaje.includes('correctamente')}">
-                {{ mensaje }}
+        <div class="form-seccion">
+            <div class="seccion-titulo">
+                <i class="fa fa-check-square"></i>
+                <h3>Salud y Sociabilidad</h3>
+            </div>
+            <div class="grid-checkboxes">
+                <label class="checkbox-container">
+                    <input type="checkbox" formControlName="apto_pisos">
+                    <span class="checkmark"></span> Apto para pisos
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" formControlName="sociable_ninos">
+                    <span class="checkmark"></span> Sociable con niños
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" formControlName="sociable_perros">
+                    <span class="checkmark"></span> Sociable con perros
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" formControlName="sociable_gatos">
+                    <span class="checkmark"></span> Sociable con gatos
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" formControlName="esterilizado">
+                    <span class="checkmark"></span> Esterilizado
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" formControlName="enfermedad_cronica">
+                    <span class="checkmark"></span> Enfermedad crónica
+                </label>
+                <label class="checkbox-container">
+                    <input type="checkbox" formControlName="es_para_principiantes">
+                    <span class="checkmark"></span> Ideal principiantes
+                </label>
+            </div>
+        </div>
+
+        <div class="form-seccion">
+            <div class="seccion-titulo">
+                <i class="fa fa-file-text"></i>
+                <h3>Descripción</h3>
+            </div>
+            <div class="campo">
+                <label>Aviso Importante</label>
+                <input type="text" formControlName="aviso_importante" class="input-aviso"
+                    placeholder="Ej. Necesita licencia PPP o medicación especial">
             </div>
 
-            <div class="acciones-finales">
-                <button type="submit" class="btn-guardar" [disabled]="animalForm.invalid || guardando">
-                    {{ guardando ? 'Guardando en la base de datos...' : '💾 Guardar Cambios' }}
-                </button>
+            <div class="campo">
+                <label>Historia del peludo</label>
+                <textarea formControlName="descripcion" rows="6"
+                    placeholder="Cuenta su historia, carácter..."></textarea>
             </div>
+        </div>
 
-        </form>
-    </div>
+        @if (mensaje) {
+        <div class="alerta" [class.alerta-exito]="mensaje.includes('correctamente')"
+            [class.alerta-error]="!mensaje.includes('correctamente')">
+            <i class="fa" [class.fa-check-circle]="mensaje.includes('correctamente')"
+                [class.fa-exclamation-circle]="!mensaje.includes('correctamente')"></i>
+            {{ mensaje }}
+        </div>
+        }
+
+        <div class="acciones-finales">
+            <button type="submit" class="btn-guardar" [disabled]="animalForm.invalid || guardando">
+                @if (guardando) {
+                <i class="fa fa-circle-o-notch fa-spin"></i> Guardando...
+                } @else {
+                <i class="fa fa-save"></i> Guardar Cambios
+                }
+            </button>
+        </div>
+
+    </form>
+    }
 </div>
