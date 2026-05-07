@@ -11,29 +11,30 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // 1. ¿Tiene solicitudes que acaban de ser aprobadas o rechazadas?
-    $stmtSol = $db->prepare("SELECT COUNT(*) as total FROM solicitudes_adopcion 
-                             WHERE id_usuario = :id_u AND estado != 'Pendiente'");
+    // 1. Contar solicitudes que ya NO están pendientes (Aprobadas o Rechazadas)
+    // Usamos 'estado_solicitud' que es el nombre real en tu tabla 'solicitudes'
+    $stmtSol = $db->prepare("SELECT COUNT(*) as total FROM solicitudes 
+                             WHERE id_usuario = :id_u AND estado_solicitud != 'Pendiente'");
     $stmtSol->execute([':id_u' => $id_u]);
-    $solicitudesActualizadas = $stmtSol->fetch(PDO::FETCH_ASSOC)['total'];
+    $resSol = $stmtSol->fetch(PDO::FETCH_ASSOC);
+    $solicitudesActualizadas = $resSol ? (int)$resSol['total'] : 0;
 
-    // 2. ¿Tiene historias que ya fueron aprobadas?
-    $stmtHist = $db->prepare("SELECT COUNT(*) as total FROM historias_adopcion 
-                              WHERE id_usuario = :id_u AND estado = 'Aprobada'");
+    // 2. Historias (En tu SQL no hay columna 'estado', así que solo contamos cuántas tiene)
+    $stmtHist = $db->prepare("SELECT COUNT(*) as total FROM historias_adopcion WHERE id_usuario = :id_u");
     $stmtHist->execute([':id_u' => $id_u]);
-    $historiasAprobadas = $stmtHist->fetch(PDO::FETCH_ASSOC)['total'];
+    $resHist = $stmtHist->fetch(PDO::FETCH_ASSOC);
+    $historiasTotales = $resHist ? (int)$resHist['total'] : 0;
 
-    // Enviamos un resumen de "puntos de interés"
     echo json_encode([
         "status" => "success",
         "alertas" => [
-            "solicitudes_finalizadas" => (int)$solicitudesActualizadas,
-            "historias_publicadas" => (int)$historiasAprobadas
+            "solicitudes_finalizadas" => $solicitudesActualizadas,
+            "historias_publicadas" => $historiasTotales
         ],
-        "mensaje_global" => "Tienes " . ($solicitudesActualizadas + $historiasAprobadas) . " actualizaciones en tu perfil."
+        "mensaje_global" => "Tienes " . ($solicitudesActualizadas) . " actualizaciones en tus solicitudes."
     ]);
 
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(["message" => $e->getMessage()]);
+    echo json_encode(["message" => "Error SQL: " . $e->getMessage()]);
 }

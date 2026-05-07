@@ -4,13 +4,14 @@ require_once '../../config/config.php';
 require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
+// Solo el admin puede hacer esto
 requiere_rol('admin');
 
 $data = json_decode(file_get_contents('php://input'));
 
 if (!$data || empty($data->id_solicitud) || empty($data->id_animal)) {
     http_response_code(400);
-    echo json_encode(["message" => "Faltan datos obligatorios (id_solicitud e id_animal)."]);
+    echo json_encode(["message" => "Faltan datos: id_solicitud o id_animal."]);
     exit;
 }
 
@@ -18,44 +19,43 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Iniciamos una TRANSACCIÓN para asegurar que se cumplen todos los pasos o ninguno
+    // Iniciamos transacción para que se haga todo o nada
     $db->beginTransaction();
 
-    // 1. Aprobar la solicitud seleccionada
-    $queryAprobar = "UPDATE solicitudes SET estado_solicitud = 'Aprobada' WHERE id_solicitud = :id_s";
-    $stmt1 = $db->prepare($queryAprobar);
+    // 1. Aprobar la solicitud actual (Tabla: solicitudes | Columna: estado_solicitud)
+    $queryS = "UPDATE solicitudes SET estado_solicitud = 'Aprobada' WHERE id_solicitud = :id_s";
+    $stmt1 = $db->prepare($queryS);
     $stmt1->execute([':id_s' => $data->id_solicitud]);
 
-    // 2. Cambiar el estado del animal a 'Adoptado'
-    $queryAnimal = "UPDATE animales SET estado_solicitud = 'Adoptado' WHERE id_animal = :id_a";
-    $stmt2 = $db->prepare($queryAnimal);
+    // 2. Marcar al animal como Adoptado (Tabla: animales | Columna: estado)
+    // AQUÍ ESTABA EL ERROR: Usábamos estado_solicitud en lugar de estado
+    $queryA = "UPDATE animales SET estado = 'Adoptado' WHERE id_animal = :id_a";
+    $stmt2 = $db->prepare($queryA);
     $stmt2->execute([':id_a' => $data->id_animal]);
 
-    // 3. (Opcional) Rechazar automáticamente otras solicitudes pendientes para este mismo animal
-    $queryLimpiar = "UPDATE solicitudes 
-                     SET estado_solicitud = 'Rechazada' 
-                     WHERE id_animal = :id_a 
-                     AND id_solicitud != :id_s 
-                     AND estado_solicitud = 'Pendiente'";
-    $stmt3 = $db->prepare($queryLimpiar);
+    // 3. Rechazar automáticamente otras solicitudes pendientes para este mismo animal
+    $queryL = "UPDATE solicitudes 
+               SET estado_solicitud = 'Rechazada' 
+               WHERE id_animal = :id_a 
+               AND id_solicitud != :id_s 
+               AND estado_solicitud = 'Pendiente'";
+    $stmt3 = $db->prepare($queryL);
     $stmt3->execute([
         ':id_a' => $data->id_animal,
         ':id_s' => $data->id_solicitud
     ]);
 
-    // Si todo salió bien, confirmamos los cambios en la DB
     $db->commit();
 
     echo json_encode([
-        "status" => "success",
-        "message" => "¡Adopción validada! El animal ya no está disponible y se han gestionado las demás solicitudes."
+        "status" => "success", 
+        "message" => "¡Adopción procesada con éxito! El animal ahora figura como Adoptado."
     ]);
 
 } catch (Exception $e) {
-    // Si algo falla (ej: se cae la conexión), deshacemos todo para no dejar datos incoherentes
-    if ($db->inTransaction()) {
+    if (isset($db) && $db->inTransaction()) {
         $db->rollBack();
     }
     http_response_code(500);
-    echo json_encode(["message" => "Error al validar adopción: " . $e->getMessage()]);
+    echo json_encode(["message" => "Error en la base de datos: " . $e->getMessage()]);
 }
