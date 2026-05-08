@@ -13,6 +13,8 @@ import { MisFavoritosComponent } from './components/mis-favoritos.component/mis-
 import { AnimalSoliList } from './components/animal-soli-list/animal-soli-list';
 import { ListarHistoriasComponent } from './components/listar-historias.component/listar-historias.component';
 import { ModerarHistoriasComponent } from './components/moderar-historias.component/moderar-historias.component';
+import { PublicarHistoriasComponent } from './components/publicar-historias.component/publicar-historias.component';
+import { authGuard } from './guards/auth-guard';
 
 export const routes: Routes = [
     // Rutas públicas que ya tenías
@@ -34,7 +36,11 @@ export const routes: Routes = [
 
     { path: 'historias', component: ListarHistoriasComponent },
     { path: 'historias/moderar', component: ModerarHistoriasComponent },
-
+    {
+        path: 'historias/publicar',
+        component: PublicarHistoriasComponent,
+        canActivate: [authGuard] // Protegemos para que pidan iniciar sesión
+    },
     // RUTA COMODÍN (Wildcard) - Siempre al final
     { path: '**', redirectTo: '' }
 ];

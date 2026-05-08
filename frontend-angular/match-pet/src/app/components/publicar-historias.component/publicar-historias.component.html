@@ -1,1 +1,59 @@
-<p>publicar-historias.component works!</p>
+<div class="contenedor-publicar">
+    <h2>Publicar un Final Feliz 🐾</h2>
+
+    @if (cargandoInicial) {
+    <p class="cargando-texto">Verificando adopciones...</p>
+    }
+
+    @if (!cargandoInicial) {
+
+    @if (animalesAdoptados.length === 0) {
+    <div class="alerta aviso-bloqueo">
+        <h3>¡Aún no has adoptado!</h3>
+        <p>Para publicar una historia, primero debes haber completado el proceso de adopción de un peludito en nuestro
+            refugio. ¡Anímate a cambiar una vida!</p>
+        <a routerLink="/animales" class="btn-ir-adoptar">Ver animales en adopción</a>
+    </div>
+    }
+
+    @if (animalesAdoptados.length > 0) {
+    <p>Comparte tu historia de adopción con la comunidad.</p>
+
+    @if (mensajeError) { <div class="alerta error">{{ mensajeError }}</div> }
+    @if (mensajeExito) { <div class="alerta exito">{{ mensajeExito }}</div> }
+
+    <form (ngSubmit)="enviarHistoria()" #historiaForm="ngForm">
+
+        <div class="form-group">
+            <label for="id_animal">¿De quién es esta historia?</label>
+            <select id="id_animal" name="id_animal" [(ngModel)]="datosFormulario.id_animal" required>
+                <option [ngValue]="null" disabled selected>Selecciona a tu peludito...</option>
+
+                @for (animal of animalesAdoptados; track animal.id_animal) {
+                <option [value]="animal.id_animal">
+                    {{ animal.nombre }}
+                </option>
+                }
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="titulo">Título de la historia:</label>
+            <input type="text" id="titulo" name="titulo" placeholder="Ej: Max y su nueva familia"
+                [(ngModel)]="datosFormulario.titulo" required>
+        </div>
+
+        <div class="form-group">
+            <label for="contenido">Cuéntanos vuestra experiencia:</label>
+            <textarea id="contenido" name="contenido" rows="6"
+                placeholder="¿Cómo fue la adaptación? ¿Qué es lo que más os gusta de él/ella?"
+                [(ngModel)]="datosFormulario.contenido" required></textarea>
+        </div>
+
+        <button type="submit" [disabled]="cargando || !historiaForm.form.valid" class="btn-enviar">
+            @if (cargando) { Enviando... } @else { Enviar Historia a Moderación }
+        </button>
+    </form>
+    }
+    }
+</div>

@@ -33,4 +33,8 @@ export class HistoriaService {
   publicarHistoria(datos: { id_animal: number, titulo: string, contenido: string }): Observable<any> {
     return this.http.post<any>(this.apiUrl + 'publicar_historia.php', datos);
   }
+  // Añade esto en tu HistoriaService
+  obtenerMisAdoptados(): Observable<any> {
+    return this.http.get<any>(this.apiUrl + 'mis_adoptados.php');
+  }
 }

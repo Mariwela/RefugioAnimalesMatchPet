@@ -1,5 +1,14 @@
 <div class="contenedor-historias">
-    <h2>Historias de Adopción Felices</h2>
+
+    <div class="cabecera-historias"
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Historias de Adopción Felices</h2>
+
+        <a routerLink="/historias/publicar" class="btn-publicar"
+            style="background-color: #ff6b6b; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: bold;">
+            <i class="fa fa-paw"></i> ¡Comparte tu historia!
+        </a>
+    </div>
 
     @if (cargando) {
     <div class="mensaje-carga">
