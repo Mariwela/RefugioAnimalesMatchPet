@@ -17,8 +17,7 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Añadimos 'rol' a la SELECT (en el orsiginal ya estaba, sin cambios)
-    $query = "SELECT id_usuario, nombre_completo, email, password, rol FROM usuarios WHERE email = :email LIMIT 1";
+    $query = "SELECT id_usuario, nombre_completo, email, password, rol, avatar FROM usuarios WHERE email = :email LIMIT 1";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':email', $data->email);
     $stmt->execute();
@@ -40,7 +39,7 @@ try {
             http_response_code(200);
             echo json_encode([
                 "message" => "Login exitoso",
-                "token"   => $token,   // <-- Angular lo guarda en localStorage
+                "token"   => $token,
                 "user"    => $user
             ]);
 
