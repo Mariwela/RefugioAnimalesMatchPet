@@ -1,0 +1,31 @@
+.legal-page {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+  font-family: 'DM Sans', sans-serif;
+  color: #2E1A0E;
+  line-height: 1.8;
+}
+
+.legal-page h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  color: #2E1A0E;
+  margin-bottom: 2rem;
+}
+
+.legal-page h2 {
+  font-size: 16px;
+  font-weight: 500;
+  color: #C85A2A;
+  margin: 2rem 0 0.5rem;
+}
+
+.legal-page p {
+  font-size: 14px;
+  color: #4A2E1A;
+}
+
+.legal-page a {
+  color: #C85A2A;
+}

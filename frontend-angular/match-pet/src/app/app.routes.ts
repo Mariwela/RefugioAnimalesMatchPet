@@ -17,11 +17,18 @@ import { PublicarHistoriasComponent } from './components/publicar-historias.comp
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard'; // <--- ¡Asegúrate de que esta ruta sea correcta!
 
+import { PoliticaPrivacidad} from './pages/politica-privacidad/politica-privacidad';
+import { AvisoLegal } from './pages/aviso-legal/aviso-legal';
+import { SobreNosotros } from './components/sobre-nosotros/sobre-nosotros';
+
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'animales', component: AnimalComponent },
     { path: 'animal/:id', component: AnimalDetalleComponent },
     { path: 'login', component: LoginComponent },
+    { path: 'politica-privacidad', component: PoliticaPrivacidad},
+    { path: 'aviso-legal', component: AvisoLegal },
+    { path: 'sobre-nosotros', component: SobreNosotros },
 
     // Rutas protegidas para gestión de animales
     { path: 'animales/editar/:id', component: AnimalEditComponent },
