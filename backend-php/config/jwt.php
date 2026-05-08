@@ -70,15 +70,37 @@ function jwt_verificar(string $token): array|false {
 //    Lee "Authorization: Bearer <token>"
 //    Uso: $token = jwt_extraer_header();
 // ------------------------------------------------
-function jwt_extraer_header(): string|false {
-    $headers = getallheaders();
+// ------------------------------------------------
+// Extrae el token del encabezado de la petición
+// ------------------------------------------------
+function jwt_extraer_header() {
+    $headers = null;
 
-    // getallheaders() puede devolver mayúsculas o minúsculas según el servidor
-    $auth = $headers['Authorization'] ?? $headers['authorization'] ?? null;
+    // 1. Intenta leerlo de forma normal
+    if (isset($_SERVER['Authorization'])) {
+        $headers = trim($_SERVER["Authorization"]);
+    } 
+    // 2. MAGIA: Intenta leer la variable segura del .htaccess (¡Esto es lo que te falta!)
+    else if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+        $headers = trim($_SERVER["HTTP_AUTHORIZATION"]);
+    } 
+    // 3. Método nativo de Apache
+    elseif (function_exists('apache_request_headers')) {
+        $requestHeaders = apache_request_headers();
+        $requestHeaders = array_combine(array_map('ucwords', array_keys($requestHeaders)), array_values($requestHeaders));
+        if (isset($requestHeaders['Authorization'])) {
+            $headers = trim($requestHeaders['Authorization']);
+        }
+    }
 
-    if (!$auth || !str_starts_with($auth, 'Bearer ')) return false;
-
-    return trim(substr($auth, 7));
+    // Si encontró el texto, sacamos solo el token (quitamos la palabra "Bearer ")
+    if (!empty($headers)) {
+        if (preg_match('/Bearer\s(\S+)/', $headers, $matches)) {
+            return $matches[1];
+        }
+    }
+    
+    return null;
 }
 
 // ------------------------------------------------

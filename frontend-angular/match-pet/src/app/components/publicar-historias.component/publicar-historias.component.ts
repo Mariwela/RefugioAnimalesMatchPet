@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HistoriaService } from '../../services/historia';
+
 @Component({
   selector: 'app-publicar-historias.component',
   standalone: true,
@@ -24,20 +25,29 @@ export class PublicarHistoriasComponent implements OnInit {
   mensajeExito: string = '';
   mensajeError: string = '';
 
-  constructor(private historiaService: HistoriaService) { }
+  constructor(private historiaService: HistoriaService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    // Al entrar, comprobamos qué animales ha adoptado
+    console.log('1. Arranca ngOnInit y pide los animales...');
+
     this.historiaService.obtenerMisAdoptados().subscribe({
       next: (res) => {
+        console.log('2. ¡Angular recibió la respuesta!', res);
+
         if (res.status === 'success') {
           this.animalesAdoptados = res.data;
+          console.log('3. Animales guardados en la variable:', this.animalesAdoptados);
+        } else {
+          console.log('El status no fue success:', res.status);
         }
-        this.cargandoInicial = false;
+
+        this.cargandoInicial = false; // Esto quita el mensaje de "Verificando..."
+        this.cdr.detectChanges(); // Forzar la detección de cambios
       },
       error: (err) => {
-        console.error('Error al verificar adopciones', err);
+        console.error('2. Ocurrió un error en la suscripción:', err);
         this.cargandoInicial = false;
+        this.cdr.detectChanges(); // Forzar la detección de cambios
       }
     });
   }

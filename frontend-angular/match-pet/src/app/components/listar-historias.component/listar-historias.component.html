@@ -1,23 +1,25 @@
 <div class="contenedor-historias">
+    <header class="seccion-cabecera">
+        <div class="texto-cabecera">
+            <h2>Historias de Adopción <span>Finales Felices 🐾</span></h2>
+            <p>Descubre cómo estos peluditos cambiaron la vida de sus nuevas familias.</p>
+        </div>
 
-    <div class="cabecera-historias"
-        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>Historias de Adopción Felices</h2>
-
-        <a routerLink="/historias/publicar" class="btn-publicar"
-            style="background-color: #ff6b6b; color: white; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: bold;">
-            <i class="fa fa-paw"></i> ¡Comparte tu historia!
+        <a routerLink="/historias/publicar" class="btn-principal">
+            <i class="fas fa-plus-circle"></i> ¡Comparte tu historia!
         </a>
-    </div>
+    </header>
 
     @if (cargando) {
-    <div class="mensaje-carga">
-        <p>Cargando historias...</p>
+    <div class="estado-info">
+        <div class="spinner"></div>
+        <p>Cargando momentos mágicos...</p>
     </div>
     }
 
     @if (error) {
-    <div class="mensaje-error">
+    <div class="estado-info error">
+        <i class="fas fa-exclamation-triangle"></i>
         <p>{{ error }}</p>
     </div>
     }
@@ -26,25 +28,48 @@
     <div class="grid-historias">
 
         @for (historia of historias; track historia.id_historia) {
-        <div class="tarjeta-historia">
+        <article class="tarjeta-historia">
 
-            @if (historia.imagen_url) {
-            <img [src]="historia.imagen_url" [alt]="historia.titulo" class="imagen-historia">
-            }
+            <div class="contenedor-imagen">
+                @if (historia.imagen_url) {
+                <img [src]="historia.imagen_url" [alt]="historia.titulo">
+                } @else {
+                <div class="imagen-placeholder">
+                    <i class="fas fa-paw"></i>
+                </div>
+                }
+            </div>
 
-            <h3>{{ historia.titulo }}</h3>
+            <div class="contenido-tarjeta">
+                <h3 class="titulo-historia">{{ historia.titulo }}</h3>
 
-            <p class="meta-info">
-                <strong>Peludito:</strong> {{ historia.nombre_animal }} <br>
-                <strong>Adoptante:</strong> {{ historia.nombre_usuario || 'Anónimo' }} <br>
-                <strong>Fecha:</strong> {{ historia.fecha | date:'dd/MM/yyyy' }}
-            </p>
+                <div class="meta-datos">
+                    <span class="dato">
+                        <i class="fas fa-dog"></i> {{ historia.nombre_animal }}
+                    </span>
+                    <span class="dato">
+                        <i class="fas fa-user"></i> {{ historia.nombre_usuario || 'Anónimo' }}
+                    </span>
+                    <span class="dato fecha">
+                        <i class="far fa-calendar-alt"></i> {{ historia.fecha | date:'dd MMM, yyyy' }}
+                    </span>
+                </div>
 
-            <p class="texto-historia">{{ historia.contenido }}</p>
-        </div>
+                <p class="resumen-texto">{{ historia.contenido }}</p>
+
+                @if (authService.isLoggedIn() && (esAdmin || historia.id_usuario === usuarioActualId)) {
+                <footer class="pie-tarjeta">
+                    <button (click)="eliminarHistoria(historia)" class="btn-borrar" title="Eliminar historia">
+                        <i class="fas fa-trash-alt"></i> Eliminar
+                    </button>
+                </footer>
+                }
+            </div>
+        </article>
         } @empty {
         <div class="mensaje-vacio">
-            <p>Aún no hay historias de adopción. ¡Vuelve pronto para leer finales felices!</p>
+            <i class="fas fa-feather-alt"></i>
+            <p>Aún no hay historias. ¡Sé el primero en contarnos la tuya!</p>
         </div>
         }
 

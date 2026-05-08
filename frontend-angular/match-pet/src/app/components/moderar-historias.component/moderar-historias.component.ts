@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { HistoriaService } from '../../services/historia';
 import { HistoriaModel } from '../../interfaces/historia.model';
 import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-moderar-historias.component',
+  standalone: true,
   imports: [CommonModule, DatePipe],
   templateUrl: './moderar-historias.component.html',
   styleUrl: './moderar-historias.component.css',
@@ -14,7 +15,7 @@ export class ModerarHistoriasComponent implements OnInit {
   cargando: boolean = true;
   error: string = '';
 
-  constructor(private historiaService: HistoriaService) { }
+  constructor(private historiaService: HistoriaService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.cargarPendientes();
@@ -22,26 +23,26 @@ export class ModerarHistoriasComponent implements OnInit {
 
   cargarPendientes(): void {
     this.cargando = true;
+    this.error = ''; // <--- Limpia el error al empezar
 
-    // Ahora llamamos al método específico de pendientes
     this.historiaService.obtenerPendientes().subscribe({
       next: (respuesta) => {
         if (respuesta.status === 'success') {
-          // Ya no necesitamos hacer un .filter() porque el PHP ya lo hace
           this.historiasPendientes = respuesta.data;
         } else {
-          this.error = 'No se pudieron cargar las historias pendientes.';
+          // Si el status no es success (ej. "No hay historias")
+          this.error = respuesta.message || 'No hay historias pendientes.';
         }
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error('Error al cargar pendientes:', err);
-        this.error = 'Error de conexión con el servidor.';
+        this.error = 'Error al conectar con el servidor. Revisa la consola.';
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
   }
-
   cambiarEstado(historia: HistoriaModel, nuevoEstado: 'Aprobada' | 'Rechazada'): void {
     let comentario = '';
 

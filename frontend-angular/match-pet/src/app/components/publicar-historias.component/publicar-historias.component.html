@@ -2,7 +2,9 @@
     <h2>Publicar un Final Feliz 🐾</h2>
 
     @if (cargandoInicial) {
-    <p class="cargando-texto">Verificando adopciones...</p>
+    <div class="pantalla-carga">
+        <p class="cargando-texto">Verificando adopciones...</p>
+    </div>
     }
 
     @if (!cargandoInicial) {
@@ -17,22 +19,19 @@
     }
 
     @if (animalesAdoptados.length > 0) {
-    <p>Comparte tu historia de adopción con la comunidad.</p>
+    <p class="subtitulo">Comparte tu historia de adopción con la comunidad.</p>
 
     @if (mensajeError) { <div class="alerta error">{{ mensajeError }}</div> }
     @if (mensajeExito) { <div class="alerta exito">{{ mensajeExito }}</div> }
 
-    <form (ngSubmit)="enviarHistoria()" #historiaForm="ngForm">
+    <form (ngSubmit)="enviarHistoria()" #historiaForm="ngForm" class="formulario-historia">
 
         <div class="form-group">
             <label for="id_animal">¿De quién es esta historia?</label>
             <select id="id_animal" name="id_animal" [(ngModel)]="datosFormulario.id_animal" required>
-                <option [ngValue]="null" disabled selected>Selecciona a tu peludito...</option>
-
+                <option [ngValue]="null" disabled>Selecciona a tu peludito...</option>
                 @for (animal of animalesAdoptados; track animal.id_animal) {
-                <option [value]="animal.id_animal">
-                    {{ animal.nombre }}
-                </option>
+                <option [value]="animal.id_animal">{{ animal.nombre }}</option>
                 }
             </select>
         </div>
@@ -51,7 +50,8 @@
         </div>
 
         <button type="submit" [disabled]="cargando || !historiaForm.form.valid" class="btn-enviar">
-            @if (cargando) { Enviando... } @else { Enviar Historia a Moderación }
+            @if (cargando) { <i class="fa fa-spinner fa-spin"></i> Enviando... }
+            @else { <i class="fa fa-paper-plane"></i> Enviar Historia a Moderación }
         </button>
     </form>
     }

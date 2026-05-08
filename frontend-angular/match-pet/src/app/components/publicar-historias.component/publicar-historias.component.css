@@ -1,0 +1,165 @@
+/* Contenedor principal */
+.contenedor-publicar {
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.contenedor-publicar h2 {
+    color: #2c3e50;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 28px;
+}
+
+.subtitulo {
+    text-align: center;
+    color: #7f8c8d;
+    margin-bottom: 25px;
+    font-size: 15px;
+}
+
+/* Pantalla de carga */
+.pantalla-carga {
+    text-align: center;
+    padding: 40px 0;
+}
+
+.cargando-texto {
+    color: #ff6b6b;
+    font-weight: bold;
+    font-size: 18px;
+    animation: latido 1.5s infinite;
+}
+
+@keyframes latido {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Alertas y Mensajes */
+.alerta {
+    padding: 15px 20px;
+    border-radius: 10px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.aviso-bloqueo {
+    background-color: #fff9e6;
+    border: 2px dashed #f1c40f;
+    color: #8a6d3b;
+}
+
+.aviso-bloqueo h3 {
+    margin-top: 0;
+    color: #d35400;
+}
+
+.error {
+    background-color: #fdeaea;
+    color: #e74c3c;
+    border-left: 5px solid #e74c3c;
+}
+
+.exito {
+    background-color: #eafaf1;
+    color: #27ae60;
+    border-left: 5px solid #27ae60;
+}
+
+/* Formularios */
+.formulario-historia .form-group {
+    margin-bottom: 20px;
+}
+
+.formulario-historia label {
+    display: block;
+    margin-bottom: 8px;
+    color: #34495e;
+    font-weight: 600;
+}
+
+.formulario-historia input,
+.formulario-historia select,
+.formulario-historia textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e6ed;
+    border-radius: 8px;
+    font-size: 15px;
+    color: #2c3e50;
+    background-color: #f8fafc;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    /* Evita que se salgan del contenedor */
+}
+
+.formulario-historia input:focus,
+.formulario-historia select:focus,
+.formulario-historia textarea:focus {
+    outline: none;
+    border-color: #ff6b6b;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 107, 107, 0.15);
+}
+
+.formulario-historia textarea {
+    resize: vertical;
+    /* Permite estirar solo hacia abajo */
+}
+
+/* Botones */
+.btn-enviar {
+    width: 100%;
+    background-color: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-enviar:hover:not(:disabled) {
+    background-color: #ff5252;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+}
+
+.btn-enviar:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.btn-ir-adoptar {
+    display: inline-block;
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.btn-ir-adoptar:hover {
+    background-color: #2980b9;
+}

@@ -2,6 +2,7 @@ import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { isPlatformBrowser } from '@angular/common'; // <-- Importamos esto
 import { Observable } from 'rxjs';
+import id from '@angular/common/locales/extra/id';
 
 export interface AuthResponse {
   message: string;
@@ -38,6 +39,7 @@ export class AuthService {
       localStorage.setItem('usuario_nombre', nombre);
       localStorage.setItem('usuario_rol', rol);
       localStorage.setItem('usuario_avatar', avatar);
+      localStorage.setItem('usuario_id', id.toString());
       if (avatar) {
         localStorage.setItem('usuario_avatar', avatar);
       } else {
@@ -45,7 +47,13 @@ export class AuthService {
       }
     }
   }
-
+  getUsuarioId(): number | null {
+    if (isPlatformBrowser(this.platformId)) {
+      const id = localStorage.getItem('usuario_id');
+      return id ? parseInt(id, 10) : null;
+    }
+    return null;
+  }
   getToken(): string | null {
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem('auth_token');
@@ -73,6 +81,7 @@ export class AuthService {
       localStorage.removeItem('auth_token');
       localStorage.removeItem('usuario_nombre');
       localStorage.removeItem('usuario_rol');
+      localStorage.removeItem('usuario_id');
       localStorage.removeItem('usuario_avatar');
     }
   }
