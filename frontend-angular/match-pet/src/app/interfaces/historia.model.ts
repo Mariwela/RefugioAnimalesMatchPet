@@ -1,18 +1,19 @@
-import { Historia } from "../services/historia";
-
 export interface HistoriaModel {
-    id_historia?: number;
-    id_animal?: number;
+    id_historia: number;
     id_usuario?: number;
-    titulo?: string;      // Asumiendo que tienes este campo en tu tabla
-    contenido?: string;   // Asumiendo que tienes este campo
+    id_animal?: number;
+    titulo: string;
+    contenido: string;
+    imagen_url?: string;
     fecha: string;
-    estado?: string;
+
+    // Estos vienen del JOIN en tu PHP (a.nombre y u.nombre_completo)
     nombre_animal: string;
     nombre_usuario: string;
 }
+
 export interface RespuestaHistorias {
     status: string;
-    data: Historia[];
+    data: HistoriaModel[];
     message?: string;
 }

@@ -1,1 +1,44 @@
-<p>listar-historias.component works!</p>
+<div class="contenedor-historias">
+    <h2>Historias de Adopción Felices</h2>
+
+    @if (cargando) {
+    <div class="mensaje-carga">
+        <p>Cargando historias...</p>
+    </div>
+    }
+
+    @if (error) {
+    <div class="mensaje-error">
+        <p>{{ error }}</p>
+    </div>
+    }
+
+    @if (!cargando && !error) {
+    <div class="grid-historias">
+
+        @for (historia of historias; track historia.id_historia) {
+        <div class="tarjeta-historia">
+
+            @if (historia.imagen_url) {
+            <img [src]="historia.imagen_url" [alt]="historia.titulo" class="imagen-historia">
+            }
+
+            <h3>{{ historia.titulo }}</h3>
+
+            <p class="meta-info">
+                <strong>Peludito:</strong> {{ historia.nombre_animal }} <br>
+                <strong>Adoptante:</strong> {{ historia.nombre_usuario || 'Anónimo' }} <br>
+                <strong>Fecha:</strong> {{ historia.fecha | date:'dd/MM/yyyy' }}
+            </p>
+
+            <p class="texto-historia">{{ historia.contenido }}</p>
+        </div>
+        } @empty {
+        <div class="mensaje-vacio">
+            <p>Aún no hay historias de adopción. ¡Vuelve pronto para leer finales felices!</p>
+        </div>
+        }
+
+    </div>
+    }
+</div>
