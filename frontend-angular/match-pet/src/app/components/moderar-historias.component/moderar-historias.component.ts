@@ -22,20 +22,20 @@ export class ModerarHistoriasComponent implements OnInit {
 
   cargarPendientes(): void {
     this.cargando = true;
-    // NOTA: Asegúrate de tener un método en tu servicio que apunte a 'listar_pendientes.php'
-    // Si usas el mismo de 'listar_historias.php', te traerá todas.
-    this.historiaService.obtenerHistorias().subscribe({
+
+    // Ahora llamamos al método específico de pendientes
+    this.historiaService.obtenerPendientes().subscribe({
       next: (respuesta) => {
         if (respuesta.status === 'success') {
-          // Si el endpoint trae todas, podemos filtrarlas aquí:
-          this.historiasPendientes = respuesta.data.filter(h => h.estado === 'Pendiente');
+          // Ya no necesitamos hacer un .filter() porque el PHP ya lo hace
+          this.historiasPendientes = respuesta.data;
         } else {
-          this.error = 'No se pudieron cargar las historias.';
+          this.error = 'No se pudieron cargar las historias pendientes.';
         }
         this.cargando = false;
       },
       error: (err) => {
-        console.error(err);
+        console.error('Error al cargar pendientes:', err);
         this.error = 'Error de conexión con el servidor.';
         this.cargando = false;
       }
