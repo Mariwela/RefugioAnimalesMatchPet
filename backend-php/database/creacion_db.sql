@@ -114,6 +114,7 @@ CREATE TABLE IF NOT EXISTS solicitudes (
 
 
 -- 6. Historias de adopción
+-- 6. Historias de adopción
 CREATE TABLE IF NOT EXISTS historias_adopcion (
     id_historia INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT,
@@ -122,6 +123,9 @@ CREATE TABLE IF NOT EXISTS historias_adopcion (
     contenido TEXT NOT NULL,
     imagen_url VARCHAR(255),
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    comentario_admin TEXT NULL,
+    
+    estado ENUM('Pendiente', 'Aprobada', 'Rechazada') DEFAULT 'Pendiente',
 
     FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL,
     FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
