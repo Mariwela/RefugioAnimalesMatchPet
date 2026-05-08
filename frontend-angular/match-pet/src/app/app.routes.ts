@@ -12,6 +12,7 @@ import { AnimalCrearComponent } from './components/animal-crear.component/animal
 import { MisFavoritosComponent } from './components/mis-favoritos.component/mis-favoritos.component';
 import { AnimalSoliList } from './components/animal-soli-list/animal-soli-list';
 import { ListarHistoriasComponent } from './components/listar-historias.component/listar-historias.component';
+import { ModerarHistoriasComponent } from './components/moderar-historias.component/moderar-historias.component';
 
 export const routes: Routes = [
     // Rutas públicas que ya tenías
@@ -32,6 +33,8 @@ export const routes: Routes = [
     { path: 'mis-solicitudes', component: AnimalSoliList },
 
     { path: 'historias', component: ListarHistoriasComponent },
+    { path: 'historias/moderar', component: ModerarHistoriasComponent },
+
     // RUTA COMODÍN (Wildcard) - Siempre al final
     { path: '**', redirectTo: '' }
 ];

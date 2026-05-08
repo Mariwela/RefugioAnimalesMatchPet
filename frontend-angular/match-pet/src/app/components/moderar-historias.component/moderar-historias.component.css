@@ -1,0 +1,79 @@
+.contenedor-moderacion {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.tarjeta-moderacion {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+}
+
+.cabecera-tarjeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.badge-estado.pendiente {
+    background-color: #ffc107;
+    color: #000;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: bold;
+}
+
+.meta-info {
+    font-size: 0.9em;
+    color: #555;
+}
+
+.contenido-historia {
+    margin: 15px 0;
+}
+
+.img-miniatura {
+    max-width: 150px;
+    border-radius: 4px;
+    float: right;
+    margin-left: 15px;
+}
+
+.acciones-moderacion {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.btn-aprobar {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-rechazar {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-aprobar:hover {
+    background-color: #218838;
+}
+
+.btn-rechazar:hover {
+    background-color: #c82333;
+}

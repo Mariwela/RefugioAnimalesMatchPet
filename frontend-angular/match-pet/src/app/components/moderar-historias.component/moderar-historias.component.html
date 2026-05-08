@@ -1,1 +1,52 @@
-<p>moderar-historias.component works!</p>
+<div class="contenedor-moderacion">
+    <h2>Panel de Moderación: Historias de Adopción</h2>
+
+    @if (cargando) {
+    <p class="mensaje-info">Buscando historias pendientes...</p>
+    }
+    @if (error) {
+    <p class="mensaje-error">{{ error }}</p>
+    }
+
+    @if (!cargando && !error) {
+    <div class="lista-pendientes">
+
+        @for (historia of historiasPendientes; track historia.id_historia) {
+        <div class="tarjeta-moderacion">
+            <div class="cabecera-tarjeta">
+                <h3>{{ historia.titulo }}</h3>
+                <span class="badge-estado pendiente">Pendiente</span>
+            </div>
+
+            <p class="meta-info">
+                <strong>Animal:</strong> {{ historia.nombre_animal }} |
+                <strong>Usuario:</strong> {{ historia.nombre_usuario || 'Anónimo' }} |
+                <strong>Fecha:</strong> {{ historia.fecha | date:'dd/MM/yyyy' }}
+            </p>
+
+            <div class="contenido-historia">
+                @if (historia.imagen_url) {
+                <img [src]="historia.imagen_url" alt="Foto de la historia" class="img-miniatura">
+                }
+                <p>{{ historia.contenido }}</p>
+            </div>
+
+            <div class="acciones-moderacion">
+                <button class="btn-aprobar" (click)="cambiarEstado(historia, 'Aprobada')">
+                    ✅ Aprobar
+                </button>
+                <button class="btn-rechazar" (click)="cambiarEstado(historia, 'Rechazada')">
+                    ❌ Rechazar
+                </button>
+            </div>
+        </div>
+        } @empty {
+        <div class="mensaje-exito">
+            <h3>¡Todo al día! 🎉</h3>
+            <p>No hay historias pendientes de moderación en este momento.</p>
+        </div>
+        }
+
+    </div>
+    }
+</div>
