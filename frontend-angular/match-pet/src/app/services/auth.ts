@@ -33,13 +33,13 @@ export class AuthService {
   }
 
 
-  guardarDatosSesion(token: string, nombre: string, rol: string, avatar: string): void {
+  guardarDatosSesion(token: string, nombre: string, rol: string, avatar: string, id_usuario: number): void {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.setItem('auth_token', token);
       localStorage.setItem('usuario_nombre', nombre);
       localStorage.setItem('usuario_rol', rol);
       localStorage.setItem('usuario_avatar', avatar);
-      localStorage.setItem('usuario_id', id.toString());
+      localStorage.setItem('usuario_id', id_usuario.toString());
       if (avatar) {
         localStorage.setItem('usuario_avatar', avatar);
       } else {
@@ -47,6 +47,20 @@ export class AuthService {
       }
     }
   }
+
+  // Método para obtener los datos del usuario actual (útil para el componente Acogida)
+  getCurrentUser() {
+    if (isPlatformBrowser(this.platformId)) {
+      return {
+        id_usuario: this.getUsuarioId(),
+        nombre_completo: localStorage.getItem('usuario_nombre'),
+        rol: this.getRol(),
+        avatar: localStorage.getItem('usuario_avatar')
+      };
+    }
+    return null;
+  }
+
   getUsuarioId(): number | null {
     if (isPlatformBrowser(this.platformId)) {
       const id = localStorage.getItem('usuario_id');
@@ -54,6 +68,7 @@ export class AuthService {
     }
     return null;
   }
+  
   getToken(): string | null {
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem('auth_token');

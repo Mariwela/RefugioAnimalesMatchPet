@@ -15,11 +15,15 @@ import { PublicarHistoriasComponent } from './components/publicar-historias.comp
 
 // 👇 IMPORTACIÓN DE GUARDS 👇
 import { authGuard } from './guards/auth-guard';
-import { adminGuard } from './guards/admin-guard'; // <--- ¡Asegúrate de que esta ruta sea correcta!
+import { adminGuard } from './guards/admin-guard';
 
 import { PoliticaPrivacidad} from './pages/politica-privacidad/politica-privacidad';
 import { AvisoLegal } from './pages/aviso-legal/aviso-legal';
 import { SobreNosotros } from './components/sobre-nosotros/sobre-nosotros';
+import { Contacto } from './pages/contacto/contacto';
+import { Donar } from './pages/donar/donar';
+import { Acogida } from './components/acogida/acogida';
+import { Voluntariado } from './components/voluntariado/voluntariado';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -29,6 +33,10 @@ export const routes: Routes = [
     { path: 'politica-privacidad', component: PoliticaPrivacidad},
     { path: 'aviso-legal', component: AvisoLegal },
     { path: 'sobre-nosotros', component: SobreNosotros },
+    { path: 'contacto', component: Contacto },
+    { path: 'donar', component: Donar },
+    { path: 'acogida', component: Acogida },
+    { path: 'voluntariado', component: Voluntariado },
 
     // Rutas protegidas para gestión de animales
     { path: 'animales/editar/:id', component: AnimalEditComponent },

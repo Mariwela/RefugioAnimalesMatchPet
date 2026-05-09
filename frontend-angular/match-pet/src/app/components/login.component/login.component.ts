@@ -38,7 +38,8 @@ export class LoginComponent {
           res.token, 
           res.user.nombre_completo, 
           res.user.rol, 
-          res.user.avatar
+          res.user.avatar,
+          res.user.id_usuario
         );
         this.router.navigate(['/home']);
       }

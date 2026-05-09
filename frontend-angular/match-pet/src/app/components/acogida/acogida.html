@@ -1,0 +1,79 @@
+<div class="acogida-page">
+  <header class="hero">
+    <span class="hero-tag">Programa de acogida</span>
+    <h1>Conviértete en <span class="accent">Casa de Acogida</span></h1>
+    <p>Cuéntanos qué tipo de animales puedes recibir y te contactaremos cuando alguien te necesite.</p>
+  </header>
+
+  <div class="container">
+    <div class="section-label">Configura tu perfil de acogida</div>
+
+    @if (authService.isLoggedIn()) {
+      <div class="info-card">
+        <form (ngSubmit)="guardarPerfil()">
+          
+          <!-- Contenedor Grid para los Selects -->
+          <div class="form-grid">
+            <div class="form-group">
+              <label>¿A quién puedes acoger?</label>
+              <select name="especie" [(ngModel)]="perfilAcogida.pref_especie">
+                <option value="Perro">Perros</option>
+                <option value="Gato">Gatos</option>
+                <option value="Cualquiera">Cualquiera</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Nivel de energía</label>
+              <select name="pref_energia" [(ngModel)]="perfilAcogida.pref_energia">
+                <option value="Baja">Tranquilo (Baja)</option>
+                <option value="Media">Activo (Media)</option>
+                <option value="Alta">Muy activo (Alta)</option>
+              </select>
+            </div>
+          </div> <!-- Fin form-grid -->
+
+          <div class="form-group">
+            <label>Tipo de vivienda</label>
+            <div class="radio-group">
+              <label class="radio-item">
+                <input type="radio" name="vivienda" value="Piso" [(ngModel)]="perfilAcogida.pref_vivienda"> Piso
+              </label>
+              <label class="radio-item">
+                <input type="radio" name="vivienda" value="Casa con jardín" [(ngModel)]="perfilAcogida.pref_vivienda"> Casa con jardín
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Tu experiencia (Bio)</label>
+            <textarea name="bio" [(ngModel)]="perfilAcogida.bio_experiencia" rows="4" placeholder="Cuéntanos tu experiencia con animales..."></textarea>
+          </div>
+
+          <!-- Toggle de disponibilidad -->
+          <div class="status-box">
+            <div class="status-info">
+              <span class="status-title">Disponibilidad inmediata</span>
+              <p>¿Aparecer en la lista de voluntarios activos?</p>
+            </div>
+            <label class="switch">
+              <!-- Simplificamos el cambio de estado -->
+              <input type="checkbox" name="disponible" 
+                     [checked]="perfilAcogida.disponibilidad_acogida === 'disponible'"
+                     (change)="perfilAcogida.disponibilidad_acogida = perfilAcogida.disponibilidad_acogida === 'disponible' ? 'no_disponible' : 'disponible'">
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn-save">Actualizar perfil de acogida</button>
+        </form>
+      </div>
+    } @else {
+      <div class="info-card text-center">
+        <div class="lock-icon">🔒</div>
+        <p>Debes iniciar sesión para configurar tu perfil de acogida y ayudar a nuestros peludos.</p>
+        <a routerLink="/login" class="btn-save" style="display: inline-block; text-decoration: none;">Ir al Login</a>
+      </div>
+    }
+  </div>
+</div>

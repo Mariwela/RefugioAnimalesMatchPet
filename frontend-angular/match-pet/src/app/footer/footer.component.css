@@ -1,167 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap');
+ 
 :host {
-    --primary: #FF7E67;
-    --primary-hover: #E86A55;
-    --secondary: #2C3E50;
-    /* Azul oscuro */
-    --text-light: #ecf0f1;
-    --text-muted-dark: #aeb6bf;
+  display: block;
+  width: 100%;
+}
+ 
+/* ─── Footer principal ──────────────── */
+.site-footer {
+  background: #c8ddc8;
+  font-family: 'DM Sans', sans-serif;
+  padding: 3rem 2rem 1.5rem;
+}
+ 
+/* ─── Fila principal ────────────────── */
+.footer-main {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
+  flex-wrap: wrap;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid #C8DFC8;
+}
+ 
+/* ─── Logo ──────────────────────────── */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+ 
+.logo-paws {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
 }
 
-/* Contenedor principal del footer */
-.simple-footer {
-    background-color: var(--secondary);
-    color: var(--text-light);
-    padding: 60px 0 20px 0;
-    font-family: 'Segoe UI', sans-serif;
-    margin-top: auto;
-    /* Ideal si tienes tu app en un flexbox vertical, empuja el footer al fondo */
+.paw-left {
+  font-size: 32px;
+  line-height: 1;
+  color: #C85A2A;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
 }
-
-.footer-container {
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 20px;
+ 
+.logo-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
 }
-
-/* Distribución del contenido superior */
-.footer-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 40px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-bottom: 40px;
-}
-
-/* Marca (Logo y Slogan) */
-.footer-brand {
-    max-width: 350px;
-}
-
-.brand-logo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 2rem;
-    font-weight: 800;
-    margin: 0 0 12px 0;
-    user-select: none;
-}
-
+ 
 .logo-match {
-    color: var(--text-light);
-    /* En fondo oscuro, 'Match' es blanco */
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: #1A3A1A;
 }
 
 .logo-pet {
-    color: var(--primary);
-    /* 'Pet' se mantiene salmón */
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 600;
+  color: #C85A2A;
 }
-
-.footer-brand p {
-    color: var(--text-muted-dark);
-    font-size: 1rem;
-    line-height: 1.6;
-    margin: 0;
+ 
+.logo-accent {
+  color: #C85A2A;
 }
-
-/* Enlaces (Privacidad, Términos...) */
-.footer-links {
-    display: flex;
-    gap: 25px;
+ 
+.logo-sub {
+  font-size: 10px;
+  font-weight: 400;
+  color: #5A8060;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
 }
-
+ 
+/* ─── Tagline ───────────────────────── */
+.tagline {
+  margin-top: 12px;
+  font-size: 13.5px;
+  color: #4A6A4A;
+  line-height: 1.65;
+  max-width: 220px;
+}
+ 
+/* ─── Redes sociales ────────────────── */
+.social-links {
+  display: flex;
+  gap: 9px;
+  margin-top: 18px;
+}
+ 
+.social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #B0CFB0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4A7A4A;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+ 
+.social-btn:hover {
+  background: #D8EED8;
+  color: #1A4A1A;
+  border-color: #7AB07A;
+}
+ 
+/* ─── Columnas de links ─────────────── */
+.footer-links h4 {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #3B6B3B;
+  margin: 0 0 14px;
+}
+ 
 .footer-links a {
-    color: var(--text-light);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 1rem;
-    transition: color 0.3s ease;
-    position: relative;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  color: #4A6A4A;
+  text-decoration: none;
+  margin-bottom: 10px;
+  transition: color 0.12s;
 }
-
-/* Subrayado animado al hacer hover */
-.footer-links a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -4px;
-    left: 0;
-    background-color: var(--primary);
-    transition: width 0.3s ease;
+ 
+.footer-links a svg {
+  width: 13px;
+  height: 13px;
+  color: #7AB07A;
+  flex-shrink: 0;
+  transition: color 0.12s;
 }
-
+ 
 .footer-links a:hover {
-    color: var(--primary);
+  color: #1A3A1A;
 }
-
-.footer-links a:hover::after {
-    width: 100%;
+ 
+.footer-links a:hover svg {
+  color: #3B6B3B;
 }
-
-/* Redes Sociales */
-.footer-social {
-    display: flex;
-    gap: 15px;
-}
-
-.social-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 45px;
-    height: 45px;
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--text-light);
-    border-radius: 50%;
-    font-size: 1.2rem;
-    text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.social-icon:hover {
-    background-color: var(--primary);
-    color: #fff;
-    transform: translateY(-5px);
-    /* Salta un poquito hacia arriba */
-    border-color: var(--primary);
-    box-shadow: 0 5px 15px rgba(255, 126, 103, 0.4);
-}
-
-/* Copyright (Parte inferior) */
+ 
+/* ─── Pie de footer ─────────────────── */
 .footer-bottom {
-    text-align: center;
-    padding-top: 25px;
+  max-width: 1280px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-top: 1.2rem;
+  font-size: 12px;
+  color: #7A9A7A;
 }
-
-.footer-bottom p {
-    color: var(--text-muted-dark);
-    font-size: 0.95rem;
-    margin: 0;
+ 
+.legal-links {
+  display: flex;
+  gap: 18px;
 }
-
-/* =========================================
-   RESPONSIVO (Móviles y Tablets)
-   ========================================= */
+ 
+.legal-links a {
+  color: #5A7A5A;
+  text-decoration: none;
+  transition: color 0.12s;
+}
+ 
+.legal-links a:hover {
+  color: #1A3A1A;
+}
+ 
+.footer-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #8AAA8A;
+}
+ 
+.footer-badge svg {
+  width: 13px;
+  height: 13px;
+  color: #7AB07A;
+}
+ 
+/* ─── Responsive ────────────────────── */
 @media (max-width: 768px) {
-    .footer-content {
-        flex-direction: column;
-        text-align: center;
-        gap: 30px;
-    }
-
-    .footer-brand {
-        max-width: 100%;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .footer-links {
-        flex-direction: column;
-        gap: 15px;
-    }
+  .footer-cta {
+    max-width: 100%;
+  }
+}
+ 
+@media (max-width: 640px) {
+  .footer-main {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+ 
+  .tagline {
+    max-width: 100%;
+  }
+ 
+  .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+ 
+  .footer-badge {
+    display: none;
+  }
 }
