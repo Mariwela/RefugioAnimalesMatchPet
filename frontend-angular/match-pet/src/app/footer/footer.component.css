@@ -5,72 +5,63 @@
   width: 100%;
 }
  
-/* ─── Footer principal ──────────────── */
+
 .site-footer {
   background: #c8ddc8;
   font-family: 'DM Sans', sans-serif;
-  padding: 3rem 2rem 1.5rem;
+  padding: 1.5rem 2rem 1rem;
+  border-top: 3px solid #7AB07A;
 }
  
-/* ─── Fila principal ────────────────── */
+
 .footer-main {
   max-width: 1280px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 2rem;
+  gap: 1.5rem;
   flex-wrap: wrap;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid #C8DFC8;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #A8C9A8;
 }
  
-/* ─── Logo ──────────────────────────── */
+
 .logo {
   display: flex;
   align-items: center;
   gap: 12px;
   text-decoration: none;
 }
- 
 .logo-paws {
   display: flex;
   align-items: center;
   justify-content: center;
   min-width: 40px;
 }
-
 .paw-left {
-  font-size: 32px;
+  font-size: 37px;
   line-height: 1;
   color: #C85A2A;
   filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
-}
- 
+} 
 .logo-text {
   display: flex;
   flex-direction: column;
-  line-height: 1.15;
+  line-height: 1.1;
 }
- 
 .logo-match {
   font-family: 'Playfair Display', serif;
-  font-size: 19px;
+  font-size: 30px;
   font-weight: 600;
   color: #1A3A1A;
 }
-
 .logo-pet {
   font-family: 'Playfair Display', serif;
-  font-size: 19px;
+  font-size: 25px;
   font-weight: 600;
   color: #C85A2A;
 }
- 
-.logo-accent {
-  color: #C85A2A;
-}
- 
 .logo-sub {
   font-size: 10px;
   font-weight: 400;
@@ -79,122 +70,108 @@
   text-transform: uppercase;
 }
  
-/* ─── Tagline ───────────────────────── */
+
 .tagline {
-  margin-top: 12px;
-  font-size: 13.5px;
+  margin-top: 8px;
+  font-size: 15px;
   color: #4A6A4A;
-  line-height: 1.65;
-  max-width: 220px;
+  line-height: 1.5;
+  max-width: 270px;
 }
  
-/* ─── Redes sociales ────────────────── */
+
 .social-links {
   display: flex;
-  gap: 9px;
-  margin-top: 18px;
+  gap: 8px;
+  margin-top: 10px;
 }
  
 .social-btn {
-  width: 36px;
-  height: 36px;
-  border-radius: 8px;
-  border: 1px solid #B0CFB0;
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #4A7A4A;
   text-decoration: none;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
- 
-.social-btn:hover {
-  background: #D8EED8;
-  color: #1A4A1A;
-  border-color: #7AB07A;
+.social-btn:first-child {
+  color: #1877F2;
+  border-color: 1px solid #1877F2;
+  border: 1px solid #1877F2;
+}
+.social-btn:last-child {
+  color: #E1306C;
+  border-color: #E1306C;
+  border: 1px solid #C13584;
+}
+.social-btn:first-child:hover {
+  background: #e8f0fe;
+}
+.social-btn:last-child:hover {
+  background: #fce4ec;
 }
  
-/* ─── Columnas de links ─────────────── */
+
 .footer-links h4 {
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: #3B6B3B;
-  margin: 0 0 14px;
-}
- 
+  margin: 0 0 8px;
+} 
 .footer-links a {
   display: flex;
   align-items: center;
-  gap: 7px;
-  font-size: 13.5px;
+  gap: 6px;
+  font-size: 15px;
   color: #4A6A4A;
   text-decoration: none;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
   transition: color 0.12s;
-}
- 
+} 
 .footer-links a svg {
   width: 13px;
   height: 13px;
   color: #7AB07A;
   flex-shrink: 0;
   transition: color 0.12s;
-}
- 
+} 
 .footer-links a:hover {
   color: #1A3A1A;
 }
- 
 .footer-links a:hover svg {
   color: #3B6B3B;
 }
- 
-/* ─── Pie de footer ─────────────────── */
+
+
 .footer-bottom {
   max-width: 1280px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
-  gap: 10px;
-  padding-top: 1.2rem;
-  font-size: 12px;
-  color: #7A9A7A;
+  padding-top: 0.5rem;
+  font-size: 14px;
 }
- 
-.legal-links {
-  display: flex;
-  gap: 18px;
-}
- 
-.legal-links a {
+.footer-bottom span, .footer-bottom a {
   color: #5A7A5A;
   text-decoration: none;
   transition: color 0.12s;
+  white-space: nowrap;
 }
- 
-.legal-links a:hover {
+.footer-bottom a:hover {
   color: #1A3A1A;
 }
- 
-.footer-badge {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px;
-  color: #8AAA8A;
+.footer-bottom-dot {
+  margin: 0 10px;
+  color: #a8c9a8;
 }
- 
-.footer-badge svg {
-  width: 13px;
-  height: 13px;
-  color: #7AB07A;
-}
- 
-/* ─── Responsive ────────────────────── */
+
+
 @media (max-width: 768px) {
   .footer-cta {
     max-width: 100%;
