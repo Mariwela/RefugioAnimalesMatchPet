@@ -6,30 +6,28 @@ USE matchpet_db;
 CREATE TABLE IF NOT EXISTS usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre_completo VARCHAR(100) NOT NULL,
-
-    -- NUEVOS CAMPOS integrados
     dni_nie VARCHAR(20) UNIQUE,
     fecha_nacimiento DATE,
-
     email VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(255) NOT NULL,
     telefono VARCHAR(20),
-
     direccion VARCHAR(255),
     poblacion VARCHAR(100),
     provincia VARCHAR(100),
     codigo_postal VARCHAR(10),
 
-    rol ENUM('admin', 'adoptante', 'vet', 'casa_acogida', 'voluntario') DEFAULT 'adoptante',
+    rol ENUM('admin', 'colaborador', 'vet') DEFAULT 'colaborador',
+    disponibilidad_voluntario ENUM('si', 'no') DEFAULT 'no',
+    area_interes VARCHAR(100) DEFAULT NULL,
+    horario_voluntario TEXT DEFAULT NULL,
+    comentarios_voluntario TEXT DEFAULT NULL,
 
     pref_especie ENUM('Perro', 'Gato', 'Cualquiera') DEFAULT 'Cualquiera',
     pref_energia ENUM('Baja', 'Media', 'Alta') DEFAULT NULL,
     pref_vivienda ENUM('Piso', 'Casa con jardín') DEFAULT NULL,
-
     bio_experiencia TEXT,
-
-    estado_acogida ENUM('no_disponible', 'disponible', 'ocupado', 'pausa') DEFAULT 'no_disponible',
-
+    disponibilidad_acogida ENUM('no_disponible', 'disponible', 'ocupado', 'pausa') DEFAULT 'no_disponible',
+    avatar VARCHAR(255) DEFAULT 'default_avatar.png',
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -113,7 +111,6 @@ CREATE TABLE IF NOT EXISTS solicitudes (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
--- 6. Historias de adopción
 -- 6. Historias de adopción
 CREATE TABLE IF NOT EXISTS historias_adopcion (
     id_historia INT AUTO_INCREMENT PRIMARY KEY,

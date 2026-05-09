@@ -7,6 +7,14 @@ require_once '../../config/auth_middleware.php';
 $payload = autenticar();
 
 $data = json_decode(file_get_contents('php://input'), true);
+$id_usuario = $data['id_usuario'];
+$disponibilidad_voluntario = $data['disponibilidad_voluntario'] ?? 'no';
+$area_interes = $data['area_interes'] ?? null;
+$horario_voluntario = $data['horario_voluntario'] ?? null;
+$comentarios_voluntario = $data['comentarios_voluntario'] ?? null;
+$pref_especie = $data['pref_especie'] ?? 'Cualquiera';
+$bio_experiencia = $data['bio_experiencia'] ?? null;
+$disponibilidad_acogida = $data['disponibilidad_acogida'] ?? 'no_disponible';
 
 if (empty($data)) {
     http_response_code(400);
@@ -14,8 +22,15 @@ if (empty($data)) {
     exit;
 }
 
+// Si Apache borra el header, intentamos recuperarlo así
+if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
+    $headers = apache_request_headers();
+    if (isset($headers['Authorization'])) {
+        $_SERVER['HTTP_AUTHORIZATION'] = $headers['Authorization'];
+    }
+}
+
 // Campos que el usuario puede modificar
-// Cualquier otro campo que venga en el JSON lo ignoramos
 $campos_permitidos = [
     'nombre_completo',
     'dni_nie',
@@ -29,7 +44,11 @@ $campos_permitidos = [
     'pref_energia',
     'pref_vivienda',
     'bio_experiencia',
-    'estado_acogida',
+    'disponibilidad_acogida',
+    'disponibilidad_voluntario',
+    'area_interes',
+    'horario_voluntario',
+    'comentarios_voluntario',
     'avatar'
 ];
 
@@ -74,12 +93,13 @@ try {
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
 
-    // Devolvemos el perfil actualizado (misma lógica que perfil.php)
+    // Devolvemos el perfil actualizado
     $stmtPerfil = $db->prepare("SELECT 
         id_usuario, nombre_completo, dni_nie, fecha_nacimiento,
         email, telefono, direccion, poblacion, provincia,
         codigo_postal, rol, pref_especie, pref_energia, pref_vivienda,
-        bio_experiencia, estado_acogida, avatar, fecha_registro
+        bio_experiencia, disponibilidad_acogida, disponibilidad_voluntario,
+        area_interes, horario_voluntario, comentarios_voluntario, avatar, fecha_registro
         FROM usuarios WHERE id_usuario = :id");
 
     $stmtPerfil->execute([':id' => $payload['id_usuario']]);

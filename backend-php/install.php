@@ -34,14 +34,20 @@ try {
         poblacion VARCHAR(100),
         provincia VARCHAR(100),
         codigo_postal VARCHAR(10),
-        rol ENUM('admin', 'adoptante', 'vet', 'casa_acogida', 'voluntario') DEFAULT 'adoptante',
+
+        rol ENUM('admin', 'colaborador', 'vet') DEFAULT 'colaborador',
+        disponibilidad_voluntario ENUM('si', 'no') DEFAULT 'no',
+        area_interes VARCHAR(100) DEFAULT NULL,
+        horario_voluntario TEXT DEFAULT NULL,
+        comentarios_voluntario TEXT DEFAULT NULL,
+
         pref_especie ENUM('Perro', 'Gato', 'Cualquiera') DEFAULT 'Cualquiera',
         pref_energia ENUM('Baja', 'Media', 'Alta') DEFAULT NULL,
         pref_vivienda ENUM('Piso', 'Casa con jardín') DEFAULT NULL,
         bio_experiencia TEXT,
-        estado_acogida ENUM('no_disponible', 'disponible', 'ocupado', 'pausa') DEFAULT 'no_disponible',
-        fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        avatar VARCHAR(255) DEFAULT 'default_avatar.png'
+        disponibilidad_acogida ENUM('no_disponible', 'disponible', 'ocupado', 'pausa') DEFAULT 'no_disponible',
+        avatar VARCHAR(255) DEFAULT 'default_avatar.png',
+        fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 
@@ -153,13 +159,13 @@ try {
             'pass' => 'adminpass',
             'rol' => 'admin',
             'pob' => 'Madrid',
-            'est_acogida' => 'no_disponible'
+            'disponibilidad_acogida' => 'no_disponible'
         ],
         [
             'nombre' => 'Marina Velic',
             'email' => 'mari@matchpet.com',
             'pass' => 'maripass',
-            'rol' => 'adoptante',
+            'rol' => 'colaborador',
             'fecha_nac' => '1985-04-01',
             'tel' => '611111111',
             'pob' => 'Valdemorillo',
@@ -167,7 +173,8 @@ try {
             'pref_esp' => 'Perro',
             'pref_ene' => 'Media',
             'pref_viv' => 'Casa con jardín',
-            'bio' => 'Experiencia con gatos'
+            'bio' => 'Experiencia con gatos',
+            'disponibilidad_acogida' => 'no_disponible'
         ],
         [
             'nombre' => 'Jordi Bastidas',
@@ -175,26 +182,27 @@ try {
             'pass' => 'jordipass',
             'rol' => 'vet',
             'tel' => '622222222',
-            'prov' => 'Madrid'
+            'prov' => 'Madrid',
+            'disponibilidad_acogida' => 'no_disponible'
         ],
         [
             'nombre' => 'Anthony Guanga',
             'email' => 'anthony@matchpet.com',
             'pass' => 'anthonypass',
-            'rol' => 'casa_acogida',
+            'rol' => 'colaborador',
             'tel' => '633333333',
             'prov' => 'Madrid',
             'pref_esp' => 'Gato',
             'pref_ene' => 'Media',
             'pref_viv' => 'Piso',
             'bio' => 'Experiencia con gatos',
-            'est_acogida' => 'disponible'
+            'disponibilidad_acogida' => 'disponible'
         ]
     ];
 
     $sql_user = "INSERT IGNORE INTO usuarios 
-        (nombre_completo, email, password, rol, fecha_nacimiento, telefono, poblacion, provincia, pref_especie, pref_energia, pref_vivienda, bio_experiencia, estado_acogida) 
-        VALUES (:nombre, :email, :pass, :rol, :fecha_nac, :tel, :pob, :prov, :pref_esp, :pref_ene, :pref_viv, :bio, :est_acogida)";
+        (nombre_completo, email, password, rol, fecha_nacimiento, telefono, poblacion, provincia, pref_especie, pref_energia, pref_vivienda, bio_experiencia, disponibilidad_acogida) 
+        VALUES (:nombre, :email, :pass, :rol, :fecha_nac, :tel, :pob, :prov, :pref_esp, :pref_ene, :pref_viv, :bio, :disponibilidad_acogida)";
 
     $stmt_user = $pdo->prepare($sql_user);
 
@@ -212,7 +220,7 @@ try {
             ':pref_ene'  => $u['pref_ene'] ?? NULL,
             ':pref_viv'  => $u['pref_viv'] ?? NULL,
             ':bio'       => $u['bio'] ?? NULL,
-            ':est_acogida' => $u['est_acogida'] ?? 'no_disponible'
+            ':disponibilidad_acogida' => $u['disponibilidad_acogida'] ?? 'no_disponible'
         ]);
         echo "✅ Creado: " . $u['nombre'] . " [" . $u['rol'] . "]<br>";
     }
