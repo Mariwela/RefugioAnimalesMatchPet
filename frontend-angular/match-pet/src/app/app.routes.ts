@@ -13,7 +13,7 @@ import { AnimalSoliList } from './components/animal-soli-list/animal-soli-list';
 import { ListarHistoriasComponent } from './components/listar-historias.component/listar-historias.component';
 import { ModerarHistoriasComponent } from './components/moderar-historias.component/moderar-historias.component';
 import { PublicarHistoriasComponent } from './components/publicar-historias.component/publicar-historias.component';
-import { PoliticaPrivacidad} from './pages/politica-privacidad/politica-privacidad';
+import { PoliticaPrivacidad } from './pages/politica-privacidad/politica-privacidad';
 import { AvisoLegal } from './pages/aviso-legal/aviso-legal';
 import { SobreNosotros } from './components/sobre-nosotros/sobre-nosotros';
 import { Contacto } from './pages/contacto/contacto';
@@ -25,6 +25,7 @@ import { ComoAdoptarComponent } from './components/como-adoptar/como-adoptar';
 // 👇 IMPORTACIÓN DE GUARDS 👇
 import { authGuard } from './guards/auth-guard';
 import { adminGuard } from './guards/admin-guard';
+import { EditarHistoriasComponent } from './components/editar-historias.component/editar-historias.component';
 
 
 export const routes: Routes = [
@@ -35,8 +36,7 @@ export const routes: Routes = [
     { path: 'animales/crear', component: AnimalCrearComponent },
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
-    { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
-    { path: 'politica-privacidad', component: PoliticaPrivacidad},
+    { path: 'politica-privacidad', component: PoliticaPrivacidad },
     { path: 'aviso-legal', component: AvisoLegal },
     { path: 'sobre-nosotros', component: SobreNosotros },
     { path: 'contacto', component: Contacto },
@@ -47,8 +47,9 @@ export const routes: Routes = [
     { path: 'mis-favoritos', component: MisFavoritosComponent },
     { path: 'mis-solicitudes', component: AnimalSoliList },
     { path: 'historias', component: ListarHistoriasComponent },
-    { path: 'historias/moderar', component: ModerarHistoriasComponent, canActivate: [adminGuard]},
+    { path: 'historias/moderar', component: ModerarHistoriasComponent, canActivate: [adminGuard] },
     { path: 'historias/publicar', component: PublicarHistoriasComponent, canActivate: [authGuard] },
+    { path: 'editar-historia/:id', component: EditarHistoriasComponent },
 
     { path: '**', redirectTo: '' }
 ];

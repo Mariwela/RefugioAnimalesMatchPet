@@ -1,0 +1,81 @@
+<div class="acogida-page">
+
+    <!-- SECCIÓN HERO (Cabecera) -->
+    <header class="hero">
+        <span class="hero-tag">Edición</span>
+        <h1>Actualiza tu <span class="accent">Historia</span></h1>
+        <p>Modifica los detalles de tu experiencia. Recuerda que, al guardar, la historia quedará pendiente de revisión
+            antes de ser pública.</p>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <div class="container">
+        <div class="info-card">
+
+            <!-- ALERTAS DE ÉXITO Y ERROR -->
+            @if (mensajeExito) {
+            <div class="alert-success">
+                {{ mensajeExito }}
+            </div>
+            }
+
+            @if (mensajeError) {
+            <div class="alert-error">
+                {{ mensajeError }}
+            </div>
+            }
+
+            <!-- FORMULARIO REACTIVO -->
+            <form [formGroup]="editarForm" (ngSubmit)="onSubmit()">
+
+                <!-- Campo Título -->
+                <div class="form-group">
+                    <label for="titulo">Título de la historia</label>
+                    <input type="text" id="titulo" formControlName="titulo"
+                        placeholder="Ej: El nuevo hogar de Firulais">
+
+                    <!-- Mensaje de validación -->
+                    @if (editarForm.get('titulo')?.invalid && editarForm.get('titulo')?.touched) {
+                    <div class="validation-message">
+                        El título es obligatorio y debe tener al menos 5 caracteres.
+                    </div>
+                    }
+                </div>
+
+                <!-- Campo Contenido -->
+                <div class="form-group">
+                    <label for="contenido">Contenido de la historia</label>
+                    <textarea id="contenido" rows="6" formControlName="contenido"
+                        placeholder="Cuenta cómo ha sido tu experiencia desde la adopción..."></textarea>
+
+                    <!-- Mensaje de validación -->
+                    @if (editarForm.get('contenido')?.invalid && editarForm.get('contenido')?.touched) {
+                    <div class="validation-message">
+                        El contenido es obligatorio y debe tener al menos 20 caracteres.
+                    </div>
+                    }
+                </div>
+
+                <!-- BOTONES DE ACCIÓN -->
+                <div style="margin-top: 2.5rem;">
+
+                    <!-- Botón principal de guardar -->
+                    <button type="submit" class="btn-save" [disabled]="editarForm.invalid || cargando">
+                        @if (cargando) {
+                        <span>Guardando cambios...</span>
+                        } @else {
+                        <span>Guardar Historia</span>
+                        }
+                    </button>
+
+                    <!-- Enlace para cancelar -->
+                    <a routerLink="/historias" class="btn-link">
+                        Cancelar y volver a la lista
+                    </a>
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
