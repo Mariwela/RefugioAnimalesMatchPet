@@ -74,7 +74,11 @@
   margin-bottom: 1rem;
   box-shadow: 0 4px 12px rgba(26, 58, 26, 0.06);
 }
+
 .avatar-wrapper {
+  position: relative;
+  width: 72px;
+  height: 72px;
   flex-shrink: 0;
 }
 .avatar-img {
@@ -84,6 +88,41 @@
   object-fit: cover;
   border: 3px solid #C8DFC8;
   background: #F4FAF4;
+}
+.avatar-overlay {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 24px;
+  height: 24px;
+  background: #C85A2A;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: 2px solid #fff;
+  transition: background 0.15s;
+}
+.avatar-overlay:hover {
+  background: #A84520;
+}
+.avatar-overlay i {
+  color: #fff;
+  font-size: 11px;
+}
+.avatar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.avatar-hint {
+  font-size: 10px;
+  color: #9AB89A;
+  text-align: center;
+  padding: 0.5rem 0 0;
 }
 .perfil-info h2 {
   font-family: 'Playfair Display', serif;
