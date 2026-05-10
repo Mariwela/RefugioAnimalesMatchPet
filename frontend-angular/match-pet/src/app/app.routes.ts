@@ -36,6 +36,7 @@ export const routes: Routes = [
     { path: 'animales/crear', component: AnimalCrearComponent },
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
+    { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
     { path: 'politica-privacidad', component: PoliticaPrivacidad },
     { path: 'aviso-legal', component: AvisoLegal },
     { path: 'sobre-nosotros', component: SobreNosotros },
