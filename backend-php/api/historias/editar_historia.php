@@ -4,17 +4,23 @@ require_once '../../config/config.php';
 require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
-// 1. Validar que el método sea PUT (o POST, según prefieras para ediciones)
-if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+// 1. Manejar el Preflight de Angular (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
+// 2. Permitir que el método sea POST o PUT
+if ($_SERVER['REQUEST_METHOD'] !== 'POST' && $_SERVER['REQUEST_METHOD'] !== 'PUT') {
     http_response_code(405);
-    echo json_encode(["message" => "Método no permitido. Usa PUT."]);
+    echo json_encode(["message" => "Método no permitido. Usa POST o PUT."]);
     exit;
 }
 
 $payload = autenticar();
 $data = json_decode(file_get_contents('php://input'));
 
-// 2. Limpiar espacios extra y validar existencia
+// 3. Limpiar espacios extra y validar existencia
 $id_historia = $data->id_historia ?? null;
 $titulo = isset($data->titulo) ? trim($data->titulo) : null;
 $contenido = isset($data->contenido) ? trim($data->contenido) : null;
