@@ -22,7 +22,7 @@ export class Acogida implements OnInit{
     pref_energia: 'Media',
     pref_vivienda: 'Piso',
     bio_experiencia: '',
-    disponibilidad_acogida: 'no_disponible'
+    disponibilidad_acogida: 'disponible'
   };
 
   ngOnInit(): void {

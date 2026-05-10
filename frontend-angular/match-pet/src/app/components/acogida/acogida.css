@@ -7,32 +7,31 @@
 
 .acogida-page {
   font-family: 'DM Sans', sans-serif;
-  background: #F7FBF7; /* El mismo verde blanquecino de Sobre Nosotros */
+  background: #F7FBF7;
   min-height: 100vh;
-  padding-bottom: 5rem;
+  padding-bottom: 0rem;
 }
 
-/* ── Hero (Consistente con Sobre Nosotros) ── */
+
 .hero {
   background: linear-gradient(to bottom, #F7FBF7, #EDF7ED);
   text-align: center;
-  padding: 4rem 1rem 3.5rem;
+  padding: 1.5rem 1rem 1.5rem;
   border-bottom: 1px solid #C8DFC8;
 }
-
 .hero-tag {
   display: inline-block;
-  background: #EAF5EA;
-  color: #3B6B3B;
+  background: #FBF0EA;
+  color: #C85A2A;
+  border: 1px solid #E8C4A8;
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 5px 14px;
+  padding: 5px 7px;
   border-radius: 20px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
-
 .hero h1 {
   font-family: 'Playfair Display', serif;
   font-size: 38px;
@@ -40,48 +39,44 @@
   color: #1A3A1A;
   margin-bottom: 1rem;
 }
-
 .hero h1 .accent {
   color: #C85A2A;
 }
-
 .hero p {
   font-size: 16px;
   color: #4A6A4A;
-  max-width: 600px;
+  max-width: 620px;
   margin: 0 auto;
   line-height: 1.6;
 }
 
-/* ── Contenedor y Tarjeta ── */
+
 .container {
   max-width: 800px;
   margin: 0 auto;
   padding: 0 1.5rem;
 }
-
 .section-label {
   font-size: 11px;
   font-weight: 500;
   color: #5A8060;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  margin: 2.5rem 0 1rem;
+  margin: 1rem 0 1rem;
   text-align: center;
 }
-
 .info-card {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
   border-radius: 16px;
-  padding: 2.5rem;
+  padding: 2rem;
   box-shadow: 0 8px 24px rgba(26, 58, 26, 0.06);
-  margin-top: -2rem; /* Efecto flotante sobre el hero */
+  margin-top: -2rem;
   position: relative;
   z-index: 10;
 }
 
-/* ── Formulario ── */
+
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -90,7 +85,7 @@
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.2rem;
 }
 
 .form-group label {
@@ -103,7 +98,7 @@
 
 select, textarea, input[type="text"] {
   width: 100%;
-  padding: 12px 15px;
+  padding: 13px 15px;
   border: 1px solid #D8EED8;
   border-radius: 10px;
   font-family: 'DM Sans', sans-serif;
@@ -111,6 +106,7 @@ select, textarea, input[type="text"] {
   color: #4A6A4A;
   background-color: #FCFEFC;
   transition: border-color 0.2s, box-shadow 0.2s;
+  box-sizing: border-box;
 }
 
 select:focus, textarea:focus {
@@ -119,7 +115,7 @@ select:focus, textarea:focus {
   box-shadow: 0 0 0 3px rgba(122, 176, 122, 0.1);
 }
 
-/* ── Radios Estilizados ── */
+
 .radio-group {
   display: flex;
   gap: 20px;
@@ -141,7 +137,7 @@ select:focus, textarea:focus {
   height: 18px;
 }
 
-/* ── Status Box & Switch ── */
+
 .status-box {
   background: #F4FAF4;
   border: 1px solid #B0CFB0;
@@ -194,10 +190,14 @@ select:focus, textarea:focus {
   border-radius: 50%;
 }
 
-input:checked + .slider { background-color: #C85A2A; }
-input:checked + .slider:before { transform: translateX(24px); }
+input:checked + .slider {
+  background-color: #C85A2A;
+}
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
 
-/* ── Botón ── */
+
 .btn-save {
   width: 100%;
   background: #C85A2A;
@@ -212,21 +212,37 @@ input:checked + .slider:before { transform: translateX(24px); }
   transition: background 0.2s, transform 0.1s;
   box-shadow: 0 4px 12px rgba(200, 90, 42, 0.2);
 }
-
 .btn-save:hover {
   background: #A84520;
   transform: translateY(-1px);
 }
-
 .btn-save:active {
   transform: translateY(0);
 }
 
-/* ── Centrado para Login ── */
-.text-center { text-align: center; }
-.lock-icon { font-size: 3rem; margin-bottom: 1rem; }
+.btn-link {
+  display: block;
+  text-align: center;
+  margin-top: 1.2rem;
+  color: #5A8060;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.btn-link:hover {
+  color: #3B6B3B;
+  text-decoration: underline;
+}
 
-/* ── Responsive ── */
+.text-center {
+  text-align: center;
+}
+.lock-icon {
+  font-size: 3rem; margin-bottom: 1rem;
+}
+
+
 @media (max-width: 640px) {
   .hero h1 { font-size: 28px; }
   .form-grid { grid-template-columns: 1fr; }

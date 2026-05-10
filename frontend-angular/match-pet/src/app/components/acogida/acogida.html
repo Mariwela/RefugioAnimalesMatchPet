@@ -12,7 +12,6 @@
       <div class="info-card">
         <form (ngSubmit)="guardarPerfil()">
           
-          <!-- Contenedor Grid para los Selects -->
           <div class="form-grid">
             <div class="form-group">
               <label>¿A quién puedes acoger?</label>
@@ -31,7 +30,7 @@
                 <option value="Alta">Muy activo (Alta)</option>
               </select>
             </div>
-          </div> <!-- Fin form-grid -->
+          </div>
 
           <div class="form-group">
             <label>Tipo de vivienda</label>
@@ -47,17 +46,15 @@
 
           <div class="form-group">
             <label>Tu experiencia (Bio)</label>
-            <textarea name="bio" [(ngModel)]="perfilAcogida.bio_experiencia" rows="4" placeholder="Cuéntanos tu experiencia con animales..."></textarea>
+            <textarea name="bio_experiencia" [(ngModel)]="perfilAcogida.bio_experiencia" rows="2" placeholder="Cuéntanos tu experiencia con animales..."></textarea>
           </div>
 
-          <!-- Toggle de disponibilidad -->
           <div class="status-box">
             <div class="status-info">
               <span class="status-title">Disponibilidad inmediata</span>
               <p>¿Aparecer en la lista de voluntarios activos?</p>
             </div>
             <label class="switch">
-              <!-- Simplificamos el cambio de estado -->
               <input type="checkbox" name="disponible" 
                      [checked]="perfilAcogida.disponibilidad_acogida === 'disponible'"
                      (change)="perfilAcogida.disponibilidad_acogida = perfilAcogida.disponibilidad_acogida === 'disponible' ? 'no_disponible' : 'disponible'">
@@ -66,6 +63,7 @@
           </div>
 
           <button type="submit" class="btn-save">Actualizar perfil de acogida</button>
+          <a routerLink="/perfil" class="btn-link">Volver a mi perfil</a>
         </form>
       </div>
     } @else {

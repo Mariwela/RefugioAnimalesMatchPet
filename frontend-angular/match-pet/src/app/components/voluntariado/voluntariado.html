@@ -11,7 +11,6 @@
     <div class="info-card">
       <form (ngSubmit)="guardarVoluntariado()">
         
-        <!-- ÁREA DE INTERÉS -->
         <div class="form-group">
           <label>¿En qué área te gustaría ayudar?</label>
             <select name="area_interes" [(ngModel)]="opcionSeleccionada" (change)="gestionarCambioArea()">
@@ -34,7 +33,6 @@
             }
         </div>
 
-        <!-- DISPONIBILIDAD -->
         <div class="form-group">
           <label>Disponibilidad horaria</label>
           <select name="horario_voluntario" [(ngModel)]="perfilVoluntario.horario_voluntario">
@@ -45,10 +43,9 @@
           </select>
         </div>
 
-        <!-- MOTIVACIÓN -->
         <div class="form-group">
           <label>¿Por qué quieres ser voluntario?</label>
-          <textarea name="comentarios_voluntario" [(ngModel)]="perfilVoluntario.comentarios_voluntario" rows="4" placeholder="Cuéntanos un poco sobre ti..."></textarea>
+          <textarea name="comentarios_voluntario" [(ngModel)]="perfilVoluntario.comentarios_voluntario" rows="2" placeholder="Cuéntanos un poco sobre ti..."></textarea>
         </div>
 
         <button type="submit" class="btn-save">Guardar Perfil de Voluntario</button>

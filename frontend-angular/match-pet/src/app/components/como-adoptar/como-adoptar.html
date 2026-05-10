@@ -1,0 +1,25 @@
+<div class="adoption-steps-page">
+  <header class="hero">
+    <span class="hero-tag">Proceso de Unión</span>
+    <h1>Cómo adoptar en <span class="accent">MatchPet</span></h1>
+    <p>Seguimos un proceso riguroso para garantizar que cada animal encuentre el hogar perfecto.</p>
+  </header>
+
+  <div class="container">
+    <div class="section-label">Nuestros pasos para una adopción exitosa</div>
+    <div class="info-card">
+        <div class="steps-grid">
+            @for (paso of pasos; track paso.numero) {
+            <div class="step-card">
+                <div class="step-number">{{ paso.numero }}</div>
+                <div class="step-icon">{{ paso.icono }}</div>
+                <h3>{{ paso.titulo }}</h3>
+                <p [innerHTML]="paso.descripcion"></p>
+            </div>
+            }
+        </div>
+        <span class="cta-text">¿Estás listo para cambiar una vida?</span>
+        <a routerLink="/animales" class="btn-primary">Ver animales en adopción</a>
+    </div>
+  </div>
+</div>

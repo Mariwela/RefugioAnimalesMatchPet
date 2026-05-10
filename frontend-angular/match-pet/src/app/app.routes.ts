@@ -24,6 +24,7 @@ import { Contacto } from './pages/contacto/contacto';
 import { Donar } from './pages/donar/donar';
 import { Acogida } from './components/acogida/acogida';
 import { Voluntariado } from './components/voluntariado/voluntariado';
+import { ComoAdoptarComponent } from './components/como-adoptar/como-adoptar';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -37,6 +38,7 @@ export const routes: Routes = [
     { path: 'donar', component: Donar },
     { path: 'acogida', component: Acogida },
     { path: 'voluntariado', component: Voluntariado },
+    { path: 'como-adoptar', component: ComoAdoptarComponent },
 
     // Rutas protegidas para gestión de animales
     { path: 'animales/editar/:id', component: AnimalEditComponent },
