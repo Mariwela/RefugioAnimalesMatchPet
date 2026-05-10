@@ -192,13 +192,24 @@
         <div class="acciones-finales">
             <button type="submit" class="btn-guardar" [disabled]="animalForm.invalid || guardando">
                 @if (guardando) {
-                <i class="fa fa-circle-o-notch fa-spin"></i> Guardando...
+                    <i class="fa fa-circle-o-notch fa-spin"></i> Guardando...
                 } @else {
-                <i class="fa fa-save"></i> Guardar Cambios
+                    <i class="fa fa-save"></i> Guardar Cambios
                 }
             </button>
         </div>
 
+        @if (mensajeExito) {
+            <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
+                ✅ {{ mensajeExito }}
+            </div>
+        }
+        @if (mensajeError) {
+            <div class="alert alert--error" [class.fade-out]="!notificacionVisible">
+                ❌ {{ mensajeError }}
+            </div>
+        }
+        
     </form>
     }
 </div>

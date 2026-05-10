@@ -10,7 +10,7 @@
 
     @if (authService.isLoggedIn()) {
       <div class="info-card">
-        <form (ngSubmit)="guardarPerfil()">
+        <form #miForm="ngForm" (ngSubmit)="guardarPerfil(miForm)">
           
           <div class="form-grid">
             <div class="form-group">
@@ -62,8 +62,21 @@
             </label>
           </div>
 
-          <button type="submit" class="btn-save">Actualizar perfil de acogida</button>
+          <button type="submit" class="btn-save" [disabled]="guardando">
+            {{ guardando ? 'Guardando...' : 'Actualizar perfil de acogida' }}
+          </button>
           <a routerLink="/perfil" class="btn-link">Volver a mi perfil</a>
+
+          @if (mensajeExito) {
+            <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
+              ✅ {{ mensajeExito }}
+            </div>
+          }
+          @if (mensajeError) {
+            <div class="alert alert--error" [class.fade-out]="!notificacionVisible">
+              ❌ {{ mensajeError }}
+            </div>
+          }
         </form>
       </div>
     } @else {

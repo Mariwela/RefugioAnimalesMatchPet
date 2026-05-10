@@ -9,7 +9,7 @@
     <p class="section-label">Formulario de Voluntariado</p>
     
     <div class="info-card">
-      <form (ngSubmit)="guardarVoluntariado()">
+      <form #voluntForm="ngForm" (ngSubmit)="guardarVoluntariado(voluntForm)">
         
         <div class="form-group">
           <label>¿En qué área te gustaría ayudar?</label>
@@ -48,8 +48,22 @@
           <textarea name="comentarios_voluntario" [(ngModel)]="perfilVoluntario.comentarios_voluntario" rows="2" placeholder="Cuéntanos un poco sobre ti..."></textarea>
         </div>
 
-        <button type="submit" class="btn-save">Guardar Perfil de Voluntario</button>
+        <button type="submit" class="btn-save" [disabled]="guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar Perfil de Voluntario' }}
+        </button>
         <a routerLink="/perfil" class="btn-link">Volver a mi perfil</a>
+
+        @if (mensajeExito) {
+          <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
+            ✅ {{ mensajeExito }}
+          </div>
+        }
+        @if (mensajeError) {
+          <div class="alert alert--error" [class.fade-out]="!notificacionVisible">
+            ❌ {{ mensajeError }}
+          </div>
+        }
+
       </form>
     </div>
   </div>

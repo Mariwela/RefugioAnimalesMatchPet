@@ -16,6 +16,9 @@ export class AnimalEditComponent implements OnInit {
   cargando: boolean = true;
   guardando: boolean = false;
   mensaje: string = '';
+  mensajeExito: string = '';
+  mensajeError: string = '';
+  notificacionVisible: boolean = true;
   idAnimal!: number;
 
   constructor(
@@ -54,6 +57,23 @@ export class AnimalEditComponent implements OnInit {
     }
   }
 
+  notificacionFadeOut(): void {
+    this.notificacionVisible = true;
+    this.cdr.detectChanges();
+
+    setTimeout(() => {
+      this.notificacionVisible = false;
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.mensajeExito = '';
+        this.mensajeError = '';
+        this.notificacionVisible = true;
+        this.cdr.detectChanges();
+      }, 1000);
+    }, 4000);
+  }
+
   // 1. Estructuramos el formulario idéntico a tu tabla 'animales'
   iniciarFormulario(): void {
     this.animalForm = this.fb.group({
@@ -81,8 +101,6 @@ export class AnimalEditComponent implements OnInit {
     });
   }
 
-  // 2. Traemos los datos de la DB y los metemos en el formulario
-  // 2. Traemos los datos de la DB y los metemos en el formulario
   // 2. Traemos los datos de la DB y los metemos en el formulario
   cargarDatosAnimal(id: number): void {
     console.log('1. Iniciando petición para el animal ID:', id);
@@ -138,7 +156,14 @@ export class AnimalEditComponent implements OnInit {
   // 3. Enviamos los datos actualizados a tu PHP
   guardarCambios(): void {
     if (this.animalForm.invalid) {
-      this.mensaje = 'Revisa los campos obligatorios.';
+      this.mensajeError = 'Por favor, rellena todos los campos obligatorios.';
+      this.notificacionFadeOut();
+      return;
+    }
+
+    if (this.animalForm.pristine) {
+      this.mensajeError = 'No has realizado ningún cambio para guardar.';
+      this.notificacionFadeOut();
       return;
     }
 
@@ -149,16 +174,20 @@ export class AnimalEditComponent implements OnInit {
       next: (res) => {
         this.guardando = false;
         if (res.status === 'success') {
-          this.mensaje = '¡Animal actualizado correctamente!';
+          this.mensaje = '¡Ficha de animal actualizada correctamente!';
+          this.animalForm.markAsPristine(); 
+          this.notificacionFadeOut();
           // Opcional: Volver al detalle tras 2 segundos
           setTimeout(() => this.router.navigate(['/animal', this.idAnimal]), 2000);
         } else {
           this.mensaje = 'Error: ' + res.message;
+          this.notificacionFadeOut();
         }
       },
       error: (err) => {
         this.guardando = false;
         this.mensaje = 'Error al guardar los cambios.';
+        this.notificacionFadeOut();
         console.error(err);
       }
     });
