@@ -16,8 +16,16 @@
  
       <!-- Avatar + nombre -->
       <div class="perfil-header-card">
-        <div class="avatar-wrapper">
-          <img [src]="urlAvatar" [alt]="usuario.nombre_completo" class="avatar-img">
+        <div class="avatar-container">
+          <div class="avatar-wrapper">
+            <img [src]="urlAvatar" [alt]="usuario.nombre_completo" class="avatar-img">
+            <label class="avatar-overlay" title="Cambiar foto">
+              <i class="fa fa-camera"></i>
+              <input type="file" accept="image/jpg,image/jpeg,image/png,image/webp"
+                (change)="subirAvatar($event)" hidden>
+            </label>
+          </div>
+          <small class="avatar-hint">JPG, PNG o WEBP · Máx. 2MB</small>
         </div>
         <div class="perfil-info">
           <h2>{{ usuario.nombre_completo }}</h2>
@@ -25,6 +33,11 @@
           <p class="fecha-registro">Miembro desde {{ usuario.fecha_registro | date:'MMMM yyyy' : '' : 'es' }}</p>
         </div>
       </div>
+      @if (mensajeExito) {
+        <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
+          ✅ {{ mensajeExito }}
+        </div>
+      }
  
       <!-- Tabs -->
       <div class="tabs">
