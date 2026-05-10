@@ -24,6 +24,11 @@
             Adopta
           </a>
         </li>
+        <li>
+          <a routerLink="/historias/moderar" routerLinkActive="active">
+            Moderar Historias
+          </a>
+        </li>
 
         <!-- Cómo ayudar -->
         <li class="dropdown">
@@ -79,32 +84,19 @@
       <div class="user-icons">
 
         <!-- Favoritos -->
-        <a
-          routerLink="/mis-favoritos"
-          routerLinkActive="active"
-          class="action-link"
-          title="Mis Favoritos"
-        >
+        <a routerLink="/mis-favoritos" routerLinkActive="active" class="action-link" title="Mis Favoritos">
           <i class="fa fa-heart icon-salmon"></i>
           <span class="action-text">Favoritos</span>
         </a>
 
         <!-- Solicitudes -->
-        <a
-          routerLink="/mis-solicitudes"
-          routerLinkActive="active"
-          class="action-link"
-          title="Mis Solicitudes"
-        >
+        <a routerLink="/mis-solicitudes" routerLinkActive="active" class="action-link" title="Mis Solicitudes">
           <i class="fa fa-list-alt icon-dark"></i>
           <span class="action-text">Solicitudes</span>
         </a>
 
         <!-- Notificaciones -->
-        <div
-          class="notification-wrapper"
-          [title]="mensajeNotificaciones"
-        >
+        <div class="notification-wrapper" [title]="mensajeNotificaciones">
           <i class="fa-solid fa-bell notification-icon"></i>
 
           @if (totalNotificaciones > 0) {
@@ -120,17 +112,9 @@
             Hola, {{ nombreUsuario }}
           </span>
 
-          <img
-            [src]="urlAvatar"
-            [alt]="nombreUsuario"
-            class="avatar"
-          >
+          <img [src]="urlAvatar" [alt]="nombreUsuario" class="avatar">
 
-          <button
-            (click)="cerrarSesion()"
-            class="btn-logout"
-            title="Cerrar sesión"
-          >
+          <button (click)="cerrarSesion()" class="btn-logout" title="Cerrar sesión">
             <i class="fa fa-sign-out"></i>
             Salir
           </button>

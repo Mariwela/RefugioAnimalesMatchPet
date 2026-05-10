@@ -47,7 +47,6 @@ export class EditarHistoriasComponent implements OnInit {
   }
 
   onSubmit(): void {
-    // Si el formulario no es válido, no hacemos nada
     if (this.editarForm.invalid) {
       return;
     }
@@ -58,20 +57,23 @@ export class EditarHistoriasComponent implements OnInit {
 
     const { titulo, contenido } = this.editarForm.value;
 
-    // 3. Llamamos al servicio que creamos antes
     this.historiaService.editarHistoria(this.idHistoria, titulo, contenido).subscribe({
       next: (respuesta) => {
-        this.cargando = false;
-        this.mensajeExito = respuesta.message || 'Historia actualizada. Queda pendiente de revisión.';
+        this.cargando = false; // Apagamos el botón
+        this.mensajeExito = respuesta.message || 'Historia actualizada con éxito.';
 
-        // Redirigimos al usuario a sus historias después de 2 segundos
         setTimeout(() => {
-          this.router.navigate(['/mis-historias']); // Cambia esta ruta según tu proyecto
+          this.router.navigate(['/historias']);
         }, 2000);
       },
-      error: (error) => {
-        this.cargando = false;
-        this.mensajeError = error.error?.message || 'Ocurrió un error al actualizar la historia.';
+      error: (err) => {
+        // IMPRIMIMOS EL ERROR PARA VER QUÉ PASA
+        console.error('Error al guardar la historia:', err);
+
+        this.cargando = false; // SIEMPRE apagamos el botón aquí también
+
+        // Extraemos el mensaje de error de forma segura
+        this.mensajeError = err.error?.message || err.message || 'Error de conexión con el servidor.';
       }
     });
   }
