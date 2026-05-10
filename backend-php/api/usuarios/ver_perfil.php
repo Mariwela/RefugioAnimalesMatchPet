@@ -26,7 +26,11 @@ try {
                 pref_energia,
                 pref_vivienda,
                 bio_experiencia,
-                estado_acogida,
+                disponibilidad_acogida,
+                disponibilidad_voluntario,
+                area_interes,
+                horario_voluntario,
+                comentarios_voluntario,
                 avatar,
                 fecha_registro
               FROM usuarios

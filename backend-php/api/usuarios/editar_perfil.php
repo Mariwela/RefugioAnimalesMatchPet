@@ -52,7 +52,6 @@ $campos_permitidos = [
     'avatar'
 ];
 
-// Construimos el UPDATE solo con los campos permitidos que llegaron
 $fields = [];
 $params = [':id' => $payload['id_usuario']];
 
