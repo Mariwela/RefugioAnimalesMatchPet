@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Necesario si usas *ngIf en el HTML
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms'; // Añadido ReactiveFormsModule
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 @Component({
-  selector: 'app-login', // Le quité el '.component' para seguir el estándar
-  standalone: true, // Asegura que es standalone
-  imports: [ReactiveFormsModule, CommonModule], // ¡Muy importante para que funcione el formulario!
+  selector: 'app-login',
+  standalone: true,
+  imports: [ReactiveFormsModule, CommonModule, RouterLink],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -33,7 +33,6 @@ export class LoginComponent {
   this.authService.login(email, password).subscribe({
     next: (res) => {
       if (res.token && res.user) {
-        // Pasamos los 4 datos necesarios
         this.authService.guardarDatosSesion(
           res.token, 
           res.user.nombre_completo, 

@@ -1,12 +1,12 @@
 import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { isPlatformBrowser } from '@angular/common'; // <-- Importamos esto
+import { isPlatformBrowser } from '@angular/common';
 import { Observable } from 'rxjs';
 import id from '@angular/common/locales/extra/id';
 
 export interface AuthResponse {
   message: string;
-  user?: {              // <-- Añadimos este objeto
+  user?: {
     id_usuario: number;
     nombre_completo: string;
     email: string;
@@ -20,18 +20,21 @@ export interface AuthResponse {
   providedIn: 'root',
 })
 export class AuthService {
-  // En tu auth.service.ts
-  private apiUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/auth/login.php';
+  private loginUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/auth/login.php';
+  private registroUrl = 'http://localhost/refugioAnimalesMatchPet/backend-php/api/auth/registro.php';
 
   constructor(
     private http: HttpClient,
-    @Inject(PLATFORM_ID) private platformId: Object // <-- Inyectamos el ID de la plataforma
+    @Inject(PLATFORM_ID) private platformId: Object
   ) { }
 
   login(email: string, password: string): Observable<AuthResponse> {
-    return this.http.post<AuthResponse>(this.apiUrl, { email, password });
+    return this.http.post<AuthResponse>(this.loginUrl, { email, password });
   }
 
+  registro(datos: any) {
+    return this.http.post<any>(this.registroUrl, datos);
+  }
 
   guardarDatosSesion(token: string, nombre: string, rol: string, avatar: string, id_usuario: number): void {
     if (isPlatformBrowser(this.platformId)) {
@@ -43,12 +46,11 @@ export class AuthService {
       if (avatar) {
         localStorage.setItem('usuario_avatar', avatar);
       } else {
-        localStorage.removeItem('usuario_avatar'); // Lo borramos por si había uno viejo
+        localStorage.removeItem('usuario_avatar');
       }
     }
   }
 
-  // Método para obtener los datos del usuario actual (útil para el componente Acogida)
   getCurrentUser() {
     if (isPlatformBrowser(this.platformId)) {
       return {
@@ -87,7 +89,6 @@ export class AuthService {
     return null;
   }
   isAdmin(): boolean {
-    // Retorna true solo si el rol guardado en localStorage es exactamente 'admin'
     return this.getRol() === 'admin';
   }
 
