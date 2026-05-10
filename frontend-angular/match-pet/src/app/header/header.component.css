@@ -5,7 +5,7 @@
   width: 100%;
 }
 
-/* ─── Header Principal ──────────────── */
+
 .main-header {
   background: #ffffff;
   border-bottom: 1px solid #c8ddc8;
@@ -27,7 +27,7 @@
   gap: 1rem;
 }
 
-/* ─── Logo ──────────────────────────── */
+
 .brand-logo {
   display: flex;
   align-items: center;
@@ -53,7 +53,7 @@
   color: #C85A2A;
 }
 
-/* ─── Navegación ────────────────────── */
+
 .main-nav ul {
   list-style: none;
   margin: 0;
@@ -76,13 +76,13 @@
   color: #1A3A1A;
 }
 
-/* ─── Dropdown ──────────────────────── */
+
 .dropdown {
   position: relative;
 }
 
 .dropdown-menu {
-  display: none; /* Por defecto no se ve */
+  display: none;
   position: absolute;
   top: 100%;
   left: 0;
@@ -91,19 +91,19 @@
   border-radius: 8px;
   min-width: 180px;
   padding: 0.5rem 0;
-  margin-top: 8px; /* Separación del header */
+  margin-top: 8px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   list-style: none;
   z-index: 1000;
 }
 
-/* Clase que activa Angular al pinchar */
+
 .dropdown-menu.show {
   display: flex;
   flex-direction: column;
 }
 
-/* Estilo para los links dentro del submenú */
+
 .dropdown-menu li a {
   padding: 10px 20px;
   font-size: 14px;
@@ -117,7 +117,7 @@
   color: #1A3A1A;
 }
 
-/* Opcional: un pequeño triángulo arriba del menú */
+
 .dropdown-menu.show::before {
   content: '';
   position: absolute;
@@ -128,7 +128,7 @@
   border-bottom: 6px solid #c8ddc8;
 }
 
-/* ─── Acciones de Usuario ───────────── */
+
 .user-actions {
   display: flex;
   align-items: center;
@@ -171,7 +171,7 @@
 
 .icon-salmon { color: #E8854A; }
 
-/* ─── Notificaciones y Perfil ───────── */
+
 .notification-wrapper {
   position: relative;
   cursor: pointer;
@@ -197,12 +197,11 @@
   border-left: 1px solid #c8ddc8;
   padding-left: 1.2rem;
 }
-
 .user-greeting {
   font-size: 13px;
   color: #1A3A1A;
+  text-decoration: none;
 }
-
 .avatar {
   width: 35px;
   height: 35px;
@@ -210,6 +209,22 @@
   object-fit: cover;
   border: 2px solid #c8ddc8;
 }
+
+.user-profile a .avatar {
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.15s;
+}
+.user-profile a .avatar:hover {
+  opacity: 0.85;
+}
+.user-profile a.user-greeting {
+  color: #C85A2A;
+}
+.user-profile a.user-greeting:hover {
+  color: #C85A2A;
+}
+
 
 .btn-logout {
   background: none;
@@ -229,7 +244,7 @@
   color: #a33;
 }
 
-/* ─── Responsive (Sin Scroll Horizontal) ─── */
+
 @media (max-width: 1024px) {
   .main-nav {
     display: none; /* Aquí podrías implementar un menú hamburguesa */

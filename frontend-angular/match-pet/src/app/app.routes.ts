@@ -5,6 +5,7 @@ import { AnimalComponent } from './components/animal.component/animal.component'
 import { AnimalDetalleComponent } from './components/animal-detalle.component/animal-detalle.component';
 import { LoginComponent } from './components/login.component/login.component';
 import { RegistroComponent } from './components/registro/registro';
+import { PerfilComponent } from './components/perfil/perfil';
 import { AnimalEditComponent } from './components/animal-edit.component/animal-edit.component';
 import { AnimalCrearComponent } from './components/animal-crear.component/animal-crear.component';
 import { MisFavoritosComponent } from './components/mis-favoritos.component/mis-favoritos.component';

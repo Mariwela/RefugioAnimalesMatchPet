@@ -7,7 +7,6 @@ require_once '../../config/auth_middleware.php';
 $payload = autenticar();
 
 $data = json_decode(file_get_contents('php://input'), true);
-$id_usuario = $data['id_usuario'];
 $disponibilidad_voluntario = $data['disponibilidad_voluntario'] ?? 'no';
 $area_interes = $data['area_interes'] ?? null;
 $horario_voluntario = $data['horario_voluntario'] ?? null;
@@ -57,8 +56,9 @@ $params = [':id' => $payload['id_usuario']];
 
 foreach ($campos_permitidos as $campo) {
     if (array_key_exists($campo, $data)) {
+        $valor = $data[$campo];
+        $params[":$campo"] = ($valor === '' || $valor === 'null') ? null : $valor;
         $fields[] = "$campo = :$campo";
-        $params[":$campo"] = $data[$campo];
     }
 }
 
