@@ -32,7 +32,8 @@
         <div class="grid-perfil">
             <div class="columna-foto">
                 <div class="marco-foto">
-                    <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-principal">
+                    <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-principal"
+                        (click)="abrirZoom(animal.foto_portada)" title="Click para ampliar" style="cursor: zoom-in;">
                 </div>
             </div>
 
@@ -122,7 +123,8 @@
             <div class="grid-galeria">
                 @for (foto of animal.galeria; track foto.url_completa) {
                 <div class="item-galeria">
-                    <img [src]="foto.url_completa" [alt]="animal.nombre" class="foto-extra">
+                    <img [src]="foto.url_completa" [alt]="animal.nombre" class="foto-extra"
+                        (click)="abrirZoom(foto.url_completa)" title="Click para ampliar" style="cursor: zoom-in;">
                 </div>
                 }
             </div>

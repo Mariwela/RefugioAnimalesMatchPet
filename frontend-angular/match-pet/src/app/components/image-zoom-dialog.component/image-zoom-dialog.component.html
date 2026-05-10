@@ -1,0 +1,28 @@
+<div class="zoom-overlay" (click)="dialogRef.close()">
+    <div class="zoom-contenedor" (click)="$event.stopPropagation()">
+
+        <button class="btn-cerrar-minimal" (click)="dialogRef.close()">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        @if (imagenes.length > 1) {
+        <button class="nav-extra anterior" (click)="fotoAnterior()">
+            <i class="fa-solid fa-long-arrow-left"></i>
+        </button>
+
+        <button class="nav-extra siguiente" (click)="fotoSiguiente()">
+            <i class="fa-solid fa-long-arrow-right"></i>
+        </button>
+        }
+
+        <div class="marco-imagen">
+            <img [src]="imagenes[indiceActual]" class="imagen-zoomeada">
+        </div>
+
+        @if (imagenes.length > 1) {
+        <div class="contador-minimal">
+            {{ indiceActual + 1 }} <span>/</span> {{ imagenes.length }}
+        </div>
+        }
+    </div>
+</div>

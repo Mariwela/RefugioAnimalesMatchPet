@@ -3,11 +3,13 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalService } from '../../services/animal'; // Ajusta esta ruta si es diferente
 import { AuthService } from '../../services/auth';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ImageZoomDialogComponent } from '../image-zoom-dialog.component/image-zoom-dialog.component';
 
 @Component({
   selector: 'app-animal-detalle',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './animal-detalle.component.html',
   styleUrl: './animal-detalle.component.css'
 })
@@ -28,7 +30,8 @@ export class AnimalDetalleComponent implements OnInit {
     private router: Router,        // Para poder volver atrás
     private animalService: AnimalService,
     public authService: AuthService, // Cambiado a 'public' si lo usas en el HTML
-    private cdr: ChangeDetectorRef // Nuestro toque mágico
+    private cdr: ChangeDetectorRef,
+    private dialog: MatDialog// Nuestro toque mágico
   ) { }
 
   ngOnInit(): void {
@@ -148,5 +151,37 @@ export class AnimalDetalleComponent implements OnInit {
         }
       });
     }
+  }
+
+  // 👇 FUNCIÓN CORREGIDA CON TUS NOMBRES DE VARIABLES 👇
+  abrirZoom(imagenClickeadaUrl: string): void {
+    let todasLasImagenes: string[] = [];
+
+    // 1. Metemos la foto principal usando TU variable: 'foto_portada'
+    if (this.animal.foto_portada) {
+      todasLasImagenes.push(this.animal.foto_portada);
+    }
+
+    // 2. Metemos las de la galería usando TU variable: 'url_completa'
+    if (this.animal.galeria && this.animal.galeria.length > 0) {
+      const urlsGaleria = this.animal.galeria.map((foto: any) => foto.url_completa);
+      todasLasImagenes = [...todasLasImagenes, ...urlsGaleria];
+    }
+
+    // 3. Eliminamos duplicados (por si la portada se repite en la galería)
+    todasLasImagenes = [...new Set(todasLasImagenes)];
+
+    // 4. Buscamos qué posición ocupa la imagen que clickeó el usuario
+    let indiceClickeado = todasLasImagenes.indexOf(imagenClickeadaUrl);
+    if (indiceClickeado === -1) indiceClickeado = 0;
+
+    // 5. Abrimos el modal
+    this.dialog.open(ImageZoomDialogComponent, {
+      data: { imagenes: todasLasImagenes, indiceIndex: indiceClickeado },
+      maxWidth: '100vw',
+      width: '100vw',
+      height: '100vh',
+      panelClass: 'zoom-dialog-panel'
+    });
   }
 }

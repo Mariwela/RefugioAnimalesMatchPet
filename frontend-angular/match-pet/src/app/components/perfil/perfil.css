@@ -74,6 +74,7 @@
   margin-bottom: 1rem;
   box-shadow: 0 4px 12px rgba(26, 58, 26, 0.06);
 }
+
 .avatar-wrapper {
   position: relative;
   width: 72px;
@@ -123,7 +124,10 @@
   text-align: center;
   padding: 0.5rem 0 0;
 }
+<<<<<<< HEAD
 
+=======
+>>>>>>> f41e04ebc9dea342b5572c7785d3157949a955d9
 .perfil-info h2 {
   font-family: 'Playfair Display', serif;
   font-size: 20px;
