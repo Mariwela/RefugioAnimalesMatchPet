@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http'; // Asegúrate de importar HttpHeaders
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RespuestaHistorias } from '../interfaces/historia.model';
@@ -37,17 +37,25 @@ export class HistoriaService {
     return this.http.post<any>(this.apiUrl + 'moderar_historia.php', payload, { headers: this.getHeaders() });
   }
 
-  // CORREGIDO: Ahora envía el Token
   publicarHistoria(datos: { id_animal: number, titulo: string, contenido: string }): Observable<any> {
     return this.http.post<any>(this.apiUrl + 'publicar_historia.php', datos, { headers: this.getHeaders() });
   }
 
-  // CORREGIDO: Ahora envía el Token
   obtenerMisAdoptados(): Observable<any> {
     return this.http.get<any>(this.apiUrl + 'mis_adoptados.php', { headers: this.getHeaders() });
   }
 
   eliminarHistoria(idHistoria: number): Observable<any> {
     return this.http.delete<any>(`${this.apiUrl}eliminar_historia.php?id=${idHistoria}`, { headers: this.getHeaders() });
+  }
+
+  editarHistoria(idHistoria: number, titulo: string, contenido: string): Observable<any> {
+    const payload = {
+      id_historia: idHistoria,
+      titulo: titulo,
+      contenido: contenido
+    };
+
+    return this.http.post<any>(this.apiUrl + 'editar_historia.php', payload, { headers: this.getHeaders() });
   }
 }
