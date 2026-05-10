@@ -1,1 +1,64 @@
-<p>editar-historias.component works!</p>
+<div class="container mt-5">
+    <h2>Editar Historia de Adopción</h2>
+
+    <!-- Alertas de éxito y error con la nueva sintaxis -->
+    @if (mensajeExito) {
+    <div class="alert alert-success">
+        {{ mensajeExito }}
+    </div>
+    }
+
+    @if (mensajeError) {
+    <div class="alert alert-danger">
+        {{ mensajeError }}
+    </div>
+    }
+
+    <!-- Formulario Reactivo -->
+    <form [formGroup]="editarForm" (ngSubmit)="onSubmit()">
+
+        <!-- Campo Título -->
+        <div class="form-group mb-3">
+            <label for="titulo"><strong>Título de la historia</strong></label>
+            <input type="text" id="titulo" class="form-control" formControlName="titulo"
+                placeholder="Ej: El nuevo hogar de Firulais">
+
+            <!-- Mensaje de validación -->
+            @if (editarForm.get('titulo')?.invalid && editarForm.get('titulo')?.touched) {
+            <div class="text-danger mt-1">
+                El título es obligatorio y debe tener al menos 5 caracteres.
+            </div>
+            }
+        </div>
+
+        <!-- Campo Contenido -->
+        <div class="form-group mb-3">
+            <label for="contenido"><strong>Contenido</strong></label>
+            <textarea id="contenido" class="form-control" rows="6" formControlName="contenido"
+                placeholder="Cuenta cómo ha sido tu experiencia..."></textarea>
+
+            <!-- Mensaje de validación -->
+            @if (editarForm.get('contenido')?.invalid && editarForm.get('contenido')?.touched) {
+            <div class="text-danger mt-1">
+                El contenido es obligatorio y debe tener al menos 20 caracteres.
+            </div>
+            }
+        </div>
+
+        <!-- Botones de Acción -->
+        <div class="d-flex gap-2 mt-4">
+            <button type="submit" class="btn btn-primary" [disabled]="editarForm.invalid || cargando">
+                @if (cargando) {
+                <span>Guardando...</span>
+                } @else {
+                <span>Guardar Cambios</span>
+                }
+            </button>
+
+            <button type="button" class="btn btn-secondary" routerLink="/mis-historias">
+                Cancelar
+            </button>
+        </div>
+
+    </form>
+</div>
