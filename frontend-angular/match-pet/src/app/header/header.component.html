@@ -116,15 +116,14 @@
 
         <!-- Perfil usuario -->
         <div class="user-profile">
-          <span class="user-greeting">
-            Hola, {{ nombreUsuario }}
-          </span>
-
-          <img
-            [src]="urlAvatar"
-            [alt]="nombreUsuario"
-            class="avatar"
-          >
+          <a routerLink="/perfil">
+            <span class="user-greeting">
+              Hola, {{ nombreUsuario }}
+            </span>
+          </a>
+          <a routerLink="/perfil">
+            <img [src]="urlAvatar" [alt]="nombreUsuario" class="avatar">
+          </a>
 
           <button
             (click)="cerrarSesion()"
