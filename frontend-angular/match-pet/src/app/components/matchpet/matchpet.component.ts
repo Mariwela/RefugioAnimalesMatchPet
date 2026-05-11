@@ -1,5 +1,4 @@
 import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +23,9 @@ export interface Pesos {
     sociable_ninos: number;
     sociable_perros: number;
     sociable_gatos: number;
+    medicacion: number;
+    experiencia: number;
+    paciencia: number;
 }
 
 export interface Preferencias {
@@ -40,10 +42,15 @@ export interface Preferencias {
     tiene_gatos: boolean | null;
     gatos_sociables: boolean | null;
 
-    // valor final usado por el algoritmo
+    // valores finales usados por el algoritmo
     apto_pisos: boolean | null;
     sociable_perros: boolean | null;
     sociable_gatos: boolean | null;
+
+    // nuevas preferencias
+    acepta_medicacion: boolean | null;       // ¿acepta animal con medicación diaria?
+    tiene_experiencia: boolean | null;       // ¿tiene experiencia con animales?
+    tiene_paciencia: string | null;          // 'Alta' | 'Muy Alta' | null
 }
 
 export interface ResultadoAnimal {
@@ -57,11 +64,15 @@ export interface ResultadoAnimal {
     foto: string;
     descripcion: string;
     afinidad: number;
+    aviso_importante: string | null;
     badges: {
         nivel_energia: string;
         apto_pisos: boolean;
         sociable_ninos: boolean;
         esterilizado: boolean;
+        enfermedad_cronica: boolean;
+        es_para_principiantes: boolean;
+        nivel_paciencia: string;
     };
 }
 
@@ -71,18 +82,14 @@ export interface ResultadoAnimal {
 
 type Paso =
     | 'especie'
-    | 'pregunta-0'
-    | 'pregunta-1'
-    | 'pregunta-2'
-    | 'pregunta-3'
-    | 'pregunta-4'
+    | `pregunta-${number}`
     | 'cargando'
     | 'resultados';
 
 @Component({
     selector: 'app-matchpet',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [FormsModule],   // CommonModule ya no es necesario con @if / @for
     templateUrl: './matchpet.component.html',
     styleUrls: ['./matchpet.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -91,7 +98,7 @@ export class MatchpetComponent implements OnInit {
 
     // Estado del wizard
     pasoActual: Paso = 'especie';
-    especieSeleccionada: string | null = null; // null = cualquiera
+    especieSeleccionada: string | null = null;
     indicePregunta = 0;
 
     pesos: Pesos = {
@@ -100,6 +107,9 @@ export class MatchpetComponent implements OnInit {
         sociable_ninos: 3,
         sociable_perros: 3,
         sociable_gatos: 3,
+        medicacion: 3,
+        experiencia: 3,
+        paciencia: 3,
     };
 
     preferencias: Preferencias = {
@@ -119,6 +129,10 @@ export class MatchpetComponent implements OnInit {
         apto_pisos: null,
         sociable_perros: null,
         sociable_gatos: null,
+
+        acepta_medicacion: null,
+        tiene_experiencia: null,
+        tiene_paciencia: null,
     };
 
     resultados: ResultadoAnimal[] = [];
@@ -126,8 +140,12 @@ export class MatchpetComponent implements OnInit {
 
     private apiUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api';
 
-    // Definición de preguntas
+    // ────────────────────────────────────────────
+    //  PREGUNTAS DEL WIZARD
+    // ────────────────────────────────────────────
+
     readonly PREGUNTAS: PreguntaMatchPet[] = [
+        // 0 – Energía
         {
             key: 'nivel_energia',
             prefKey: 'nivel_energia',
@@ -142,6 +160,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
+        // 1 – Tipo de vivienda
         {
             key: 'apto_pisos',
             prefKey: 'tipo_vivienda',
@@ -156,6 +175,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
+        // 2 – Acceso exterior (se salta si tiene jardín)
         {
             key: 'apto_pisos',
             prefKey: 'acceso_exterior',
@@ -169,6 +189,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
+        // 3 – Niños
         {
             key: 'sociable_ninos',
             prefKey: 'sociable_ninos',
@@ -183,6 +204,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
+        // 4 – Perros en casa
         {
             key: 'sociable_perros',
             prefKey: 'tiene_perros',
@@ -196,6 +218,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
+        // 5 – Perros sociables (se salta si no tiene perros)
         {
             key: 'sociable_perros',
             prefKey: 'perros_sociables',
@@ -209,6 +232,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
+        // 6 – Gatos en casa
         {
             key: 'sociable_gatos',
             prefKey: 'tiene_gatos',
@@ -222,6 +246,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
+        // 7 – Gatos sociables (se salta si no tiene gatos)
         {
             key: 'sociable_gatos',
             prefKey: 'gatos_sociables',
@@ -232,6 +257,49 @@ export class MatchpetComponent implements OnInit {
             opciones: [
                 { label: '✅ Sí', valor: true },
                 { label: '❌ No', valor: false },
+            ],
+        },
+
+        // 8 – Medicación diaria ← NUEVA
+        {
+            key: 'medicacion',
+            prefKey: 'acepta_medicacion',
+            titulo: '¿Podrías hacerte cargo de un animal con medicación diaria?',
+            descripcion: 'Algunos animales con enfermedad crónica necesitan pastillas, gotas o inyecciones cada día.',
+            icono: '💊',
+            tipoPregunta: 'booleano',
+            opciones: [
+                { label: '✅ Sí, sin problema', valor: true },
+                { label: '❌ Prefiero que no', valor: false },
+            ],
+        },
+
+        // 9 – Experiencia ← NUEVA
+        {
+            key: 'experiencia',
+            prefKey: 'tiene_experiencia',
+            titulo: '¿Tienes experiencia previa con animales?',
+            descripcion: 'Algunos animales necesitan un adoptante experimentado que sepa leer su lenguaje.',
+            icono: '🎓',
+            tipoPregunta: 'booleano',
+            opciones: [
+                { label: '🐾 Sí, llevo años con animales', valor: true },
+                { label: '🌱 Soy nuevo en esto', valor: false },
+            ],
+        },
+
+        // 10 – Paciencia ← NUEVA
+        {
+            key: 'paciencia',
+            prefKey: 'tiene_paciencia',
+            titulo: '¿Cuánta paciencia tienes para el adiestramiento?',
+            descripcion: 'Algunos animales con traumas o malos hábitos necesitan mucho tiempo y constancia.',
+            icono: '🧘',
+            tipoPregunta: 'booleano',
+            opciones: [
+                { label: '🚀 Quiero resultados rápidos', valor: 'Baja' },
+                { label: '🙂 Soy bastante paciente', valor: 'Alta' },
+                { label: '🧘 Tengo toda la paciencia del mundo', valor: 'Muy Alta' },
             ],
         },
     ];
@@ -249,7 +317,6 @@ export class MatchpetComponent implements OnInit {
     }
 
     constructor(private http: HttpClient, private router: Router, private cdr: ChangeDetectorRef) { }
-
 
     ngOnInit(): void { }
 
@@ -279,122 +346,69 @@ export class MatchpetComponent implements OnInit {
         return (this.pesos as any)[this.preguntaActual.key];
     }
 
+    /** Determina si una pregunta debe saltarse según el contexto */
+    private debeSaltar(indice: number): boolean {
+        if (indice < 0 || indice >= this.totalPreguntas) return false;
+        const prefKey = this.PREGUNTAS[indice].prefKey;
+        return (
+            (prefKey === 'acceso_exterior' && this.preferencias.tipo_vivienda === 'casa_jardin') ||
+            (prefKey === 'perros_sociables' && this.preferencias.tiene_perros === false) ||
+            (prefKey === 'gatos_sociables' && this.preferencias.tiene_gatos === false)
+        );
+    }
+
     siguientePregunta(): void {
-
-        // avanzar normal
         this.indicePregunta++;
-
-        // ─────────────────────────────
-        // Saltar acceso_exterior
-        // ─────────────────────────────
-        if (
-            this.indicePregunta < this.totalPreguntas &&
-            this.PREGUNTAS[this.indicePregunta].prefKey === 'acceso_exterior' &&
-            this.preferencias.tipo_vivienda === 'casa_jardin'
-        ) {
+        while (this.indicePregunta < this.totalPreguntas && this.debeSaltar(this.indicePregunta)) {
             this.indicePregunta++;
         }
 
-        // ─────────────────────────────
-        // Saltar perros_sociables
-        // ─────────────────────────────
-        if (
-            this.indicePregunta < this.totalPreguntas &&
-            this.PREGUNTAS[this.indicePregunta].prefKey === 'perros_sociables' &&
-            this.preferencias.tiene_perros === false
-        ) {
-            this.indicePregunta++;
-        }
-
-        // ─────────────────────────────
-        // Saltar gatos_sociables
-        // ─────────────────────────────
-        if (
-            this.indicePregunta < this.totalPreguntas &&
-            this.PREGUNTAS[this.indicePregunta].prefKey === 'gatos_sociables' &&
-            this.preferencias.tiene_gatos === false
-        ) {
-            this.indicePregunta++;
-        }
-
-        // fin wizard
         if (this.indicePregunta >= this.totalPreguntas) {
             this.enviarFormulario();
             return;
         }
 
-        this.pasoActual = `pregunta-${this.indicePregunta}` as Paso;
+        this.pasoActual = `pregunta-${this.indicePregunta}`;
     }
 
     anteriorPregunta(): void {
-
-        // retroceder normal
         this.indicePregunta--;
-
-        // ─────────────────────────────
-        // Saltar acceso_exterior
-        // ─────────────────────────────
-        if (
-            this.indicePregunta >= 0 &&
-            this.PREGUNTAS[this.indicePregunta].prefKey === 'acceso_exterior' &&
-            this.preferencias.tipo_vivienda === 'casa_jardin'
-        ) {
+        while (this.indicePregunta >= 0 && this.debeSaltar(this.indicePregunta)) {
             this.indicePregunta--;
         }
 
-        // ─────────────────────────────
-        // Saltar perros_sociables
-        // ─────────────────────────────
-        if (
-            this.indicePregunta >= 0 &&
-            this.PREGUNTAS[this.indicePregunta].prefKey === 'perros_sociables' &&
-            this.preferencias.tiene_perros === false
-        ) {
-            this.indicePregunta--;
-        }
-
-        // ─────────────────────────────
-        // Saltar gatos_sociables
-        // ─────────────────────────────
-        if (
-            this.indicePregunta >= 0 &&
-            this.PREGUNTAS[this.indicePregunta].prefKey === 'gatos_sociables' &&
-            this.preferencias.tiene_gatos === false
-        ) {
-            this.indicePregunta--;
-        }
-
-        // volver a especie
         if (this.indicePregunta < 0) {
             this.pasoActual = 'especie';
             return;
         }
 
-        this.pasoActual = `pregunta-${this.indicePregunta}` as Paso;
+        this.pasoActual = `pregunta-${this.indicePregunta}`;
     }
 
     reiniciar(): void {
         this.pasoActual = 'especie';
         this.especieSeleccionada = null;
         this.indicePregunta = 0;
-        this.pesos = { nivel_energia: 3, apto_pisos: 3, sociable_ninos: 3, sociable_perros: 3, sociable_gatos: 3 };
+        this.pesos = {
+            nivel_energia: 3, apto_pisos: 3, sociable_ninos: 3,
+            sociable_perros: 3, sociable_gatos: 3,
+            medicacion: 3, experiencia: 3, paciencia: 3,
+        };
         this.preferencias = {
             nivel_energia: null,
-
             tipo_vivienda: null,
             acceso_exterior: null,
-
             sociable_ninos: null,
-
             tiene_perros: null,
             perros_sociables: null,
-
             tiene_gatos: null,
             gatos_sociables: null,
-
             apto_pisos: null,
             sociable_perros: null,
             sociable_gatos: null,
+            acepta_medicacion: null,
+            tiene_experiencia: null,
+            tiene_paciencia: null,
         };
         this.resultados = [];
         this.error = null;
@@ -406,45 +420,24 @@ export class MatchpetComponent implements OnInit {
         this.pasoActual = 'cargando';
         this.error = null;
 
-        // ─────────────────────────────
         // Lógica vivienda
-        // ─────────────────────────────
-
-        if (
+        this.preferencias.apto_pisos =
             this.preferencias.tipo_vivienda === 'casa_jardin' ||
             this.preferencias.acceso_exterior === true
-        ) {
-            this.preferencias.apto_pisos = false;
-        } else {
-            this.preferencias.apto_pisos = true;
-        }
+                ? false
+                : true;
 
-        // ─────────────────────────────
         // Lógica perros
-        // ─────────────────────────────
+        this.preferencias.sociable_perros = !this.preferencias.tiene_perros
+            ? null
+            : this.preferencias.perros_sociables === false;
 
-        if (!this.preferencias.tiene_perros) {
-            this.preferencias.sociable_perros = null;
-        } else {
-            this.preferencias.sociable_perros =
-                this.preferencias.perros_sociables === false;
-        }
-
-        // ─────────────────────────────
         // Lógica gatos
-        // ─────────────────────────────
+        this.preferencias.sociable_gatos = !this.preferencias.tiene_gatos
+            ? null
+            : this.preferencias.gatos_sociables === false;
 
-        if (!this.preferencias.tiene_gatos) {
-            this.preferencias.sociable_gatos = null;
-        } else {
-            this.preferencias.sociable_gatos =
-                this.preferencias.gatos_sociables === false;
-        }
-
-        // ─────────────────────────────
         // Lógica niños
-        // ─────────────────────────────
-
         if (this.preferencias.sociable_ninos === 'no') {
             this.preferencias.sociable_ninos = null;
         }
@@ -496,17 +489,16 @@ export class MatchpetComponent implements OnInit {
         return ['1 – Poco importante', '2', '3 – Neutral', '4', '5 – Muy importante'];
     }
 
-    // Comprueba si la preferencia actual tiene valor seleccionado
-    // matchpet.component.ts
-
     get puedeAvanzar(): boolean {
-        // Solo permitimos avanzar si el usuario ha interactuado
-        // haciendo clic en una opción o en 'No tengo preferencia'
         return this.preferenciaActual !== undefined;
     }
 
     getImageUrl(foto: string): string {
         if (!foto) return 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/img/animales/default.jpg';
         return `http://localhost/RefugioAnimalesMatchPet/backend-php/public/img/animales/${foto}`;
+    }
+
+    tieneAviso(animal: ResultadoAnimal): boolean {
+        return !!animal.aviso_importante;
     }
 }
