@@ -10,6 +10,9 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
+    // 🔥 LA MAGIA AQUÍ: Si viene un ID en la URL lo usamos, si no, usamos el del token 🔥
+ $id_a_buscar = (isset($_GET['id']) && !empty($_GET['id'])) ? intval($_GET['id']) : $payload['id_usuario'];
+
     $query = "SELECT 
                 id_usuario,
                 nombre_completo,
@@ -37,13 +40,14 @@ try {
               WHERE id_usuario = :id";
 
     $stmt = $db->prepare($query);
-    $stmt->execute([':id' => $payload['id_usuario']]);
+    // Ejecutamos la consulta con el ID que determinamos arriba
+    $stmt->execute([':id' => $id_a_buscar]);
 
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if (!$usuario) {
         http_response_code(404);
-        echo json_encode(["message" => "Usuario no encontrado."]);
+        echo json_encode(["status" => "error", "message" => "Usuario no encontrado."]);
         exit;
     }
 
@@ -54,5 +58,6 @@ try {
 
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(["message" => "Error en el servidor: " . $e->getMessage()]);
+    echo json_encode(["status" => "error", "message" => "Error en el servidor: " . $e->getMessage()]);
 }
+?>
