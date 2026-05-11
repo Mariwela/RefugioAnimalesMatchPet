@@ -1,0 +1,239 @@
+<!-- ============================================================
+     matchpet.component.html
+     Wizard de afinidad para adopción de animales – MatchPet
+     ============================================================ -->
+
+<div class="matchpet-wrapper">
+
+    <!-- ─── CABECERA SIEMPRE VISIBLE ──────────────────────────── -->
+    <header class="mp-header">
+        <span class="mp-logo">🐾 MatchPet</span>
+        <p class="mp-tagline">Encuentra a tu compañero perfecto</p>
+    </header>
+
+    <!-- ─── ERROR GLOBAL ──────────────────────────────────────── -->
+    <div class="mp-error" *ngIf="error">
+        <span>⚠️ {{ error }}</span>
+        <button (click)="reiniciar()">Volver a empezar</button>
+    </div>
+
+    <!-- ═══════════════════════════════════════════════════════════
+       PASO 1: ESPECIE
+       ═════════════════════════════════════════════════════════ -->
+    <section class="mp-step step-especie" *ngIf="pasoActual === 'especie'">
+
+        <h2 class="mp-step-title">¿Qué tipo de animal estás buscando?</h2>
+        <p class="mp-step-sub">Puedes abrir el match a todos o elegir tu preferido.</p>
+
+        <div class="mp-especie-cards">
+
+            <button class="mp-especie-card" (click)="seleccionarEspecie(null)">
+                <span class="mp-especie-emoji">🐾</span>
+                <span class="mp-especie-label">Cualquier animal</span>
+                <span class="mp-especie-desc">Quiero ver todas las opciones</span>
+            </button>
+
+            <button class="mp-especie-card" (click)="seleccionarEspecie('Perro')">
+                <span class="mp-especie-emoji">🐕</span>
+                <span class="mp-especie-label">Perro</span>
+                <span class="mp-especie-desc">Solo quiero ver perros</span>
+            </button>
+
+            <button class="mp-especie-card" (click)="seleccionarEspecie('Gato')">
+                <span class="mp-especie-emoji">🐈</span>
+                <span class="mp-especie-label">Gato</span>
+                <span class="mp-especie-desc">Solo quiero ver gatos</span>
+            </button>
+
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+       PASOS 2-6: PREGUNTAS DEL WIZARD
+       ═════════════════════════════════════════════════════════ -->
+    <section class="mp-step step-pregunta" *ngIf="pasoActual.startsWith('pregunta')">
+
+        <!-- Barra de progreso -->
+        <div class="mp-progress-bar">
+            <div class="mp-progress-fill" [style.width.%]="((indicePregunta + 1) / totalPreguntas) * 100"></div>
+        </div>
+        <p class="mp-progress-text">
+            Pregunta {{ indicePregunta + 1 }} de {{ totalPreguntas }}
+        </p>
+
+        <!-- Pregunta -->
+        <div class="mp-pregunta-card">
+            <span class="mp-pregunta-icono">{{ preguntaActual.icono }}</span>
+            <h2 class="mp-pregunta-titulo">{{ preguntaActual.titulo }}</h2>
+            <p class="mp-pregunta-desc">{{ preguntaActual.descripcion }}</p>
+
+            <!-- Opciones (booleano o nivel energía) -->
+            <div class="mp-opciones" *ngIf="preguntaActual.opciones">
+                <button *ngFor="let op of preguntaActual.opciones" class="mp-opcion-btn"
+                    [class.selected]="preferenciaActual === op.valor" (click)="seleccionarPreferencia(op.valor)">
+                    {{ op.label }}
+                </button>
+            </div>
+
+            <!-- Opción "No tengo preferencia" siempre disponible -->
+            <button *ngIf="preguntaActual.prefKey !== 'tipo_vivienda' && 
+               preguntaActual.prefKey !== 'acceso_exterior' && 
+               preguntaActual.prefKey !== 'sociable_ninos' &&
+               preguntaActual.prefKey !== 'tiene_perros' &&
+               preguntaActual.prefKey !== 'tiene_gatos' &&
+               preguntaActual.prefKey !== 'perros_sociables' &&
+               preguntaActual.prefKey !== 'gatos_sociables'" class="mp-opcion-btn mp-opcion-skip"
+                [class.selected]="preferenciaActual === null" (click)="seleccionarPreferencia(null)">
+                🤷 No tengo preferencia
+            </button>
+
+            <!-- Slider de importancia (siempre visible) -->
+            <div class="mp-importancia" *ngIf="preferenciaActual !== null && 
+           preguntaActual.prefKey !== 'tipo_vivienda' && 
+           preguntaActual.prefKey !== 'tiene_perros' && 
+           preguntaActual.prefKey !== 'tiene_gatos' &&
+           !(preguntaActual.prefKey === 'acceso_exterior' && preferenciaActual === false) &&
+           !(preguntaActual.prefKey === 'sociable_ninos' && preferenciaActual === 'no') &&
+           !(preguntaActual.prefKey === 'perros_sociables' && preferenciaActual === false) &&
+           !(preguntaActual.prefKey === 'gatos_sociables' && preferenciaActual === false)">
+
+                <label class="mp-importancia-label">
+                    <ng-container [ngSwitch]="preguntaActual.prefKey">
+
+                        <ng-container *ngSwitchCase="'acceso_exterior'">
+                            ¿Cuánto dirías tú?
+                        </ng-container>
+
+                        <ng-container *ngSwitchCase="'perros_sociables'">
+                            ¿Cuánto?
+                        </ng-container>
+
+                        <ng-container *ngSwitchCase="'gatos_sociables'">
+                            ¿Cuánto?
+                        </ng-container>
+
+                        <ng-container *ngSwitchCase="'sociable_ninos'">
+                            ¿Cuánto es de importante que sea sociable con niños?
+                        </ng-container>
+
+                        <ng-container *ngSwitchDefault>
+                            ¿Cuánto es de importante para ti este aspecto?
+                        </ng-container>
+
+                    </ng-container>
+
+                    <strong>{{ pesoActual }}/5</strong>
+                </label>
+
+                <div class="mp-slider-row">
+                    <span class="mp-slider-hint">Poco</span>
+                    <input type="range" min="1" max="5" step="1" [(ngModel)]="pesos[preguntaActual.key]"
+                        class="mp-slider" />
+                    <span class="mp-slider-hint">Mucho</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegación -->
+        <div class="mp-nav">
+            <button class="mp-btn mp-btn-secondary" (click)="anteriorPregunta()">
+                ← Atrás
+            </button>
+            <button class="mp-btn mp-btn-primary" [disabled]="!puedeAvanzar" (click)="siguientePregunta()">
+                {{ indicePregunta < totalPreguntas - 1 ? 'Siguiente →' : '🔍 Ver mis matches' }} </button>
+        </div>
+
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+       CARGANDO
+       ═════════════════════════════════════════════════════════ -->
+    <section class="mp-step step-cargando" *ngIf="pasoActual === 'cargando'">
+        <div class="mp-loader">
+            <span class="mp-loader-paw">🐾</span>
+            <p>Buscando tu match perfecto…</p>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════════════
+       RESULTADOS
+       ═════════════════════════════════════════════════════════ -->
+    <section class="mp-step step-resultados" *ngIf="pasoActual === 'resultados'">
+
+        <h2 class="mp-resultados-titulo">🎉 Tus mejores matches</h2>
+        <p class="mp-resultados-sub">
+            Estos son los animales que mejor encajan con lo que buscas.
+            ¡Conoce su perfil y da el primer paso!
+        </p>
+
+        <!-- Sin resultados -->
+        <div class="mp-sin-resultados" *ngIf="resultados.length === 0">
+            <span>😿</span>
+            <p>No encontramos animales disponibles con esos criterios. Prueba a ampliar tu búsqueda.</p>
+            <button class="mp-btn mp-btn-primary" (click)="reiniciar()">Volver a empezar</button>
+        </div>
+
+        <!-- Tarjetas de resultado -->
+        <div class="mp-resultados-grid" *ngIf="resultados.length > 0">
+
+            <article class="mp-animal-card" *ngFor="let animal of resultados; let i = index"
+                [class.top-match]="i === 0">
+                <!-- Badge de posición -->
+                <div class="mp-rank-badge" *ngIf="i === 0">⭐ Mejor match</div>
+
+                <!-- Foto -->
+                <div class="mp-animal-foto-wrap">
+                    <img [src]="getImageUrl(animal.foto)" [alt]="animal.nombre" class="mp-animal-foto"
+                        (error)="$any($event.target).src = 'assets/img/default.jpg'" />
+                    <!-- Porcentaje de afinidad -->
+                    <div class="mp-afinidad-badge" [style.background]="getColorAfinidad(animal.afinidad)">
+                        <span class="mp-afinidad-num">{{ animal.afinidad }}%</span>
+                        <span class="mp-afinidad-label">{{ getLabelAfinidad(animal.afinidad) }}</span>
+                    </div>
+                </div>
+
+                <!-- Info -->
+                <div class="mp-animal-info">
+                    <h3 class="mp-animal-nombre">{{ animal.nombre }}</h3>
+                    <p class="mp-animal-meta">
+                        {{ animal.especie }} · {{ animal.raza }} · {{ animal.edad }}
+                    </p>
+
+                    <!-- Badges de características -->
+                    <div class="mp-badges">
+                        <span class="mp-badge mp-badge-energia">
+                            ⚡ {{ animal.badges.nivel_energia }}
+                        </span>
+                        <span class="mp-badge" [class.mp-badge-ok]="animal.badges.apto_pisos"
+                            [class.mp-badge-no]="!animal.badges.apto_pisos">
+                            🏠 {{ animal.badges.apto_pisos ? 'Apto piso' : 'Necesita espacio' }}
+                        </span>
+                        <span class="mp-badge" [class.mp-badge-ok]="animal.badges.sociable_ninos"
+                            [class.mp-badge-no]="!animal.badges.sociable_ninos">
+                            👶 {{ animal.badges.sociable_ninos ? 'Con niños ✓' : 'Sin niños' }}
+                        </span>
+                        <span class="mp-badge mp-badge-esterilizado" *ngIf="animal.badges.esterilizado">
+                            ✂️ Esterilizado
+                        </span>
+                    </div>
+
+                    <p class="mp-animal-desc">{{ animal.descripcion }}</p>
+
+                    <button class="mp-btn mp-btn-primary mp-btn-full" (click)="irAPerfil(animal.id_animal)">
+                        Ver perfil de {{ animal.nombre }} →
+                    </button>
+                </div>
+            </article>
+
+        </div>
+
+        <!-- Botón reiniciar -->
+        <div class="mp-reiniciar">
+            <button class="mp-btn mp-btn-secondary" (click)="reiniciar()">
+                🔄 Repetir test
+            </button>
+        </div>
+
+    </section>
+
+</div>
