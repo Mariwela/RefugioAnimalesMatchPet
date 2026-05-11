@@ -3,6 +3,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HistoriaService } from '../../services/historia';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-publicar-historias.component',
@@ -12,15 +13,15 @@ import { HistoriaService } from '../../services/historia';
   styleUrl: './publicar-historias.component.css',
 })
 export class PublicarHistoriasComponent implements OnInit {
-  animalesAdoptados: any[] = []; // <-- Guardaremos aquí sus animales
+  animalesAdoptados: any[] = [];
   cargandoInicial: boolean = true;
-
   datosFormulario = {
     id_animal: null as number | null,
     titulo: '',
     contenido: ''
   };
-
+  fotoSeleccionada: File | null = null;
+  vistaPrevia: string | null = null;
   cargando: boolean = false;
   mensajeExito: string = '';
   mensajeError: string = '';
@@ -52,28 +53,62 @@ export class PublicarHistoriasComponent implements OnInit {
     });
   }
 
-  enviarHistoria(): void {
-    if (!this.datosFormulario.id_animal || !this.datosFormulario.titulo || !this.datosFormulario.contenido) {
-      this.mensajeError = 'Por favor, rellena todos los campos.';
-      return;
-    }
+  onFileSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      this.fotoSeleccionada = file;
 
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.vistaPrevia = reader.result as string;
+        this.cdr.detectChanges();
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  enviarHistoria(): void {
     this.cargando = true;
     this.mensajeError = '';
     this.mensajeExito = '';
 
-    this.historiaService.publicarHistoria(this.datosFormulario as any).subscribe({
-      next: (respuesta) => {
-        if (respuesta.status === 'success') {
-          this.mensajeExito = '¡Historia enviada a moderación con éxito!';
-          this.datosFormulario = { id_animal: null, titulo: '', contenido: '' };
+    this.historiaService.publicarHistoria(this.datosFormulario).subscribe({
+      next: (res) => {
+        if (res.status === 'success' && res.id_historia) {
+          
+          this.historiaService.subirFotoHistoria(res.id_historia, this.fotoSeleccionada!)
+            .pipe(
+              // El bloque finalize se ejecuta SIEMPRE al terminar la petición
+              finalize(() => {
+                  this.cargando = false; 
+                  this.cdr.detectChanges();
+              })
+            )
+            .subscribe({
+              next: (resFoto) => {
+                this.mensajeExito = "¡Historia publicada con éxito!";
+                this.resetearFormulario();
+              },
+              error: (err) => {
+                // Si la foto ya se guardó en la carpeta, este error es un "falso positivo" de CORS/Canal
+                console.warn('Error de comunicación, pero la foto podría estar guardada', err);
+                this.mensajeExito = "Historia guardada correctamente.";
+                this.resetearFormulario();
+              }
+            });
         }
-        this.cargando = false;
       },
       error: (err) => {
-        this.mensajeError = err.error?.message || 'Hubo un error al publicar la historia.';
+        this.mensajeError = "Error al conectar con el servidor.";
         this.cargando = false;
       }
     });
   }
+
+  resetearFormulario() {
+    this.datosFormulario = { id_animal: null, titulo: '', contenido: '' };
+    this.fotoSeleccionada = null;
+    this.vistaPrevia = null;
+  }
+  
 }

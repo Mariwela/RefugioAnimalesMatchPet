@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { RespuestaHistorias } from '../interfaces/historia.model';
+import { AuthService } from './auth';
 
 @Injectable({
   providedIn: 'root',
@@ -9,44 +10,46 @@ import { RespuestaHistorias } from '../interfaces/historia.model';
 export class HistoriaService {
   private apiUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/historias/';
 
-  constructor(private http: HttpClient) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) { }
 
-  // Función privada para no repetir código de headers
+  //Genera las cabeceras con el token de autenticación
   private getHeaders() {
-    const token = localStorage.getItem('auth_token');
+    const token = this.authService.getToken();
     return new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
   }
 
+  // --- MÉTODO PÚBLICOS ---
   obtenerHistorias(): Observable<RespuestaHistorias> {
     return this.http.get<RespuestaHistorias>(this.apiUrl + 'listar_historias.php');
   }
 
-  obtenerPendientes(): Observable<RespuestaHistorias> {
-    // Añadimos headers porque listar_pendientes requiere ser admin
-    return this.http.get<RespuestaHistorias>(this.apiUrl + 'listar_pendientes.php', { headers: this.getHeaders() });
+  // --- MÉTODOS PROTEGIDOS (Requieren Token) ---
+  publicarHistoria(datos: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/publicar_historia.php`, datos, { 
+      headers: this.getHeaders() 
+    });
   }
 
-  moderarHistoria(idHistoria: number, nuevoEstado: string, comentario?: string): Observable<any> {
-    const payload = {
-      id_historia: idHistoria,
-      nuevo_estado: nuevoEstado,
-      comentario_admin: comentario
-    };
-    return this.http.post<any>(this.apiUrl + 'moderar_historia.php', payload, { headers: this.getHeaders() });
-  }
+  subirFotoHistoria(idHistoria: number, foto: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('id_historia', idHistoria.toString());
+    formData.append('foto', foto);
+    formData.append('nombre_final_archivo', `historia_${idHistoria}_${Date.now()}`);
 
-  publicarHistoria(datos: { id_animal: number, titulo: string, contenido: string }): Observable<any> {
-    return this.http.post<any>(this.apiUrl + 'publicar_historia.php', datos, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}subir_foto_historia.php`, formData, { 
+      headers: this.getHeaders() 
+    });
   }
 
   obtenerMisAdoptados(): Observable<any> {
-    return this.http.get<any>(this.apiUrl + 'mis_adoptados.php', { headers: this.getHeaders() });
-  }
-
-  eliminarHistoria(idHistoria: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}eliminar_historia.php?id=${idHistoria}`, { headers: this.getHeaders() });
+    return this.http.get<any>(`${this.apiUrl}/mis_adoptados.php`, { 
+      headers: this.getHeaders() 
+    });
   }
 
   editarHistoria(idHistoria: number, titulo: string, contenido: string): Observable<any> {
@@ -56,6 +59,24 @@ export class HistoriaService {
       contenido: contenido
     };
 
-    return this.http.post<any>(this.apiUrl + 'editar_historia.php', payload, { headers: this.getHeaders() });
+    return this.http.post<any>('${this.apiUrl}editar_historia.php', payload, { headers: this.getHeaders() });
+  }
+
+  // --- MÉTODOS DE ADMINISTRACIÓN (Requieren Token y Rol Admin) ---
+  obtenerPendientes(): Observable<RespuestaHistorias> {
+    return this.http.get<RespuestaHistorias>('${this.apiUrl}listar_pendientes.php', { headers: this.getHeaders() });
+  }
+
+  moderarHistoria(idHistoria: number, nuevoEstado: string, comentario?: string): Observable<any> {
+    const payload = {
+      id_historia: idHistoria,
+      nuevo_estado: nuevoEstado,
+      comentario_admin: comentario
+    };
+    return this.http.post<any>('${this.apiUrl}moderar_historia.php', payload, { headers: this.getHeaders() });
+  }
+
+  eliminarHistoria(idHistoria: number): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}eliminar_historia.php?id=${idHistoria}`, { headers: this.getHeaders() });
   }
 }

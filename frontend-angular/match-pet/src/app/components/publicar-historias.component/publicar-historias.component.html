@@ -49,7 +49,17 @@
                 [(ngModel)]="datosFormulario.contenido" required></textarea>
         </div>
 
-        <button type="submit" [disabled]="cargando || !historiaForm.form.valid" class="btn-enviar">
+        <div class="form-group">
+            <label for="foto">Sube una foto de vuestra nueva vida:</label>
+            <input type="file" id="foto" (change)="onFileSelected($event)" accept="image/*" class="input-file">
+            @if (vistaPrevia) {
+                <div class="preview-contenedor">
+                    <img [src]="vistaPrevia" alt="Vista previa" class="img-preview" style="max-width: 200px; border-radius: 10px;">
+                </div>
+            }
+        </div>       
+
+        <button type="submit" [disabled]="cargando || !historiaForm.form.valid|| !historiaForm.form.valid || !fotoSeleccionada" class="btn-enviar">
             @if (cargando) { <i class="fa fa-spinner fa-spin"></i> Enviando... }
             @else { <i class="fa fa-paper-plane"></i> Enviar Historia a Moderación }
         </button>
