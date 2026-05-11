@@ -171,7 +171,7 @@ export class PerfilComponent implements OnInit {
   if (!input.files?.length) return;
 
   const file = input.files[0];
-<<<<<<< HEAD
+
   const formData = new FormData();
   formData.append('avatar', file);
 
@@ -192,29 +192,6 @@ export class PerfilComponent implements OnInit {
     }
   });
 }
-
-=======
-    const formData = new FormData();
-    formData.append('avatar', file);
-  
-    this.http.post<any>(`${this.BASE_URL}/subir_avatar.php`, formData, { headers: this.getHeaders() }).subscribe({
-      next: (res) => {
-        if (res.status === 'success') {
-          this.usuario.avatar = res.avatar;
-          localStorage.setItem('usuario_avatar', res.avatar);
-          this.mensajeExito = res.message;
-          this.cdr.detectChanges();
-          this.notificacionFadeOut();
-        }
-      },
-      error: (err) => {
-        this.mensajeError = err.error?.message || 'Error al subir la imagen.';
-        this.cdr.detectChanges();
-        this.notificacionFadeOut();
-      }
-    });
-  }
->>>>>>> f41e04ebc9dea342b5572c7785d3157949a955d9
  
   cambiarPassword(): void {
     if (this.passwordForm.invalid) return;
