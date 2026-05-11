@@ -2,17 +2,17 @@ import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../../services/auth';
 import { ChangeDetectorRef } from '@angular/core';
- 
+
 function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   const nueva = control.get('password_nuevo')?.value;
   const confirmar = control.get('confirmar_password')?.value;
   return nueva === confirmar ? null : { passwordsMismatch: true };
 }
- 
+
 @Component({
   selector: 'app-perfil',
   standalone: true,
@@ -21,44 +21,60 @@ function passwordsMatch(control: AbstractControl): ValidationErrors | null {
   styleUrls: ['./perfil.css']
 })
 export class PerfilComponent implements OnInit {
- 
+
   private readonly BASE_URL = 'http://localhost/refugioAnimalesMatchPet/backend-php/api/usuarios';
   private readonly URL_AVATARS = 'http://localhost/refugioAnimalesMatchPet/backend-php/public/avatars/';
- 
+
   usuario: any = null;
   cargando = true;
   tabActiva: 'datos' | 'password' | 'eliminar' = 'datos';
- 
+
+  // 🔥 NUEVA VARIABLE: Nos dirá si estamos en modo lectura o edición 🔥
+  esMiPerfil: boolean = true;
+
   perfilForm!: FormGroup;
   passwordForm!: FormGroup;
- 
+
   guardando = false;
   guardandoPassword = false;
   eliminando = false;
- 
+
   mensajeExito = '';
   mensajeError = '';
   mensajePasswordExito = '';
   mensajePasswordError = '';
- 
+
   confirmarEliminar = false;
   emailConfirmacion = '';
- 
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
     private router: Router,
-    private authService: AuthService,
+    public authService: AuthService,
     private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
     @Inject(PLATFORM_ID) private platformId: Object
-  ) {}
- 
+  ) { }
+
   ngOnInit(): void {
     console.log('mensajeExito al init:', this.mensajeExito);
-    this.cargarPerfil();
-    this.inicializarPasswordForm();
+
+    // 1. CAPTURAMOS EL ID DE LA URL (SI EXISTE)
+    const idUrl = this.route.snapshot.paramMap.get('id');
+
+    if (idUrl) {
+      // Modo: Viendo el perfil de otra persona
+      this.esMiPerfil = false;
+      this.cargarPerfil(idUrl);
+    } else {
+      // Modo: Viendo mi propio perfil
+      this.esMiPerfil = true;
+      this.cargarPerfil();
+      this.inicializarPasswordForm();
+    }
   }
- 
+
   get urlAvatar(): string {
     const avatar = this.usuario?.avatar;
     if (avatar && avatar !== 'default_avatar.png') {
@@ -66,7 +82,7 @@ export class PerfilComponent implements OnInit {
     }
     return `${this.URL_AVATARS}default_avatar.png`;
   }
- 
+
   private getHeaders(): HttpHeaders {
     const token = isPlatformBrowser(this.platformId) ? localStorage.getItem('auth_token') : '';
     return new HttpHeaders({ Authorization: `Bearer ${token}` });
@@ -88,56 +104,69 @@ export class PerfilComponent implements OnInit {
       }, 1000);
     }, 4000);
   }
- 
-  cargarPerfil(): void {
-    this.http.get<any>(`${this.BASE_URL}/ver_perfil.php`, { headers: this.getHeaders() }).subscribe({
+
+  // 2. MODIFICADO: Ahora puede recibir un ID opcional
+  cargarPerfil(idUsuario?: string): void {
+    this.cargando = true; // Aseguramos que empiece cargando
+
+    const urlConsulta = idUsuario
+      ? `${this.BASE_URL}/ver_perfil.php?id=${idUsuario}`
+      : `${this.BASE_URL}/ver_perfil.php`;
+
+    this.http.get<any>(urlConsulta, { headers: this.getHeaders() }).subscribe({
       next: (res) => {
-        console.log('Respuesta:', res);
-        if (res.status === 'success') {
+        console.log('Respuesta recibida:', res);
+        if (res.status === 'success' && res.data) {
           this.usuario = res.data;
-          this.inicializarPerfilForm();
-          this.cdr.detectChanges();
+          if (this.esMiPerfil) {
+            this.inicializarPerfilForm();
+          }
+        } else {
+          this.mensajeError = res.message || 'No se pudo cargar el perfil.';
         }
-        this.cargando = false;
+        this.cargando = false; // 👈 IMPORTANTE: Siempre pasamos a false al terminar
+        this.cdr.detectChanges();
       },
       error: (err) => {
-        console.log('Error ver_perfil:', err);
-        this.cargando = false;
+        console.error('Error en la petición:', err);
+        this.mensajeError = 'Error de conexión con el servidor.';
+        this.cargando = false; // 👈 IMPORTANTE: También en caso de error
         this.cdr.detectChanges();
       }
     });
   }
- 
+
   inicializarPerfilForm(): void {
     this.perfilForm = this.fb.group({
-      nombre_completo:  [this.usuario.nombre_completo, Validators.required],
-      email:            [this.usuario.email, [Validators.required, Validators.email]],
-      dni_nie:          [this.usuario.dni_nie],
+      nombre_completo: [this.usuario.nombre_completo, Validators.required],
+      email: [this.usuario.email, [Validators.required, Validators.email]],
+      dni_nie: [this.usuario.dni_nie],
       fecha_nacimiento: [this.usuario.fecha_nacimiento],
-      telefono:         [this.usuario.telefono],
-      direccion:        [this.usuario.direccion],
-      poblacion:        [this.usuario.poblacion],
-      provincia:        [this.usuario.provincia],
-      codigo_postal:    [this.usuario.codigo_postal],
-      pref_especie:     [this.usuario.pref_especie],
-      pref_energia:     [this.usuario.pref_energia],
-      pref_vivienda:    [this.usuario.pref_vivienda],
-      bio_experiencia:  [this.usuario.bio_experiencia],
+      telefono: [this.usuario.telefono],
+      direccion: [this.usuario.direccion],
+      poblacion: [this.usuario.poblacion],
+      provincia: [this.usuario.provincia],
+      codigo_postal: [this.usuario.codigo_postal],
+      pref_especie: [this.usuario.pref_especie],
+      pref_energia: [this.usuario.pref_energia],
+      pref_vivienda: [this.usuario.pref_vivienda],
+      bio_experiencia: [this.usuario.bio_experiencia],
     });
   }
- 
+
   inicializarPasswordForm(): void {
     this.passwordForm = this.fb.group(
       {
-        password_actual:    ['', Validators.required],
-        password_nuevo:     ['', [Validators.required, Validators.minLength(6)]],
+        password_actual: ['', Validators.required],
+        password_nuevo: ['', [Validators.required, Validators.minLength(6)]],
         confirmar_password: ['', Validators.required],
       },
       { validators: passwordsMatch }
     );
   }
- 
+
   guardarPerfil(): void {
+    if (!this.esMiPerfil) return; // Seguridad extra
     if (this.perfilForm.invalid) return;
     if (!this.perfilForm.dirty) {
       this.mensajeError = 'No hay cambios para guardar.';
@@ -149,7 +178,7 @@ export class PerfilComponent implements OnInit {
     const payload = Object.fromEntries(
       Object.entries(this.perfilForm.value).map(([k, v]) => [k, v === '' ? null : v])
     );
- 
+
     this.http.post<any>(`${this.BASE_URL}/editar_perfil.php`, payload, { headers: this.getHeaders() }).subscribe({
       next: (res) => {
         this.mensajeExito = res.message || 'Perfil actualizado correctamente.';
@@ -167,42 +196,44 @@ export class PerfilComponent implements OnInit {
   }
 
   subirAvatar(event: Event): void {
-  const input = event.target as HTMLInputElement;
-  if (!input.files?.length) return;
+    if (!this.esMiPerfil) return; // Seguridad extra
+    const input = event.target as HTMLInputElement;
+    if (!input.files?.length) return;
 
-  const file = input.files[0];
+    const file = input.files[0];
 
-  const formData = new FormData();
-  formData.append('avatar', file);
+    const formData = new FormData();
+    formData.append('avatar', file);
 
-  this.http.post<any>(`${this.BASE_URL}/subir_avatar.php`, formData, { headers: this.getHeaders() }).subscribe({
-    next: (res) => {
-      if (res.status === 'success') {
-        this.usuario.avatar = res.avatar;
-        localStorage.setItem('usuario_avatar', res.avatar);
-        this.mensajeExito = res.message;
+    this.http.post<any>(`${this.BASE_URL}/subir_avatar.php`, formData, { headers: this.getHeaders() }).subscribe({
+      next: (res) => {
+        if (res.status === 'success') {
+          this.usuario.avatar = res.avatar;
+          localStorage.setItem('usuario_avatar', res.avatar);
+          this.mensajeExito = res.message;
+          this.cdr.detectChanges();
+          this.notificacionFadeOut();
+        }
+      },
+      error: (err) => {
+        this.mensajeError = err.error?.message || 'Error al subir la imagen.';
         this.cdr.detectChanges();
         this.notificacionFadeOut();
       }
-    },
-    error: (err) => {
-      this.mensajeError = err.error?.message || 'Error al subir la imagen.';
-      this.cdr.detectChanges();
-      this.notificacionFadeOut();
-    }
-  });
-}
- 
+    });
+  }
+
   cambiarPassword(): void {
+    if (!this.esMiPerfil) return; // Seguridad extra
     if (this.passwordForm.invalid) return;
     this.guardandoPassword = true;
     this.mensajePasswordExito = '';
     this.mensajePasswordError = '';
     this.cdr.detectChanges();
- 
+
     const { password_actual, password_nuevo } = this.passwordForm.value;
     console.log('Enviando:', { password_actual, password_nuevo });
- 
+
     this.http.post<any>(`${this.BASE_URL}/cambiar_password.php`, { password_actual, password_nuevo }, { headers: this.getHeaders() }).subscribe({
       next: (res) => {
         this.mensajePasswordExito = res.message || 'Contraseña cambiada correctamente.';
@@ -219,12 +250,13 @@ export class PerfilComponent implements OnInit {
       }
     });
   }
- 
+
   eliminarCuenta(): void {
+    if (!this.esMiPerfil) return; // Seguridad extra
     if (this.emailConfirmacion !== this.usuario.email) return;
     this.eliminando = true;
     this.cdr.detectChanges();
- 
+
     this.http.delete<any>(`${this.BASE_URL}/eliminar_perfil.php`, { headers: this.getHeaders() }).subscribe({
       next: () => {
         this.authService.logout();

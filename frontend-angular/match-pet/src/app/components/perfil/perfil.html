@@ -1,229 +1,262 @@
 <div class="perfil-page">
- 
+
   <header class="hero">
-    <span class="hero-tag">🐾 Mi cuenta</span>
-    <h1>Mi <span class="accent">Perfil</span></h1>
-    <p>Gestiona tu información personal y preferencias de adopción.</p>
+    <span class="hero-tag">🐾 {{ esMiPerfil ? 'Mi cuenta' : 'Perfil de Usuario' }}</span>
+    <h1>{{ esMiPerfil ? 'Mi ' : '' }}<span class="accent">Perfil</span></h1>
+    <p>{{ esMiPerfil ? 'Gestiona tu información personal y preferencias de adopción.' : 'Información del solicitante.'
+      }}</p>
   </header>
- 
+
   <div class="container">
- 
+
     @if (cargando) {
-      <div class="loading">Cargando perfil...</div>
+    <div class="loading">Cargando perfil...</div>
     }
- 
-    @if (usuario) {
- 
-      <!-- Avatar + nombre -->
-      <div class="perfil-header-card">
-        <div class="avatar-container">
-          <div class="avatar-wrapper">
-            <img [src]="urlAvatar" [alt]="usuario.nombre_completo" class="avatar-img">
-            <label class="avatar-overlay" title="Cambiar foto">
-              <i class="fa fa-camera"></i>
-              <input type="file" accept="image/jpg,image/jpeg,image/png,image/webp"
-                (change)="subirAvatar($event)" hidden>
-            </label>
-          </div>
-          <small class="avatar-hint">JPG, PNG o WEBP · Máx. 2MB</small>
-        </div>
-        <div class="perfil-info">
-          <h2>{{ usuario.nombre_completo }}</h2>
-          <span class="rol-badge">{{ usuario.rol }}</span>
-          <p class="fecha-registro">Miembro desde {{ usuario.fecha_registro | date:'MMMM yyyy' : '' : 'es' }}</p>
-        </div>
-      </div>
-      @if (mensajeExito) {
-        <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
-          ✅ {{ mensajeExito }}
-        </div>
-      }
- 
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab" [class.active]="tabActiva === 'datos'" (click)="cambiarTab('datos')">Mis datos</button>
-        <button class="tab" [class.active]="tabActiva === 'password'" (click)="cambiarTab('password')">Contraseña</button>
-        <button class="tab" [class.active]="tabActiva === 'eliminar'" (click)="cambiarTab('eliminar')">Eliminar cuenta</button>
-      </div>
- 
-      <!-- TAB: Mis datos -->
-      @if (tabActiva === 'datos') {
-        <div class="info-card">
-          <form [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()" class="form">
- 
-            <div class="section-label">Información personal</div>
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Nombre completo</label>
-                <input type="text" formControlName="nombre_completo" placeholder="Tu nombre">
-              </div>
-              <div class="form-group">
-                <label>DNI / NIE</label>
-                <input type="text" formControlName="dni_nie" placeholder="12345678A">
-              </div>
-              <div class="form-group">
-                <label>Fecha de nacimiento</label>
-                <input type="date" formControlName="fecha_nacimiento">
-              </div>
-              <div class="form-group">
-                <label>Teléfono</label>
-                <input type="text" formControlName="telefono" placeholder="+34 600 000 000">
-              </div>
-              <div class="form-group full">
-                <label>Email</label>
-                <input type="email" formControlName="email" placeholder="tu@email.com">
-              </div>
-            </div>
- 
-            <div class="section-label">Dirección</div>
-            <div class="form-grid">
-              <div class="form-group full">
-                <label>Dirección</label>
-                <input type="text" formControlName="direccion" placeholder="Calle, número...">
-              </div>
-              <div class="form-group">
-                <label>Población</label>
-                <input type="text" formControlName="poblacion" placeholder="Ciudad">
-              </div>
-              <div class="form-group">
-                <label>Provincia</label>
-                <input type="text" formControlName="provincia" placeholder="Provincia">
-              </div>
-              <div class="form-group">
-                <label>Código postal</label>
-                <input type="text" formControlName="codigo_postal" placeholder="28000">
-              </div>
-            </div>
- 
-            <div class="section-label">Preferencias de adopción</div>
-            <div class="form-grid">
-              <div class="form-group">
-                <label>Especie preferida</label>
-                <select formControlName="pref_especie">
-                  <option value="Cualquiera">Cualquiera</option>
-                  <option value="Perro">Perro</option>
-                  <option value="Gato">Gato</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Nivel de energía</label>
-                <select formControlName="pref_energia">
-                  <option value="">Sin preferencia</option>
-                  <option value="Baja">Baja</option>
-                  <option value="Media">Media</option>
-                  <option value="Alta">Alta</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Tipo de vivienda</label>
-                <select formControlName="pref_vivienda">
-                  <option value="">Sin preferencia</option>
-                  <option value="Piso">Piso</option>
-                  <option value="Casa con jardín">Casa con jardín</option>
-                </select>
-              </div>
-              <div class="form-group full">
-                <label>Experiencia con animales</label>
-                <textarea formControlName="bio_experiencia" rows="3" placeholder="Cuéntanos tu experiencia..."></textarea>
-              </div>
-            </div>
- 
-            @if (mensajeExito) {
-              <div class="alert alert--success" [class.fade-out]="!notificacionVisible">✅ {{ mensajeExito }}</div>
-            }
-            @if (mensajeError) {
-              <div class="alert alert--error" [class.fade-out]="!notificacionVisible">❌ {{ mensajeError }}</div>
-            }
- 
-            <button type="submit" class="btn-save" [disabled]="perfilForm.invalid || guardando">
-              {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
-            </button>
- 
-          </form>
-        </div>
-      }
- 
-      <!-- TAB: Contraseña -->
-      @if (tabActiva === 'password') {
-        <div class="info-card">
-          <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()" class="form">
- 
-            <div class="section-label">Cambiar contraseña</div>
- 
-            <div class="form-group">
-              <label>Contraseña actual</label>
-              <div class="input-with-icon">
-                <i class="fa fa-lock"></i>
-                <input type="password" formControlName="password_actual" placeholder="Tu contraseña actual"
-                  [class.is-invalid]="passwordForm.get('password_actual')?.invalid && passwordForm.get('password_actual')?.touched">
-              </div>
-            </div>
- 
-            <div class="form-group">
-              <label>Nueva contraseña</label>
-              <div class="input-with-icon">
-                <i class="fa fa-lock"></i>
-                <input type="password" formControlName="password_nuevo" placeholder="Mínimo 6 caracteres"
-                  [class.is-invalid]="passwordForm.get('password_nuevo')?.invalid && passwordForm.get('password_nuevo')?.touched">
-              </div>
-            </div>
- 
-            <div class="form-group">
-              <label>Confirmar nueva contraseña</label>
-              <div class="input-with-icon">
-                <i class="fa fa-lock"></i>
-                <input type="password" formControlName="confirmar_password" placeholder="Repite la nueva contraseña"
-                  [class.is-invalid]="passwordForm.errors?.['passwordsMismatch'] && passwordForm.get('confirmar_password')?.touched">
-              </div>
-              @if (passwordForm.errors?.['passwordsMismatch'] && passwordForm.get('confirmar_password')?.touched) {
-                <div class="error-text">
-                  <small><i class="fa fa-exclamation-triangle"></i> Las contraseñas no coinciden.</small>
-                </div>
-              }
-            </div>
- 
-            @if (mensajePasswordExito) {
-              <div class="alert alert--success" [class.fade-out]="!notificacionVisible">✅ {{ mensajePasswordExito }}</div>
-            }
-            @if (mensajePasswordError) {
-              <div class="alert alert--error" [class.fade-out]="!notificacionVisible">❌ {{ mensajePasswordError }}</div>
-            }
- 
-            <button type="submit" class="btn-save" [disabled]="passwordForm.invalid || guardandoPassword">
-              {{ guardandoPassword ? 'Cambiando...' : 'Cambiar contraseña' }}
-            </button>
- 
-          </form>
-        </div>
-      }
- 
-      <!-- TAB: Eliminar cuenta -->
-      @if (tabActiva === 'eliminar') {
-        <div class="info-card danger-zone">
-          <div class="danger-icon">⚠️</div>
-          <h3>Eliminar cuenta</h3>
-          <p>Esta acción es <strong>irreversible</strong>. Se borrarán todos tus datos, solicitudes y favoritos.</p>
- 
-          @if (!confirmarEliminar) {
-            <button class="btn-danger" (click)="confirmarEliminar = true">
-              Quiero eliminar mi cuenta
-            </button>
-          } @else {
-            <div class="confirm-box">
-              <p class="confirm-text">¿Estás seguro? Escribe tu email para confirmar:</p>
-              <input type="email" [(ngModel)]="emailConfirmacion" placeholder="tu@email.com" class="confirm-input">
-              <div class="confirm-actions">
-                <button class="btn-cancel" (click)="confirmarEliminar = false">Cancelar</button>
-                <button class="btn-danger" (click)="eliminarCuenta()"
-                  [disabled]="emailConfirmacion !== usuario.email || eliminando">
-                  {{ eliminando ? 'Eliminando...' : 'Eliminar definitivamente' }}
-                </button>
-              </div>
-            </div>
+
+    @if (usuario && !cargando) {
+
+    <div class="perfil-header-card">
+      <div class="avatar-container">
+        <div class="avatar-wrapper">
+          <img [src]="urlAvatar" [alt]="usuario.nombre_completo" class="avatar-img">
+          @if (esMiPerfil) {
+          <label class="avatar-overlay" title="Cambiar foto">
+            <i class="fa fa-camera"></i>
+            <input type="file" accept="image/jpg,image/jpeg,image/png,image/webp" (change)="subirAvatar($event)" hidden>
+          </label>
           }
         </div>
+        @if (esMiPerfil) {
+        <small class="avatar-hint">JPG, PNG o WEBP · Máx. 2MB</small>
+        }
+      </div>
+      <div class="perfil-info">
+        <h2>{{ usuario.nombre_completo }}</h2>
+        <span class="rol-badge">{{ usuario.rol }}</span>
+        <p class="fecha-registro">Miembro desde {{ usuario.fecha_registro | date:'MMMM yyyy' : '' : 'es' }}</p>
+      </div>
+    </div>
+
+    @if (mensajeExito) {
+    <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
+      ✅ {{ mensajeExito }}
+    </div>
+    }
+
+    <div class="tabs">
+      <button class="tab" [class.active]="tabActiva === 'datos'" (click)="cambiarTab('datos')">
+        {{ esMiPerfil ? 'Mis datos' : 'Datos del Solicitante' }}
+      </button>
+
+      @if (esMiPerfil) {
+      <button class="tab" [class.active]="tabActiva === 'password'" (click)="cambiarTab('password')">Contraseña</button>
+      <button class="tab" [class.active]="tabActiva === 'eliminar'" (click)="cambiarTab('eliminar')">Eliminar
+        cuenta</button>
       }
- 
+    </div>
+
+    @if (tabActiva === 'datos') {
+    <div class="info-card">
+
+      @if (esMiPerfil && perfilForm) {
+      <form [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()" class="form">
+
+        <div class="section-label">Información personal</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Nombre completo</label>
+            <input type="text" formControlName="nombre_completo" placeholder="Tu nombre">
+          </div>
+          <div class="form-group">
+            <label>DNI / NIE</label>
+            <input type="text" formControlName="dni_nie" placeholder="12345678A">
+          </div>
+          <div class="form-group">
+            <label>Fecha de nacimiento</label>
+            <input type="date" formControlName="fecha_nacimiento">
+          </div>
+          <div class="form-group">
+            <label>Teléfono</label>
+            <input type="text" formControlName="telefono" placeholder="+34 600 000 000">
+          </div>
+          <div class="form-group full">
+            <label>Email</label>
+            <input type="email" formControlName="email" placeholder="tu@email.com">
+          </div>
+        </div>
+
+        <div class="section-label">Dirección</div>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Dirección</label>
+            <input type="text" formControlName="direccion" placeholder="Calle, número...">
+          </div>
+          <div class="form-group">
+            <label>Población</label>
+            <input type="text" formControlName="poblacion" placeholder="Ciudad">
+          </div>
+          <div class="form-group">
+            <label>Provincia</label>
+            <input type="text" formControlName="provincia" placeholder="Provincia">
+          </div>
+          <div class="form-group">
+            <label>Código postal</label>
+            <input type="text" formControlName="codigo_postal" placeholder="28000">
+          </div>
+        </div>
+
+        <div class="section-label">Preferencias de adopción</div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Especie preferida</label>
+            <select formControlName="pref_especie">
+              <option value="Cualquiera">Cualquiera</option>
+              <option value="Perro">Perro</option>
+              <option value="Gato">Gato</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Nivel de energía</label>
+            <select formControlName="pref_energia">
+              <option value="">Sin preferencia</option>
+              <option value="Baja">Baja</option>
+              <option value="Media">Media</option>
+              <option value="Alta">Alta</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Tipo de vivienda</label>
+            <select formControlName="pref_vivienda">
+              <option value="">Sin preferencia</option>
+              <option value="Piso">Piso</option>
+              <option value="Casa con jardín">Casa con jardín</option>
+            </select>
+          </div>
+          <div class="form-group full">
+            <label>Experiencia con animales</label>
+            <textarea formControlName="bio_experiencia" rows="3" placeholder="Cuéntanos tu experiencia..."></textarea>
+          </div>
+        </div>
+
+        @if (mensajeExito) {
+        <div class="alert alert--success" [class.fade-out]="!notificacionVisible">✅ {{ mensajeExito }}</div>
+        }
+        @if (mensajeError) {
+        <div class="alert alert--error" [class.fade-out]="!notificacionVisible">❌ {{ mensajeError }}</div>
+        }
+
+        <button type="submit" class="btn-save" [disabled]="perfilForm.invalid || guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar cambios' }}
+        </button>
+
+      </form>
+      }
+
+      @if (!esMiPerfil) {
+      <div class="vista-lectura">
+        <div class="section-label">Información de contacto</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+          <p><strong>Email:</strong> {{ usuario.email }}</p>
+          <p><strong>Teléfono:</strong> {{ usuario.telefono || 'No especificado' }}</p>
+          <p><strong>Ubicación:</strong> {{ usuario.poblacion || 'Desconocida' }}, {{ usuario.provincia || '' }}</p>
+        </div>
+
+        <div class="section-label">Preferencias de Adopción</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+          <p><strong>Vivienda:</strong> {{ usuario.pref_vivienda || 'No especificada' }}</p>
+          <p><strong>Especie preferida:</strong> {{ usuario.pref_especie || 'Cualquiera' }}</p>
+        </div>
+
+        <div style="margin-top: 15px;">
+          <p><strong>Experiencia:</strong></p>
+          <p style="background: #f9f9f9; padding: 10px; border-radius: 5px; margin-top: 5px;">
+            {{ usuario.bio_experiencia || 'El usuario no ha detallado su experiencia.' }}
+          </p>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
+    @if (tabActiva === 'password' && esMiPerfil && passwordForm) {
+    <div class="info-card">
+      <form [formGroup]="passwordForm" (ngSubmit)="cambiarPassword()" class="form">
+
+        <div class="section-label">Cambiar contraseña</div>
+
+        <div class="form-group">
+          <label>Contraseña actual</label>
+          <div class="input-with-icon">
+            <i class="fa fa-lock"></i>
+            <input type="password" formControlName="password_actual" placeholder="Tu contraseña actual"
+              [class.is-invalid]="passwordForm.get('password_actual')?.invalid && passwordForm.get('password_actual')?.touched">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Nueva contraseña</label>
+          <div class="input-with-icon">
+            <i class="fa fa-lock"></i>
+            <input type="password" formControlName="password_nuevo" placeholder="Mínimo 6 caracteres"
+              [class.is-invalid]="passwordForm.get('password_nuevo')?.invalid && passwordForm.get('password_nuevo')?.touched">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Confirmar nueva contraseña</label>
+          <div class="input-with-icon">
+            <i class="fa fa-lock"></i>
+            <input type="password" formControlName="confirmar_password" placeholder="Repite la nueva contraseña"
+              [class.is-invalid]="passwordForm.errors?.['passwordsMismatch'] && passwordForm.get('confirmar_password')?.touched">
+          </div>
+          @if (passwordForm.errors?.['passwordsMismatch'] && passwordForm.get('confirmar_password')?.touched) {
+          <div class="error-text">
+            <small><i class="fa fa-exclamation-triangle"></i> Las contraseñas no coinciden.</small>
+          </div>
+          }
+        </div>
+
+        @if (mensajePasswordExito) {
+        <div class="alert alert--success" [class.fade-out]="!notificacionVisible">✅ {{ mensajePasswordExito }}</div>
+        }
+        @if (mensajePasswordError) {
+        <div class="alert alert--error" [class.fade-out]="!notificacionVisible">❌ {{ mensajePasswordError }}</div>
+        }
+
+        <button type="submit" class="btn-save" [disabled]="passwordForm.invalid || guardandoPassword">
+          {{ guardandoPassword ? 'Cambiando...' : 'Cambiar contraseña' }}
+        </button>
+
+      </form>
+    </div>
+    }
+
+    @if (tabActiva === 'eliminar' && esMiPerfil) {
+    <div class="info-card danger-zone">
+      <div class="danger-icon">⚠️</div>
+      <h3>Eliminar cuenta</h3>
+      <p>Esta acción es <strong>irreversible</strong>. Se borrarán todos tus datos, solicitudes y favoritos.</p>
+
+      @if (!confirmarEliminar) {
+      <button class="btn-danger" (click)="confirmarEliminar = true">
+        Quiero eliminar mi cuenta
+      </button>
+      } @else {
+      <div class="confirm-box">
+        <p class="confirm-text">¿Estás seguro? Escribe tu email para confirmar:</p>
+        <input type="email" [(ngModel)]="emailConfirmacion" placeholder="tu@email.com" class="confirm-input">
+        <div class="confirm-actions">
+          <button class="btn-cancel" (click)="confirmarEliminar = false">Cancelar</button>
+          <button class="btn-danger" (click)="eliminarCuenta()"
+            [disabled]="emailConfirmacion !== usuario.email || eliminando">
+            {{ eliminando ? 'Eliminando...' : 'Eliminar definitivamente' }}
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+    }
+
     }
   </div>
 </div>

@@ -41,12 +41,29 @@
                     @for (solicitud of solicitudes; track solicitud.id_solicitud) {
                     <tr>
                         <td class="col-id"><span class="id-badge">#{{ solicitud.id_solicitud }}</span></td>
-                        <td class="col-animal"><strong>{{ solicitud.nombre_animal }}</strong></td>
+
+                        <td class="col-animal">
+                            <a [routerLink]="['/animal', solicitud.id_animal]"
+                                style="text-decoration: none; color: inherit; cursor: pointer;"
+                                title="Ver ficha del animal">
+                                <strong>{{ solicitud.nombre_animal }}</strong>
+                            </a>
+                        </td>
 
                         <td class="col-solicitante">
                             <div class="solicitante-info">
                                 <i class="fa fa-user-circle avatar-placeholder"></i>
-                                <span>{{ solicitud.nombre_completo ? solicitud.nombre_completo : 'Tú' }}</span>
+
+                                @if (solicitud.id_usuario) {
+                                <a [routerLink]="['/perfil', solicitud.id_usuario]"
+                                    style="text-decoration: none; color: inherit; cursor: pointer;"
+                                    title="Ver perfil del solicitante">
+                                    <span>{{ solicitud.nombre_completo ? solicitud.nombre_completo : 'Ver perfil'
+                                        }}</span>
+                                </a>
+                                } @else {
+                                <span>Anónimo</span>
+                                }
 
                                 @if (solicitud.comentario_admin) {
                                 <span class="icono-comentario" [title]="solicitud.comentario_admin">
@@ -55,7 +72,6 @@
                                 }
                             </div>
                         </td>
-
                         <td class="col-fecha">{{ solicitud.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}</td>
 
                         <td class="col-estado">

@@ -2,11 +2,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common'; // Importante para usar DatePipe y directivas en el HTML
 import { AnimalService } from '../../services/animal'; // ¡Ajusta esta ruta a donde esté tu servicio!
 import { AuthService } from '../../services/auth';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-animal-soli-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './animal-soli-list.html',
   styleUrl: './animal-soli-list.css',
 })

@@ -31,12 +31,14 @@ import { EditarHistoriasComponent } from './components/editar-historias.componen
 export const routes: Routes = [
     { path: '', component: HomeComponent },
     { path: 'animales', component: AnimalComponent },
+
     { path: 'animal/:id', component: AnimalDetalleComponent },
     { path: 'animales/editar/:id', component: AnimalEditComponent },
     { path: 'animales/crear', component: AnimalCrearComponent },
     { path: 'login', component: LoginComponent },
     { path: 'registro', component: RegistroComponent },
     { path: 'perfil', component: PerfilComponent, canActivate: [authGuard] },
+    { path: 'perfil/:id', component: PerfilComponent },
     { path: 'politica-privacidad', component: PoliticaPrivacidad },
     { path: 'aviso-legal', component: AvisoLegal },
     { path: 'sobre-nosotros', component: SobreNosotros },
