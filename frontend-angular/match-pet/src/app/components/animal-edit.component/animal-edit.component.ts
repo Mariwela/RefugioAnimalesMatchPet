@@ -20,7 +20,7 @@ export class AnimalEditComponent implements OnInit {
   mensajeError: string = '';
   notificacionVisible: boolean = true;
   idAnimal!: number;
-
+  borrando: boolean = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -175,7 +175,7 @@ export class AnimalEditComponent implements OnInit {
         this.guardando = false;
         if (res.status === 'success') {
           this.mensaje = '¡Ficha de animal actualizada correctamente!';
-          this.animalForm.markAsPristine(); 
+          this.animalForm.markAsPristine();
           this.notificacionFadeOut();
           // Opcional: Volver al detalle tras 2 segundos
           setTimeout(() => this.router.navigate(['/animal', this.idAnimal]), 2000);
@@ -195,5 +195,36 @@ export class AnimalEditComponent implements OnInit {
 
   cancelar(): void {
     this.router.navigate(['/animal', this.idAnimal]);
+  }
+
+  eliminarAnimal(): void {
+    // 1. Confirmación de seguridad
+    const confirmar = confirm(`¿Estás seguro de eliminar a ${this.animalForm.value.nombre}? Esta acción borrará permanentemente el registro y todas sus fotos.`);
+
+    if (!confirmar) return;
+
+    this.borrando = true;
+
+    this.animalService.eliminarAnimal(this.idAnimal).subscribe({
+      next: (res) => {
+        this.borrando = false;
+        if (res.status === 'success') {
+          this.mensajeExito = '¡Animal y fotos eliminados correctamente!';
+          this.notificacionFadeOut();
+
+          // Redirigir a la lista general tras el borrado
+          setTimeout(() => this.router.navigate(['/animales']), 2000);
+        } else {
+          this.mensajeError = 'Error: ' + res.message;
+          this.notificacionFadeOut();
+        }
+      },
+      error: (err) => {
+        this.borrando = false;
+        this.mensajeError = 'Error técnico al intentar eliminar.';
+        this.notificacionFadeOut();
+        console.error(err);
+      }
+    });
   }
 }

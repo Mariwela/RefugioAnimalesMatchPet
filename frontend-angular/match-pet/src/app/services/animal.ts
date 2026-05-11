@@ -16,6 +16,9 @@ export class AnimalService {
     return this.http.get<any>(`${this.baseUrl}/listar.php?pagina=${pagina}`);
   }
 
+  eliminarAnimal(id: number): Observable<any> {
+    return this.http.post(`${this.baseUrl}/eliminar_animal.php`, { id_animal: id });
+  }
   // 3. Conecta con detalle.php (trae TODO: animal + fotos + salud)
   getAnimalById(id: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/detalle.php?id=${id}`);
@@ -123,6 +126,7 @@ export class AnimalService {
 
     return this.http.get<any>(url, { headers });
   }
+
 
 }
 
