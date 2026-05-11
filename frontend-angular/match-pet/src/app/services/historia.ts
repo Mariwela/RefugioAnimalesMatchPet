@@ -59,12 +59,12 @@ export class HistoriaService {
       contenido: contenido
     };
 
-    return this.http.post<any>('${this.apiUrl}editar_historia.php', payload, { headers: this.getHeaders() });
+    return this.http.post<any>(`${this.apiUrl}editar_historia.php`, payload, { headers: this.getHeaders() });
   }
 
   // --- MÉTODOS DE ADMINISTRACIÓN (Requieren Token y Rol Admin) ---
   obtenerPendientes(): Observable<RespuestaHistorias> {
-    return this.http.get<RespuestaHistorias>('${this.apiUrl}listar_pendientes.php', { headers: this.getHeaders() });
+    return this.http.get<RespuestaHistorias>(`${this.apiUrl}listar_pendientes.php`, { headers: this.getHeaders() });
   }
 
   moderarHistoria(idHistoria: number, nuevoEstado: string, comentario?: string): Observable<any> {
@@ -73,7 +73,7 @@ export class HistoriaService {
       nuevo_estado: nuevoEstado,
       comentario_admin: comentario
     };
-    return this.http.post<any>('${this.apiUrl}moderar_historia.php', payload, { headers: this.getHeaders() });
+    return this.http.post<any>(`${this.apiUrl}moderar_historia.php`, payload, { headers: this.getHeaders() });
   }
 
   eliminarHistoria(idHistoria: number): Observable<any> {
