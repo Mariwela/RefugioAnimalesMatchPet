@@ -4,6 +4,8 @@ require_once '../../config/config.php';
 require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
+if (ob_get_length()) ob_clean();
+
 // 1. Manejar el Preflight de Angular (OPTIONS)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -27,7 +29,7 @@ $contenido = isset($data->contenido) ? trim($data->contenido) : null;
 
 if (!$id_historia || empty($titulo) || empty($contenido)) {
     http_response_code(400);
-    echo json_encode(["message" => "Faltan datos obligatorios para la edición."]);
+    echo json_encode(["status" => "error", "message" => "Faltan datos obligatorios para la edición."]);
     exit;
 }
 
@@ -42,13 +44,13 @@ try {
 
     if (!$historia) {
         http_response_code(404);
-        echo json_encode(["message" => "La historia no existe."]);
+        echo json_encode(["status" => "error", "message" => "La historia no existe."]);
         exit;
     }
 
     if ($payload['rol'] !== 'admin' && $payload['id_usuario'] != $historia['id_usuario']) {
         http_response_code(403);
-        echo json_encode(["message" => "No tienes permiso para editar esta historia."]);
+        echo json_encode(["status" => "error", "message" => "No tienes permiso para editar esta historia."]);
         exit;
     }
 
@@ -70,9 +72,11 @@ try {
         "status" => "success",
         "message" => "Historia actualizada. Queda pendiente de revisión por el administrador."
     ]);
+    exit;
 
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode(["message" => "Error al actualizar: " . $e->getMessage()]);
+    echo json_encode(["status" => "error", "message" => "Error al actualizar: " . $e->getMessage()]);
+    exit;
 }
 ?>

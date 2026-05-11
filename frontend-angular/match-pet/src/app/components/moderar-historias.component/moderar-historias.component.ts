@@ -11,6 +11,8 @@ import { CommonModule, DatePipe } from '@angular/common';
   styleUrl: './moderar-historias.component.css',
 })
 export class ModerarHistoriasComponent implements OnInit {
+  private readonly URL_HISTORIAS = 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/historias/';
+
   historiasPendientes: HistoriaModel[] = [];
   cargando: boolean = true;
   error: string = '';
@@ -43,6 +45,14 @@ export class ModerarHistoriasComponent implements OnInit {
       }
     });
   }
+
+  getImagenUrl(ruta: string | undefined): string {
+    if (ruta && ruta.trim() !== '') {
+      return `${this.URL_HISTORIAS}${ruta}`;
+    }
+    return 'historia-default.png'; 
+  }
+
   cambiarEstado(historia: HistoriaModel, nuevoEstado: 'Aprobada' | 'Rechazada'): void {
     let comentario = '';
 

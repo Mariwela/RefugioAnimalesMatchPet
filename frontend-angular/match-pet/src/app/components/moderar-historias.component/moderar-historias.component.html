@@ -25,9 +25,7 @@
             </p>
 
             <div class="contenido-historia">
-                @if (historia.imagen_url) {
-                <img [src]="historia.imagen_url" alt="Foto de la historia" class="img-miniatura">
-                }
+                <img [src]="getImagenUrl(historia.imagen_url)" alt="Foto de la historia" class="img-miniatura">
                 <p>{{ historia.contenido }}</p>
             </div>
 

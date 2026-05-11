@@ -13,6 +13,7 @@ try {
     // Consultamos las historias que pertenecen al usuario del token
     $query = "SELECT 
                 h.id_historia,
+                h.id_animal,
                 h.titulo,
                 h.contenido,
                 h.imagen_url,

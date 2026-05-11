@@ -30,6 +30,7 @@ try {
         "status" => "success", 
         "data" => $historias
     ]);
+    exit;
 
 } catch (Exception $e) {
     http_response_code(500);
@@ -37,4 +38,5 @@ try {
         "status" => "error", 
         "message" => $e->getMessage()
     ]);
+    exit;
 }
