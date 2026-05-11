@@ -4,7 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AnimalService } from '../../services/animal';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
-
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 @Component({
   selector: 'app-animal-edit.component',
   imports: [CommonModule, ReactiveFormsModule],

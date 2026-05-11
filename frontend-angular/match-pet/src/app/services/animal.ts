@@ -17,7 +17,20 @@ export class AnimalService {
   }
 
   eliminarAnimal(id: number): Observable<any> {
-    return this.http.post(`${this.baseUrl}/eliminar_animal.php`, { id_animal: id });
+    // 1. Rescatamos el token guardado cuando el usuario hizo login
+    const token = localStorage.getItem('auth_token'); // Asegúrate de que este es el nombre con el que guardas tu token
+
+    // 2. Preparamos la cabecera (Header) con el token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // 3. Enviamos la petición POST: URL, Cuerpo ({id_animal}), y las Cabeceras
+    return this.http.post(
+      `${this.baseUrl}/eliminar_animal.php`,
+      { id_animal: id },
+      { headers: headers }
+    );
   }
   // 3. Conecta con detalle.php (trae TODO: animal + fotos + salud)
   getAnimalById(id: number): Observable<any> {
