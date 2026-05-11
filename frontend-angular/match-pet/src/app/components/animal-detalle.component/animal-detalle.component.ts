@@ -5,6 +5,7 @@ import { AnimalService } from '../../services/animal'; // Ajusta esta ruta si es
 import { AuthService } from '../../services/auth';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ImageZoomDialogComponent } from '../image-zoom-dialog.component/image-zoom-dialog.component';
+import { Favoritos } from '../../services/favoritos';
 
 @Component({
   selector: 'app-animal-detalle',
@@ -19,7 +20,7 @@ export class AnimalDetalleComponent implements OnInit {
   errorMsg: string = '';
   fotosGaleria: any[] = [];
   isAdmin: boolean = false;
-
+  favoritosIds: number[] = [];
   // 👇 NUEVAS VARIABLES PARA LA SOLICITUD 👇
   enviandoSolicitud: boolean = false;
   mensajeSolicitud: string = '';
@@ -31,7 +32,8 @@ export class AnimalDetalleComponent implements OnInit {
     private animalService: AnimalService,
     public authService: AuthService, // Cambiado a 'public' si lo usas en el HTML
     private cdr: ChangeDetectorRef,
-    private dialog: MatDialog// Nuestro toque mágico
+    private dialog: MatDialog,
+    private favoritosService: Favoritos
   ) { }
 
   ngOnInit(): void {
@@ -183,5 +185,30 @@ export class AnimalDetalleComponent implements OnInit {
       height: '100vh',
       panelClass: 'zoom-dialog-panel'
     });
+  }
+
+  isFavorito(id_animal: number): boolean {
+    return this.favoritosIds.includes(id_animal);
+  }
+  toggleFavorito(id_animal: number) {
+    if (this.isFavorito(id_animal)) {
+      // Eliminar de favoritos
+      this.favoritosService.eliminarFavorito(id_animal).subscribe({
+        next: () => {
+          this.favoritosIds = this.favoritosIds.filter(id => id !== id_animal);
+          this.cdr.detectChanges(); // 👈 Repintamos para que el corazón se ponga blanco
+        },
+        error: (err) => console.error("Error al eliminar de favoritos", err)
+      });
+    } else {
+      // Agregar a favoritos
+      this.favoritosService.agregarFavorito(id_animal).subscribe({
+        next: () => {
+          this.favoritosIds.push(id_animal);
+          this.cdr.detectChanges(); // 👈 Repintamos para que el corazón se ponga rojo
+        },
+        error: (err) => console.error("Error al agregar a favoritos", err)
+      });
+    }
   }
 }

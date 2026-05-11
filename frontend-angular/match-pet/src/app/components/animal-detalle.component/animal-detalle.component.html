@@ -38,12 +38,25 @@
             </div>
 
             <div class="columna-info">
-                <div class="titulo-animal">
-                    <h2>{{ animal.nombre }}</h2>
-                    <span class="etiqueta-estado"><i class="fa fa-check-circle"></i> Disponible para Adopción</span>
-                </div>
 
-                <div class="datos-rapidos">
+                <div class="titulo-animal"
+                    style="display: flex; align-items: flex-start; justify-content: space-between; gap: 15px;">
+                    <div>
+                        <h2 style="margin-bottom: 5px;">{{ animal.nombre }}</h2>
+                        <span class="etiqueta-estado"><i class="fa fa-check-circle"></i> Disponible para Adopción</span>
+                    </div>
+
+                    <button class="btn-favorito" (click)="toggleFavorito(animal.id_animal)"
+                        [class.es-favorito]="isFavorito(animal.id_animal)" title="Añadir/Quitar de favoritos"
+                        style="background: transparent; border: none; font-size: 28px; cursor: pointer; transition: transform 0.2s;">
+                        <span class="heart-icon">
+                            @if (isFavorito(animal.id_animal)) {
+                            ❤️ } @else {
+                            🤍 }
+                        </span>
+                    </button>
+                </div>
+                <div class="datos-rapidos" style="margin-top: 20px;">
                     <div class="dato-item">
                         <span class="icono">🐾</span>
                         <div class="dato-texto">
