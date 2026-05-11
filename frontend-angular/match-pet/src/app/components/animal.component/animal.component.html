@@ -1,9 +1,38 @@
 <div class="contenedor-animales">
     <h2>Animales Esperando un Hogar</h2>
 
+    <div class="barra-filtros">
+        <div class="filtro-grupo">
+            <select [(ngModel)]="filtros.especie" (ngModelChange)="aplicarFiltros()">
+                <option value="">Todas las Especies</option>
+                <option value="Perro">Perros</option>
+                <option value="Gato">Gatos</option>
+                <option value="Exótico">Exóticos</option>
+                <option value="Otro">Otros</option>
+            </select>
+        </div>
+
+        <div class="filtro-grupo">
+            <select [(ngModel)]="filtros.tamano" (ngModelChange)="aplicarFiltros()">
+                <option value="">Cualquier Tamaño</option>
+                <option value="Pequeño">Pequeño</option>
+                <option value="Mediano">Mediano</option>
+                <option value="Grande">Grande</option>
+            </select>
+        </div>
+
+        <div class="filtro-grupo">
+            <select [(ngModel)]="filtros.sexo" (ngModelChange)="aplicarFiltros()">
+                <option value="">Cualquier Sexo</option>
+                <option value="Macho">Macho</option>
+                <option value="Hembra">Hembra</option>
+            </select>
+        </div>
+    </div>
+
     @if (cargando) {
     <div class="mensaje-carga">
-        <p>Buscando peludos disponibles...</p>
+        <p><i class="fa fa-spinner fa-spin"></i> Buscando peludos disponibles...</p>
     </div>
     }
 
@@ -14,19 +43,16 @@
     }
 
     @if (!cargando && !errorMsg) {
-
     @if (animales.length > 0) {
     <div class="grid-animales">
         @for (animal of animales; track animal.id_animal) {
         <div class="tarjeta-animal">
-            <img [src]="animal.foto_portada" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
+            <img [src]="getFotoUrl(animal.foto_portada)" [alt]="'Foto de ' + animal.nombre" class="foto-animal">
 
             <button class="btn-favorito" (click)="toggleFavorito(animal.id_animal)"
                 [class.es-favorito]="isFavorito(animal.id_animal)" title="Añadir/Quitar de favoritos">
                 <span class="heart-icon">
-                    @if (isFavorito(animal.id_animal)) {
-                    ❤️ } @else {
-                    🤍 }
+                    @if (isFavorito(animal.id_animal)) { ❤️ } @else { 🤍 }
                 </span>
             </button>
 
@@ -52,8 +78,13 @@
         </button>
     </div>
     } @else {
-    <div class="sin-resultados">
-        <p>Actualmente no hay animales disponibles para adopción.</p>
+    <div class="sin-resultados" style="text-align: center; padding: 40px;">
+        <i class="fa fa-search" style="font-size: 3rem; color: #ccc; margin-bottom: 15px;"></i>
+        <p>No se encontraron animales con esos filtros.</p>
+        <button class="btn-limpiar" (click)="limpiarFiltros()"
+            style="margin-top: 15px; padding: 8px 16px; cursor: pointer;">
+            Limpiar filtros
+        </button>
     </div>
     }
     }

@@ -16,19 +16,18 @@
 
     @if (!cargando && !mensaje.includes('Acceso denegado')) {
     <div class="cabecera-form">
-        <h2>✏️ Editar Ficha de <span class="nombre-resaltado">{{ animalForm.get('nombre')?.value }}</span></h2>
+        <h2>Editar Ficha de <span class="nombre-resaltado">{{ animalForm.get('nombre')?.value }}</span></h2>
         <button class="btn-cancelar" (click)="cancelar()">
             <i class="fa fa-arrow-left"></i> Volver
         </button>
     </div>
 
     <form [formGroup]="animalForm" (ngSubmit)="guardarCambios()" class="formulario-animal">
-
         <input type="hidden" formControlName="id_animal">
 
         <div class="form-seccion">
             <div class="seccion-titulo">
-                <i class="fa fa-info-circle"></i>
+                <i class="fa fa-paw"></i>
                 <h3>Datos Básicos</h3>
             </div>
 
@@ -91,13 +90,13 @@
 
         <div class="form-seccion">
             <div class="seccion-titulo">
-                <i class="fa fa-heartbeat"></i>
+                <i class="fa fa-heart"></i>
                 <h3>Comportamiento y Estado</h3>
             </div>
             <div class="grid-3-col">
                 <div class="campo">
                     <label>Estado de Adopción</label>
-                    <select formControlName="estado" class="select-estado">
+                    <select formControlName="estado">
                         <option value="Disponible">Disponible</option>
                         <option value="Adoptado">Adoptado</option>
                         <option value="En Acogida">En Acogida</option>
@@ -127,47 +126,47 @@
 
         <div class="form-seccion">
             <div class="seccion-titulo">
-                <i class="fa fa-check-square"></i>
+                <i class="fa fa-medkit"></i>
                 <h3>Salud y Sociabilidad</h3>
             </div>
             <div class="grid-checkboxes">
                 <label class="checkbox-container">
                     <input type="checkbox" formControlName="apto_pisos">
-                    <span class="checkmark"></span> Apto para pisos
+                    Apto para pisos
                 </label>
                 <label class="checkbox-container">
                     <input type="checkbox" formControlName="sociable_ninos">
-                    <span class="checkmark"></span> Sociable con niños
+                    Sociable con niños
                 </label>
                 <label class="checkbox-container">
                     <input type="checkbox" formControlName="sociable_perros">
-                    <span class="checkmark"></span> Sociable con perros
+                    Sociable con perros
                 </label>
                 <label class="checkbox-container">
                     <input type="checkbox" formControlName="sociable_gatos">
-                    <span class="checkmark"></span> Sociable con gatos
+                    Sociable con gatos
                 </label>
                 <label class="checkbox-container">
                     <input type="checkbox" formControlName="esterilizado">
-                    <span class="checkmark"></span> Esterilizado
+                    Esterilizado
                 </label>
                 <label class="checkbox-container">
                     <input type="checkbox" formControlName="enfermedad_cronica">
-                    <span class="checkmark"></span> Enfermedad crónica
+                    Enfermedad crónica
                 </label>
                 <label class="checkbox-container">
                     <input type="checkbox" formControlName="es_para_principiantes">
-                    <span class="checkmark"></span> Ideal principiantes
+                    Ideal principiantes
                 </label>
             </div>
         </div>
 
         <div class="form-seccion">
             <div class="seccion-titulo">
-                <i class="fa fa-file-text"></i>
+                <i class="fa fa-file-text-o"></i>
                 <h3>Descripción</h3>
             </div>
-            <div class="campo">
+            <div class="campo" style="margin-bottom: 1rem;">
                 <label>Aviso Importante</label>
                 <input type="text" formControlName="aviso_importante" class="input-aviso"
                     placeholder="Ej. Necesita licencia PPP o medicación especial">
@@ -180,36 +179,38 @@
             </div>
         </div>
 
-        @if (mensaje) {
-        <div class="alerta" [class.alerta-exito]="mensaje.includes('correctamente')"
-            [class.alerta-error]="!mensaje.includes('correctamente')">
-            <i class="fa" [class.fa-check-circle]="mensaje.includes('correctamente')"
-                [class.fa-exclamation-circle]="!mensaje.includes('correctamente')"></i>
-            {{ mensaje }}
+        @if (mensajeExito) {
+        <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
+            <i class="fa fa-check-circle"></i> {{ mensajeExito }}
+        </div>
+        }
+        @if (mensajeError) {
+        <div class="alert alert--error" [class.fade-out]="!notificacionVisible">
+            <i class="fa fa-exclamation-circle"></i> {{ mensajeError }}
         </div>
         }
 
         <div class="acciones-finales">
-            <button type="submit" class="btn-guardar" [disabled]="animalForm.invalid || guardando">
-                @if (guardando) {
-                    <i class="fa fa-circle-o-notch fa-spin"></i> Guardando...
-                } @else {
-                    <i class="fa fa-save"></i> Guardar Cambios
-                }
+            <button type="button" class="btn-delete" (click)="eliminarAnimal()" [disabled]="guardando || borrando">
+                <i class="fa" [ngClass]="borrando ? 'fa-spinner fa-spin' : 'fa-trash'"></i>
+                {{ borrando ? 'Eliminando...' : 'Eliminar' }}
             </button>
+
+            <div class="right-buttons">
+                <button type="button" class="btn-cancelar" (click)="cancelar()">
+                    Cancelar
+                </button>
+
+                <button type="submit" class="btn-guardar" [disabled]="animalForm.invalid || guardando || borrando">
+                    @if (guardando) {
+                    <i class="fa fa-spinner fa-spin"></i> Guardando...
+                    } @else {
+                    <i class="fa fa-save"></i> Guardar Cambios
+                    }
+                </button>
+            </div>
         </div>
 
-        @if (mensajeExito) {
-            <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
-                ✅ {{ mensajeExito }}
-            </div>
-        }
-        @if (mensajeError) {
-            <div class="alert alert--error" [class.fade-out]="!notificacionVisible">
-                ❌ {{ mensajeError }}
-            </div>
-        }
-        
     </form>
     }
 </div>

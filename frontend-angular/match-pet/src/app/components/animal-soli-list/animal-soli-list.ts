@@ -17,7 +17,7 @@ export class AnimalSoliList implements OnInit {
   errorMensaje: string = '';
   isAdmin: boolean = false;
   procesandoId: number | null = null; // Para mostrar carga en un botón específico
-
+  comentarioAbiertoId: number | null = null;
   constructor(
     private animalService: AnimalService,
     private authService: AuthService,
@@ -99,6 +99,13 @@ export class AnimalSoliList implements OnInit {
           this.procesandoId = null;
         }
       });
+    }
+  }
+  toggleComentario(id: number): void {
+    if (this.comentarioAbiertoId === id) {
+      this.comentarioAbiertoId = null; // Si ya estaba abierto, lo cerramos
+    } else {
+      this.comentarioAbiertoId = id; // Si estaba cerrado, lo abrimos
     }
   }
 }

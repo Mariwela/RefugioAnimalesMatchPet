@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -16,6 +16,22 @@ export class AnimalService {
     return this.http.get<any>(`${this.baseUrl}/listar.php?pagina=${pagina}`);
   }
 
+  eliminarAnimal(id: number): Observable<any> {
+    // 1. Rescatamos el token guardado cuando el usuario hizo login
+    const token = localStorage.getItem('auth_token'); // Asegúrate de que este es el nombre con el que guardas tu token
+
+    // 2. Preparamos la cabecera (Header) con el token
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // 3. Enviamos la petición POST: URL, Cuerpo ({id_animal}), y las Cabeceras
+    return this.http.post(
+      `${this.baseUrl}/eliminar_animal.php`,
+      { id_animal: id },
+      { headers: headers }
+    );
+  }
   // 3. Conecta con detalle.php (trae TODO: animal + fotos + salud)
   getAnimalById(id: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/detalle.php?id=${id}`);
@@ -122,6 +138,27 @@ export class AnimalService {
     const url = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/notificaciones/notificaciones.php';
 
     return this.http.get<any>(url, { headers });
+  }
+
+  filtrarAnimales(filtros: any): Observable<any> {
+    let params = new HttpParams();
+
+    // Solo añadimos a la URL los filtros que tengan texto
+    if (filtros.texto && filtros.texto.trim() !== '') {
+      params = params.set('texto', filtros.texto);
+    }
+    if (filtros.especie && filtros.especie !== '') {
+      params = params.set('especie', filtros.especie);
+    }
+    if (filtros.tamano && filtros.tamano !== '') {
+      params = params.set('tamano', filtros.tamano);
+    }
+    if (filtros.sexo && filtros.sexo !== '') {
+      params = params.set('sexo', filtros.sexo);
+    }
+
+    // Petición GET enviando los parámetros
+    return this.http.get(`${this.baseUrl}/filtrar_animales.php`, { params: params });
   }
 
 }

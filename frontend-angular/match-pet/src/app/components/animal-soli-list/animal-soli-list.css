@@ -276,3 +276,81 @@
     font-size: 1.1rem;
     margin: 0;
 }
+
+/* ─── Ajustes para la columna del Solicitante ─── */
+.solicitante-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.solicitante-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.link-perfil {
+    text-decoration: none;
+    color: var(--secondary);
+    font-weight: 600;
+    transition: color 0.2s;
+}
+
+.link-perfil:hover {
+    color: var(--primary);
+}
+
+/* ─── Acordeón de Comentarios ─── */
+.comentario-wrapper {
+    margin-left: 34px;
+    /* Alineado con el texto, saltando el avatar */
+}
+
+.btn-toggle-comentario {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 2px 0;
+    font-size: 0.8rem;
+    font-weight: 700;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+}
+
+.btn-toggle-comentario:hover {
+    color: var(--primary);
+}
+
+.comentario-caja {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    background-color: var(--bg-body);
+    border-left: 3px solid var(--primary);
+    padding: 10px 12px;
+    border-radius: 0 8px 8px 0;
+    color: var(--text-main);
+    white-space: normal;
+    /* Permite que el texto baje de línea si es largo */
+    max-width: 250px;
+    line-height: 1.4;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
