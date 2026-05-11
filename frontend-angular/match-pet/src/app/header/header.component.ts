@@ -20,7 +20,8 @@ export class HeaderComponent implements OnInit {
 
   totalNotificaciones: number = 0;
   mensajeNotificaciones: string = 'No tienes notificaciones nuevas.';
-
+  listaNotificaciones: any[] = [];
+  mostrarDropdown: boolean = false;
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -37,13 +38,24 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  toggleNotificaciones(): void {
+    this.mostrarDropdown = !this.mostrarDropdown;
+  }
   cargarAlertas(): void {
     this.notificacionService.getResumenNotificaciones().subscribe({
       next: (res) => {
         setTimeout(() => {
           if (res.status === 'success') {
+
+            // 🔥 AÑADE ESTA LÍNEA PARA VER QUÉ LLEGA EXACTAMENTE 🔥
+            console.log("Respuesta del servidor:", res);
+
             this.totalNotificaciones = res.alertas.solicitudes_finalizadas;
             this.mensajeNotificaciones = res.mensaje_global;
+
+            // Asignamos la lista. Si no existe, se pone un array vacío []
+            this.listaNotificaciones = res.notificaciones_detalle || [];
+
             this.cdr.detectChanges();
           }
         });
@@ -51,7 +63,6 @@ export class HeaderComponent implements OnInit {
       error: (err) => console.error('Error notificaciones:', err)
     });
   }
-
   get nombreUsuario(): string {
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem('usuario_nombre') || 'Usuario';

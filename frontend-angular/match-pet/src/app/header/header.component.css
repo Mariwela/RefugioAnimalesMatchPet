@@ -71,7 +71,7 @@
   transition: color 0.2s ease;
 }
 
-.main-nav a:hover, 
+.main-nav a:hover,
 .main-nav a.active {
   color: #1A3A1A;
 }
@@ -92,7 +92,7 @@
   min-width: 180px;
   padding: 0.5rem 0;
   margin-top: 8px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   list-style: none;
   z-index: 1000;
 }
@@ -169,7 +169,9 @@
   margin-bottom: 2px;
 }
 
-.icon-salmon { color: #E8854A; }
+.icon-salmon {
+  color: #E8854A;
+}
 
 
 .notification-wrapper {
@@ -197,11 +199,13 @@
   border-left: 1px solid #c8ddc8;
   padding-left: 1.2rem;
 }
+
 .user-greeting {
   font-size: 13px;
   color: #1A3A1A;
   text-decoration: none;
 }
+
 .avatar {
   width: 35px;
   height: 35px;
@@ -215,12 +219,15 @@
   text-decoration: none;
   transition: opacity 0.15s;
 }
+
 .user-profile a .avatar:hover {
   opacity: 0.85;
 }
+
 .user-profile a.user-greeting {
   color: #C85A2A;
 }
+
 .user-profile a.user-greeting:hover {
   color: #C85A2A;
 }
@@ -244,14 +251,99 @@
   color: #a33;
 }
 
+/* ── Contenedor principal de notificaciones ── */
+.notification-wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+/* ── Badge (el numerito rojo de notificaciones) ── */
+.badge-notificacion {
+  position: absolute;
+  top: -8px;
+  right: -5px;
+  /* Si ya tienes estilos para el badge en tu CSS, puedes borrar lo de abajo,
+     lo pongo por si acaso para asegurarme de que se vea bien redondo y rojo */
+  background-color: #d9534f;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+/* ── Menú desplegable ── */
+.dropdown-notificaciones {
+  position: absolute;
+  top: 130%;
+  right: -10px;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  width: 300px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  cursor: default;
+  /* El cursor vuelve a ser una flecha dentro del menú */
+}
+
+/* ── Cabecera del menú desplegable ── */
+.dropdown-notificaciones-header {
+  padding: 12px 15px;
+  border-bottom: 1px solid #eee;
+  font-weight: bold;
+  color: #333;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* ── Lista de notificaciones (ul) ── */
+.dropdown-notificaciones-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  max-height: 300px;
+  overflow-y: auto;
+  text-align: left;
+}
+
+/* ── Cada notificación individual (li) ── */
+.dropdown-notificaciones-item {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f5f5f5;
+  font-size: 13px;
+  color: #555;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.dropdown-notificaciones-item:hover {
+  background-color: #f9f9f9;
+  /* Efecto al pasar el ratón */
+}
+
+.dropdown-notificaciones-item i {
+  color: #6c757d;
+  margin-right: 8px;
+}
+
+/* ── Mensaje cuando no hay notificaciones (li) ── */
+.dropdown-notificaciones-empty {
+  padding: 15px;
+  font-size: 13px;
+  color: #888;
+  text-align: center;
+}
 
 @media (max-width: 1024px) {
   .main-nav {
-    display: none; /* Aquí podrías implementar un menú hamburguesa */
+    display: none;
+    /* Aquí podrías implementar un menú hamburguesa */
   }
-  
-  .user-greeting, .action-text {
-    display: none; /* Ahorrar espacio en tablets */
+
+  .user-greeting,
+  .action-text {
+    display: none;
+    /* Ahorrar espacio en tablets */
   }
 }
 
@@ -259,8 +351,9 @@
   .container {
     padding: 0.75rem 1rem;
   }
-  
-  .logo-match, .logo-pet {
+
+  .logo-match,
+  .logo-pet {
     font-size: 18px;
   }
 }

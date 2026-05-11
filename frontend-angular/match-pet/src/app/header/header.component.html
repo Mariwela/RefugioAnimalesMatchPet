@@ -96,16 +96,43 @@
         </a>
 
         <!-- Notificaciones -->
-        <div class="notification-wrapper" [title]="mensajeNotificaciones">
-          <i class="fa-solid fa-bell notification-icon"></i>
+        <!-- Notificaciones -->
+        <!-- Añadimos (click) y position relative al contenedor -->
+        <div class="notification-wrapper action-link" (click)="toggleNotificaciones()">
+
+          <i class="fa fa-bell icon-dark" [title]="mensajeNotificaciones"></i>
+          <span class="action-text">Notificaciones</span>
 
           @if (totalNotificaciones > 0) {
           <span class="badge-notificacion">
             {{ totalNotificaciones }}
           </span>
           }
-        </div>
 
+          @if (mostrarDropdown) {
+          <div class="dropdown-notificaciones" (click)="$event.stopPropagation()">
+
+            <div class="dropdown-notificaciones-header">
+              Notificaciones
+            </div>
+
+            <ul class="dropdown-notificaciones-list">
+
+              @for (noti of listaNotificaciones; track noti.id) {
+              <li class="dropdown-notificaciones-item">
+                <i class="fa fa-info-circle"></i>
+                {{ noti.mensaje }}
+              </li>
+              } @empty {
+              <li class="dropdown-notificaciones-empty">
+                No hay notificaciones recientes.
+              </li>
+              }
+
+            </ul>
+          </div>
+          }
+        </div>
         <!-- Perfil usuario -->
         <div class="user-profile">
           <span class="user-greeting">
