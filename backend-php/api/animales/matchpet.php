@@ -165,15 +165,27 @@ foreach ($animales as $animal) {
     // Calcular porcentaje de afinidad
     $porcentaje = $max_puntos > 0 ? round(($puntos / $max_puntos) * 100) : 0;
 
-    // Calcular edad en años/meses para mostrar en tarjeta
-    $nacimiento = new DateTime($animal['fecha_nacimiento']);
-    $hoy        = new DateTime();
-    $diff       = $hoy->diff($nacimiento);
-    if ($diff->y >= 1) {
-        $edad_texto = $diff->y . ' año' . ($diff->y > 1 ? 's' : '');
+    // --- CÁLCULO DE EDAD SEGURO ---
+    $fecha_db = $animal['fecha_nacimiento'];
+    
+    // Si la fecha es nula o vacía, usamos 'hoy' por defecto para evitar el error
+    if (!$fecha_db) {
+        $edad_texto = "Edad desconocida";
     } else {
-        $meses = $diff->m + ($diff->y * 12);
-        $edad_texto = $meses . ' mes' . ($meses !== 1 ? 'es' : '');
+        try {
+            $nacimiento = new DateTime($fecha_db);
+            $hoy        = new DateTime();
+            $diff       = $hoy->diff($nacimiento);
+            
+            if ($diff->y >= 1) {
+                $edad_texto = $diff->y . ' año' . ($diff->y > 1 ? 's' : '');
+            } else {
+                $meses = $diff->m + ($diff->y * 12);
+                $edad_texto = $meses . ' mes' . ($meses !== 1 ? 'es' : '');
+            }
+        } catch (Exception $e) {
+            $edad_texto = "Edad desconocida";
+        }
     }
 
     $scored[] = [
