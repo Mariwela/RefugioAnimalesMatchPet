@@ -52,26 +52,43 @@
 
                         <td class="col-solicitante">
                             <div class="solicitante-info">
-                                <i class="fa fa-user-circle avatar-placeholder"></i>
 
-                                @if (solicitud.id_usuario) {
-                                <a [routerLink]="['/perfil', solicitud.id_usuario]"
-                                    style="text-decoration: none; color: inherit; cursor: pointer;"
-                                    title="Ver perfil del solicitante">
-                                    <span>{{ solicitud.nombre_completo ? solicitud.nombre_completo : 'Ver perfil'
-                                        }}</span>
-                                </a>
-                                } @else {
-                                <span>Anónimo</span>
-                                }
+                                <div class="solicitante-header">
+                                    <i class="fa fa-user-circle avatar-placeholder"></i>
 
-                                @if (solicitud.comentario_admin) {
-                                <span class="icono-comentario" [title]="solicitud.comentario_admin">
-                                    <i class="fa fa-comment-dots"></i>
-                                </span>
+                                    @if (solicitud.id_usuario) {
+                                    <a [routerLink]="['/perfil', solicitud.id_usuario]" class="link-perfil"
+                                        title="Ver perfil del solicitante">
+                                        <span>{{ solicitud.nombre_completo ? solicitud.nombre_completo : 'Ver perfil'
+                                            }}</span>
+                                    </a>
+                                    } @else {
+                                    <span>Anónimo</span>
+                                    }
+                                </div>
+
+                                @if (solicitud.comentario_admin && solicitud.comentario_admin !== 'NULL') {
+                                <div class="comentario-wrapper">
+
+                                    <button class="btn-toggle-comentario"
+                                        (click)="toggleComentario(solicitud.id_solicitud)">
+                                        <i class="fa"
+                                            [ngClass]="comentarioAbiertoId === solicitud.id_solicitud ? 'fa-chevron-up' : 'fa-comment-dots'"></i>
+                                        {{ comentarioAbiertoId === solicitud.id_solicitud ? 'Ocultar' : 'Ver respuesta
+                                        Admin' }}
+                                    </button>
+
+                                    @if (comentarioAbiertoId === solicitud.id_solicitud) {
+                                    <div class="comentario-caja">
+                                        <strong>Admin:</strong> {{ solicitud.comentario_admin }}
+                                    </div>
+                                    }
+
+                                </div>
                                 }
                             </div>
                         </td>
+
                         <td class="col-fecha">{{ solicitud.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}</td>
 
                         <td class="col-estado">
