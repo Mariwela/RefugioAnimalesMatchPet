@@ -7,11 +7,12 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 // 👇 NUEVO: Importamos el servicio de Favoritos
 import { Favoritos } from '../../services/favoritos';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-animal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule,],
   templateUrl: './animal.component.html',
   styleUrl: './animal.component.css'
 })
@@ -24,7 +25,12 @@ export class AnimalComponent implements OnInit {
 
   // 👇 NUEVO: Array para guardar los IDs de los animales favoritos
   favoritosIds: number[] = [];
-
+  filtros = {
+    texto: '',
+    especie: '',
+    tamano: '',
+    sexo: ''
+  };
   public authService = inject(AuthService);
   private http = inject(HttpClient);
 
@@ -38,6 +44,7 @@ export class AnimalComponent implements OnInit {
   ngOnInit(): void {
     this.cargarAnimales();
     this.cargarFavoritosUsuario(); // 👈 NUEVO: Llamamos a cargar los favoritos al inicio
+    this.aplicarFiltros();
   }
 
   // ---------------------------------------------------
@@ -161,5 +168,41 @@ export class AnimalComponent implements OnInit {
         alert('Error de conexión al intentar eliminar.');
       }
     });
+  }
+  aplicarFiltros(): void {
+    this.cargando = true;
+    this.cdr.detectChanges(); // 3. Fuerza la detección antes de la petición asíncrona
+
+    this.animalService.filtrarAnimales(this.filtros).subscribe({
+      next: (res) => {
+        this.animales = res.data;
+        this.cargando = false;
+        this.cdr.detectChanges(); // 4. Y otra vez al recibir los datos
+      },
+      error: (err) => {
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+  limpiarFiltros(): void {
+    this.filtros = { texto: '', especie: '', tamano: '', sexo: '' };
+    this.aplicarFiltros(); // Volvemos a buscar todo
+  }
+  private readonly URL_BASE_IMAGENES = 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/img/animales/';
+
+  // 2. Función para construir la URL completa
+  getFotoUrl(foto: string): string {
+    if (!foto || foto === 'default_animal.jpg') {
+      return 'assets/img/default_animal.jpg'; // O la ruta a tu imagen por defecto local
+    }
+
+    // Si la foto ya trae http (por si acaso), la dejamos tal cual
+    if (foto.startsWith('http')) {
+      return foto;
+    }
+
+    // Concatenamos la ruta del servidor con la ruta de la base de datos
+    return `${this.URL_BASE_IMAGENES}${foto}`;
   }
 }

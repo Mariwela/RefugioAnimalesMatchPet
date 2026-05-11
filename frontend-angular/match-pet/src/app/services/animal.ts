@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -140,6 +140,26 @@ export class AnimalService {
     return this.http.get<any>(url, { headers });
   }
 
+  filtrarAnimales(filtros: any): Observable<any> {
+    let params = new HttpParams();
+
+    // Solo añadimos a la URL los filtros que tengan texto
+    if (filtros.texto && filtros.texto.trim() !== '') {
+      params = params.set('texto', filtros.texto);
+    }
+    if (filtros.especie && filtros.especie !== '') {
+      params = params.set('especie', filtros.especie);
+    }
+    if (filtros.tamano && filtros.tamano !== '') {
+      params = params.set('tamano', filtros.tamano);
+    }
+    if (filtros.sexo && filtros.sexo !== '') {
+      params = params.set('sexo', filtros.sexo);
+    }
+
+    // Petición GET enviando los parámetros
+    return this.http.get(`${this.baseUrl}/filtrar_animales.php`, { params: params });
+  }
 
 }
 
