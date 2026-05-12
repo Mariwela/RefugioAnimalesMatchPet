@@ -62,6 +62,10 @@ export class HistoriaService {
     return this.http.post<any>(`${this.apiUrl}editar_historia.php`, payload, { headers: this.getHeaders() });
   }
 
+  obtenerHistoriaPorId(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/historiaID.php?id=${id}`);
+  }
+
   // --- MÉTODOS DE ADMINISTRACIÓN (Requieren Token y Rol Admin) ---
   obtenerPendientes(): Observable<RespuestaHistorias> {
     return this.http.get<RespuestaHistorias>(`${this.apiUrl}listar_pendientes.php`, { headers: this.getHeaders() });
@@ -74,6 +78,11 @@ export class HistoriaService {
       comentario_admin: comentario
     };
     return this.http.post<any>(`${this.apiUrl}moderar_historia.php`, payload, { headers: this.getHeaders() });
+  }
+
+  obtenerTodasAdmin(estado?: string): Observable<any> {
+    const params = estado ? `?estado=${estado}` : '';
+    return this.http.get<any>(`${this.apiUrl}listar_historias_admin.php${params}`, { headers: this.getHeaders() });
   }
 
   eliminarHistoria(idHistoria: number): Observable<any> {

@@ -6,7 +6,12 @@ require_once '../../config/auth_middleware.php';
 
 autenticar();
 
-// Validar que se han recibido todos los datos necesarios por FormData
+$directorio_destino = "../../public/historias/"; 
+
+if (!is_dir($directorio_destino)) {
+    mkdir($directorio_destino, 0777, true);
+}
+
 if (empty($_POST['id_historia']) || empty($_POST['nombre_final_archivo']) || empty($_FILES['foto'])) {
     http_response_code(400);
     echo json_encode(["message" => "Faltan datos obligatorios: id_historia, nombre_final_archivo o el archivo de imagen."]);
@@ -54,23 +59,14 @@ try {
             // Si no se actualizó ninguna fila (ID no encontrado)
             // Borrar el archivo físico que acabamos de subir para no dejar basura
             unlink($ruta_fisica);
-            http_response_code(404);
-            echo json_encode(["message" => "No se encontró el registro de la historia para vincular la imagen."]);
-            exit;
+            throw new Exception("No se pudo actualizar la base de datos.");
         }
 
     } else {
-        http_response_code(500);
-        echo json_encode(["message" => "Error crítico: El servidor no pudo guardar el archivo físico en la carpeta historias."]);
-        exit;
+        throw new Exception("No se pudo mover el archivo a public/historias. Revisa permisos.");
     }
 
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(["message" => "Error de Base de Datos: " . $e->getMessage()]);
-    exit;
-} catch (Exception $e) {
-    http_response_code(500);
-    echo json_encode(["message" => "Error del servidor: " . $e->getMessage()]);
-    exit;
 }

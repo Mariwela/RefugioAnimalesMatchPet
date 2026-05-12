@@ -1,5 +1,4 @@
 <?php
-// ¡Nada de espacios ni saltos de línea antes del <?php !
 require_once '../../config/cors.php';
 require_once '../../config/config.php';
 require_once '../../config/conexion.php';

@@ -32,7 +32,7 @@
 
             <div class="contenedor-imagen">
                 @if (historia.imagen_url) {
-                <img [src]="historia.imagen_url" [alt]="historia.titulo">
+                <img [src]="getImagenUrl(historia.imagen_url)" [alt]="historia.titulo">
                 } @else {
                 <div class="imagen-placeholder">
                     <i class="fas fa-paw"></i>
@@ -63,8 +63,7 @@
 
                     <!-- NUEVO BOTÓN: Editar (Pasa los datos por el [state]) -->
                     <button [routerLink]="['/editar-historia', historia.id_historia]"
-                        [state]="{ historiaData: historia }" class="btn-editar" title="Editar historia"
-                        style="background-color: #f39c12; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer;">
+                        [state]="{ historiaData: historia }" class="btn-editar" title="Editar historia">
                         <i class="fas fa-edit"></i> Editar
                     </button>
 

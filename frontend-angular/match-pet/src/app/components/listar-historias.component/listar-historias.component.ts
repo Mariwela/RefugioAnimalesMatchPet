@@ -13,6 +13,8 @@ import { RouterModule } from '@angular/router';
   styleUrl: './listar-historias.component.css',
 })
 export class ListarHistoriasComponent implements OnInit {
+
+  private readonly URL_IMAGENES = 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/historias/';
   historias: HistoriaModel[] = [];
   cargando: boolean = true;
   error: string = '';
@@ -22,20 +24,17 @@ export class ListarHistoriasComponent implements OnInit {
 
   constructor(
     private historiaService: HistoriaService,
-    public authService: AuthService, // <-- Lo ponemos public para usarlo en el HTML
+    public authService: AuthService,
     private cdr: ChangeDetectorRef
   ) { }
 
   ngOnInit(): void {
-
-
     // Obtenemos los datos del usuario actual para la lógica de borrado
     this.esAdmin = this.authService.isAdmin();
     this.usuarioActualId = this.authService.getUsuarioId();
     this.cargarHistorias();
   }
 
-  // ... (aquí va tu método cargarHistorias() que ya tenemos) ...
   cargarHistorias(): void {
     this.cargando = true;
     this.historiaService.obtenerHistorias().subscribe({
@@ -46,7 +45,7 @@ export class ListarHistoriasComponent implements OnInit {
           this.error = 'No se pudieron cargar las historias.';
         }
         this.cargando = false;
-        this.cdr.detectChanges(); // Forzamos actualización visual
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error:', err);
@@ -56,6 +55,14 @@ export class ListarHistoriasComponent implements OnInit {
       }
     });
   }
+
+  getImagenUrl(ruta: string | undefined): string {
+    if (ruta && ruta.trim() !== '') {
+      return `${this.URL_IMAGENES}${ruta}`;
+    }
+    return 'assets/img/historia-default.png';
+  }
+
   eliminarHistoria(historia: HistoriaModel): void {
     // 1. Pedimos confirmación al usuario (para evitar borrados por error)
     const confirmacion = confirm(`¿Estás seguro de que deseas eliminar la historia "${historia.titulo}"? Esta acción no se puede deshacer.`);
@@ -67,7 +74,7 @@ export class ListarHistoriasComponent implements OnInit {
             // 2. Eliminamos la historia del array visualmente sin recargar la página
             this.historias = this.historias.filter(h => h.id_historia !== historia.id_historia);
             alert('✅ Historia eliminada correctamente.');
-            this.cdr.detectChanges(); // Actualizamos la vista
+            this.cdr.detectChanges();
           } else {
             alert('❌ Error al eliminar: ' + respuesta.message);
           }

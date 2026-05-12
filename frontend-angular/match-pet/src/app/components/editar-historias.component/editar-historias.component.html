@@ -56,6 +56,22 @@
                     }
                 </div>
 
+                <!-- Campo para la Imagen -->
+                <div class="form-group">
+                    <label>Imagen de la historia</label>     
+                    <div class="preview-container" style="margin-bottom: 1rem;">
+                        @if (vistaPrevia) {
+                            <img [src]="vistaPrevia" alt="Vista previa" class="img-preview" style="max-width: 200px; border-radius: 8px;">
+                        } @else {
+                            <div class="placeholder-img" style="width: 200px; height: 150px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                                <span>Sin imagen</span>
+                            </div>
+                        }
+                    </div>
+                    <input type="file" id="foto" (change)="onFileSelected($event)" accept="image/*" class="file-input">
+                    <p class="help-text">Opcional: Selecciona una nueva foto solo si deseas cambiar la actual.</p>
+                </div>
+
                 <!-- BOTONES DE ACCIÓN -->
                 <div style="margin-top: 2.5rem;">
 
@@ -69,8 +85,8 @@
                     </button>
 
                     <!-- Enlace para cancelar -->
-                    <a routerLink="/historias" class="btn-link">
-                        Cancelar y volver a la lista
+                    <a routerLink="/historias/moderar" routerLinkActive="active" class="btn-link">
+                        Volver a la lista de moderar
                     </a>
 
                 </div>

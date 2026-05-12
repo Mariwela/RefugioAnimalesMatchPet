@@ -53,7 +53,7 @@ export const routes: Routes = [
     { path: 'historias', component: ListarHistoriasComponent },
     { path: 'historias/moderar', component: ModerarHistoriasComponent, canActivate: [adminGuard] },
     { path: 'historias/publicar', component: PublicarHistoriasComponent, canActivate: [authGuard] },
-    { path: 'editar-historia/:id', component: EditarHistoriasComponent },
+    { path: 'editar-historia/:id', component: EditarHistoriasComponent, canActivate: [authGuard] },
     { path: 'matchpet', component: MatchpetComponent },
 
     { path: '**', redirectTo: '' }

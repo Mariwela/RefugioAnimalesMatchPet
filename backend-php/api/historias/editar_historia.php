@@ -4,8 +4,6 @@ require_once '../../config/config.php';
 require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
-if (ob_get_length()) ob_clean();
-
 // 1. Manejar el Preflight de Angular (OPTIONS)
 if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
     http_response_code(200);
@@ -48,16 +46,14 @@ try {
         exit;
     }
 
-    if ($payload['rol'] !== 'admin' && $payload['id_usuario'] != $historia['id_usuario']) {
+    if ($payload['rol'] !== 'admin') {
         http_response_code(403);
-        echo json_encode(["status" => "error", "message" => "No tienes permiso para editar esta historia."]);
+        echo json_encode(["status" => "error", "message" => "Solo los administradores pueden editar historias."]);
         exit;
     }
 
     $queryUpdate = "UPDATE historias_adopcion 
-                    SET titulo = :titulo, 
-                        contenido = :contenido, 
-                        estado = 'Pendiente' 
+                    SET titulo = :titulo, contenido = :contenido
                     WHERE id_historia = :id";
     
     $stmtUpdate = $db->prepare($queryUpdate);
@@ -70,7 +66,7 @@ try {
 
     echo json_encode([
         "status" => "success",
-        "message" => "Historia actualizada. Queda pendiente de revisión por el administrador."
+        "message" => "Historia actualizada."
     ]);
     exit;
 
