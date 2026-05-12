@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
@@ -10,6 +10,23 @@ export class AnimalService {
   private baseUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales';
 
   constructor(private http: HttpClient) { }
+
+  crearAnimal(formData: FormData): Observable<any> {
+    // 1. Rescatamos el token con el nombre que usas en tus otras funciones
+    const token = localStorage.getItem('auth_token') || '';
+
+    // 2. Preparamos la cabecera
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    // 3. Enviamos el FormData (que contiene texto e imágenes)
+    return this.http.post<any>(
+      `${this.baseUrl}/insertar_animal.php`, 
+      formData, 
+      { headers }
+    );
+  }
 
   // 2. Conecta con listar.php
   getAnimalesDisponibles(pagina: number = 1): Observable<any> {
@@ -82,7 +99,6 @@ export class AnimalService {
       'Authorization': `Bearer ${token}`
     });
 
-    // Ajusta 'crear.php' al nombre real de tu archivo
     const url = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/solicitudes/enviar_solicitud.php';
 
     // Enviamos el id_animal en el cuerpo (body) de la petición como espera tu PHP

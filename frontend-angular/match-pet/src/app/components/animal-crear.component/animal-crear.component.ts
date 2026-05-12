@@ -1,10 +1,12 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import id from '@angular/common/locales/extra/id';
 import { response } from 'express';
+import { AnimalService } from '../../services/animal';
+import { AuthService } from '../../services/auth'; 
 
 @Component({
   selector: 'app-animal-crear.component',
@@ -16,6 +18,9 @@ export class AnimalCrearComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
   private router = inject(Router);
+  private cdr = inject(ChangeDetectorRef);
+  private animalService = inject(AnimalService);
+  private authService = inject(AuthService);
 
   animalForm: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
@@ -41,9 +46,12 @@ export class AnimalCrearComponent {
   });
 
   mensaje: string = '';
+  esExito: boolean = false;
   esError: boolean = false;
   cargando: boolean = false;
   fotoSeleccionada: File | null = null;
+  fotosGaleria: File[] = [];
+  fotosGaleriaPreview: string[] = [];
   fotoPreview: string | ArrayBuffer | null = null;
 
   onFileSeleccionada(event: any) {
@@ -51,92 +59,157 @@ export class AnimalCrearComponent {
     if (file) {
       this.fotoSeleccionada = file;
 
-      // Lógica para generar la vista previa
       const reader = new FileReader();
       reader.onload = () => {
         this.fotoPreview = reader.result;
+        
+        // ✅ Forzamos a Angular a ver el cambio de la portada al instante
+        this.cdr.detectChanges(); 
       };
       reader.readAsDataURL(file);
     }
   }
 
+  onFotosGaleriaSeleccionadas(event: any) {
+    const files: FileList = event.target.files;
+    if (!files) return;
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.fotosGaleriaPreview.push(e.target.result);
+        this.fotosGaleria.push(file);
+        
+        this.cdr.detectChanges();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  quitarFotoGaleria(index: number) {
+    this.fotosGaleria.splice(index, 1);
+    this.fotosGaleriaPreview.splice(index, 1);
+  }
+
   guardarAnimal() {
     if (this.animalForm.invalid) {
-      this.animalForm.markAllAsTouched();
+      this.mostrarError('Por favor, rellena los campos obligatorios.');
       return;
     }
 
     this.cargando = true;
-    this.mensaje = '';
+    this.esError = false;
+    this.esExito = false;
 
-    const apiUrlCrear = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/insertar_animal.php';
-    const token = localStorage.getItem('auth_token') || '';
-    const headers = new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`
+    // Creamos el FormData con los datos del formulario
+    const formData = new FormData();
+    
+    // Metemos todos los campos del formulario en el FormData
+    Object.keys(this.animalForm.controls).forEach(key => {
+      const value = this.animalForm.get(key)?.value;
+      // Convertimos booleanos a 1 o 0 para PHP
+      if (typeof value === 'boolean') {
+        formData.append(key, value ? '1' : '0');
+      } else {
+        formData.append(key, value || '');
+      }
     });
 
-    // 1️⃣ PRIMER PASO: Crear el animal con los datos de texto
-    this.http.post<any>(apiUrlCrear, this.animalForm.value, { headers }).subscribe({
+    // Llamamos al servicio
+    this.animalService.crearAnimal(formData).subscribe({
       next: (res) => {
         if (res.status === 'success') {
-          const nuevoId = res.id_animal;
-
-          // 2️⃣ SEGUNDO PASO: Si hay foto, la subimos usando el nuevo ID
+          const idNuevo = res.id_animal;
+          
+          // Si hay foto de portada, la subimos primero
           if (this.fotoSeleccionada) {
-            this.subirFoto(res.id_animal);
+            this.subirFoto(idNuevo);
+          } else if (this.fotosGaleria.length > 0) {
+            // Si no hay portada pero hay galería
+            this.finalizarCreacion('¡Animal creado!', idNuevo);
           } else {
-            this.finalizarCreacion('Animal creado con éxito.');
+            // Si no hay ninguna foto
+            this.finalizarCreacion('¡Animal creado correctamente!', idNuevo);
           }
-
         } else {
-          this.mostrarError(res.message);
+          this.mostrarError(res.message || 'Error al crear el animal');
         }
       },
-      error: () => this.mostrarError('Error de comunicación con el servidor.')
+      error: (err) => {
+        console.error(err);
+        this.mostrarError(err.error?.message || 'Error de conexión con el servidor');
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
     });
   }
 
-  // 👇 Método para subir la foto usando FormData
-  subirFoto(idAnimal: number) {
-    const apiUrlFoto = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/subir_foto_animal.php'; // Ajusta la ruta
-    const token = localStorage.getItem('auth_token') || '';
+subirFoto(idAnimal: number) {
+    const apiUrlFoto = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/subir_foto_animal.php';
+    const token = this.authService.getToken() || '';  // ✅ usa el servicio
 
-    // Usamos FormData porque vamos a enviar un archivo físico, no JSON
     const formData = new FormData();
     formData.append('foto', this.fotoSeleccionada as Blob);
     formData.append('id_animal', idAnimal.toString());
     formData.append('es_portada', '1');
 
-    // ⚠️ ATENCIÓN: Al usar FormData, NO debes enviar 'Content-Type'. 
-    // El navegador lo asigna automáticamente como 'multipart/form-data'.
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${token}`
-    });
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });;
 
     this.http.post<any>(apiUrlFoto, formData, { headers }).subscribe({
       next: (res) => {
-        this.cargando = false;
         if (res.status === 'success') {
-          this.finalizarCreacion('¡Animal y foto creados correctamente!', idAnimal);
+          this.finalizarCreacion('¡Animal y fotos creados correctamente!', idAnimal); // ✅ solo esto
         } else {
           this.mostrarError('Animal creado, pero falló la foto: ' + res.message);
         }
       },
-      error: (err) => this.mostrarError('Error al subir la foto.')
+      error: () => this.mostrarError('Error al subir la foto.')
     });
   }
 
-  private finalizarCreacion(msg: string, id?: number) {
+ private subirFotoGaleria(foto: File, idAnimal: number): Promise<void> {
+    const apiUrlFoto = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/subir_foto_animal.php';
+    const token = this.authService.getToken() || '';
+
+    const formData = new FormData();
+    formData.append('foto', foto);
+    formData.append('id_animal', idAnimal.toString());
+    formData.append('es_portada', '0'); // 0 porque son fotos de la galería
+
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+
+    return new Promise((resolve) => {
+      this.http.post<any>(apiUrlFoto, formData, { headers }).subscribe({
+        next: (res) => {
+          console.log('Foto de galería subida:', res);
+          resolve();
+        },
+        error: (err) => {
+          console.error('Error al subir foto de galería:', err);
+          resolve(); // Resolvemos de todos modos para que el bucle continúe con la siguiente
+        }
+      });
+    });
+  }
+
+  private async finalizarCreacion(msg: string, id?: number) {
+    if (id && this.fotosGaleria.length > 0) {
+      this.mensaje = 'Subiendo galería...'; // Feedback visual
+      this.cdr.detectChanges();
+      
+      for (const foto of this.fotosGaleria) {
+        await this.subirFotoGaleria(foto, id);
+      }
+    }
+
     this.cargando = false;
     this.mensaje = msg;
     this.esError = false;
+    this.esExito = true; // ✅ Activa la alerta de éxito
+    this.cdr.detectChanges();
+
     setTimeout(() => {
-      if (id) {
-        this.router.navigate(['/animal', id]); // Cambia '/animales' por tu ruta de detalle, ej: '/animales/detalle', id
-      } else {
-        this.router.navigate(['/animales']);
-      }
+      this.router.navigate(id ? ['/animal', id] : ['/animales']);
     }, 2000);
   }
 
@@ -144,15 +217,22 @@ export class AnimalCrearComponent {
     this.cargando = false;
     this.mensaje = msg;
     this.esError = true;
+    this.esExito = false;
+    this.cdr.detectChanges();
   }
 
   reiniciarFormulario() {
     this.animalForm.reset();
     this.fotoSeleccionada = null;
+    this.fotoPreview = null;
+    this.fotosGaleria = [];
+    this.fotosGaleriaPreview = [];
 
-    // Limpiamos el input file en el HTML manualmente
-    const fileInput = document.getElementById('foto') as HTMLInputElement;
+    const fileInput = document.getElementById('inputFoto') as HTMLInputElement;
     if (fileInput) fileInput.value = '';
+
+    const galeriaInput = document.getElementById('inputGaleria') as HTMLInputElement;
+    if (galeriaInput) galeriaInput.value = '';
   }
 
 }

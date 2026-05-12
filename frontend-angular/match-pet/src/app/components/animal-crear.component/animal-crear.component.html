@@ -29,13 +29,20 @@
                     }
                 </div>
 
-                <div class="campo">
-                    <label for="especie">Especie *</label>
-                    <input type="text" id="especie" formControlName="especie" placeholder="Ej. Perro, Gato...">
-                    @if (animalForm.get('especie')?.invalid && animalForm.get('especie')?.touched) {
-                    <small class="error-text"><i class="fa fa-times-circle"></i> La especie es obligatoria.</small>
-                    }
-                </div>
+            <div class="campo">
+                <label for="especie">Especie *</label>
+                <select id="especie" formControlName="especie">
+                    <option value="" disabled selected>Selecciona una especie</option>
+                    <option value="Perro">Perro</option>
+                    <option value="Gato">Gato</option>
+                    <option value="Otro">Otro</option>
+                </select>
+                @if (animalForm.get('especie')?.invalid && animalForm.get('especie')?.touched) {
+                    <small class="error-text">
+                        <i class="fa fa-times-circle"></i> La especie es obligatoria.
+                    </small>
+                }
+            </div>
 
                 <div class="campo">
                     <label for="raza">Raza</label>
@@ -139,19 +146,42 @@
                 <label>Historia / Descripción</label>
                 <textarea formControlName="descripcion" rows="4"></textarea>
             </div>
+
             <div class="campo">
                 <label>Foto de Portada</label>
                 <input type="file" (change)="onFileSeleccionada($event)" accept="image/*" id="inputFoto">
-            
-            @if (fotoPreview) {
-                <div class="preview-container">
-                    <img [src]="fotoPreview" alt="Vista previa" class="img-preview">
-                    <button type="button" class="btn-quitar" (click)="fotoPreview = null; fotoSeleccionada = null">
-                        <i class="fa fa-times"></i> Quitar foto
-                    </button>
-                </div>
-            }
+
+                @if (fotoPreview) {
+                    <div class="preview-container">
+                        <!-- Contenedor relativo para que el botón se pegue a la foto -->
+                        <div class="preview-item"> 
+                            <img [src]="fotoPreview" alt="Vista previa" class="img-preview">
+                            <button type="button" class="btn-quitar" (click)="fotoPreview = null; fotoSeleccionada = null">
+                                <i class="fa fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                }
             </div>
+
+            <div class="campo">
+                <label>Fotos de Galería</label>
+                <input type="file" (change)="onFotosGaleriaSeleccionadas($event)" accept="image/*" multiple id="inputGaleria">
+
+                @if (fotosGaleriaPreview.length > 0) {
+                    <div class="preview-galeria">
+                        @for (preview of fotosGaleriaPreview; track $index) {
+                            <div class="preview-item">
+                                <img [src]="preview" alt="Foto galería">
+                                <button type="button" class="btn-quitar" (click)="quitarFotoGaleria($index)">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            
         </div>
 
         <div class="acciones-finales">

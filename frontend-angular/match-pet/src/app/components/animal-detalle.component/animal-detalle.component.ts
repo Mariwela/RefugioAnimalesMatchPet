@@ -46,6 +46,7 @@ export class AnimalDetalleComponent implements OnInit {
       this.errorMsg = 'No se encontró el perfil del animal.';
       this.cargando = false;
     }
+    console.log('fecha_nacimiento raw:', this.animal?.fecha_nacimiento);
   }
 
   verificarPermisos() {
