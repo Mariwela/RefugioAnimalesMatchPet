@@ -28,7 +28,7 @@
     <div class="grid-historias">
 
         @for (historia of historias; track historia.id_historia) {
-        <article class="tarjeta-historia">
+        <article class="tarjeta-historia" (click)="abrirPreview(historia)">
 
             <div class="contenedor-imagen">
                 @if (historia.imagen_url) {
@@ -67,3 +67,25 @@
     </div>
     }
 </div>
+
+@if (historiaSeleccionada) {
+  <div class="modal-overlay" (click)="cerrarPreview()">
+      <div class="modal-contenido" (click)="$event.stopPropagation()">
+          <button class="btn-cerrar" (click)="cerrarPreview()">&times;</button>
+          
+          <div class="modal-imagen">
+              <img [src]="getImagenUrl(historiaSeleccionada.imagen_url)" [alt]="historiaSeleccionada.titulo">
+          </div>
+          
+          <div class="modal-info">
+              <h2>{{ historiaSeleccionada.titulo }}</h2>
+              <div class="meta-datos">
+                  <span><i class="fas fa-dog"></i> {{ historiaSeleccionada.nombre_animal }}</span>
+                  <span><i class="fas fa-user"></i> {{ historiaSeleccionada.nombre_usuario || 'Anónimo' }}</span>
+              </div>
+              <hr>
+              <p class="texto-completo">{{ historiaSeleccionada.contenido }}</p>
+          </div>
+      </div>
+  </div>
+}

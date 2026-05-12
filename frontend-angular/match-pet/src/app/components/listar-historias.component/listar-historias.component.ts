@@ -18,7 +18,7 @@ export class ListarHistoriasComponent implements OnInit {
   historias: HistoriaModel[] = [];
   cargando: boolean = true;
   error: string = '';
-
+  historiaSeleccionada: HistoriaModel | null = null;
   usuarioActualId: number | null = null;
   esAdmin: boolean = false;
 
@@ -61,6 +61,16 @@ export class ListarHistoriasComponent implements OnInit {
       return `${this.URL_IMAGENES}${ruta}`;
     }
     return 'assets/img/historia-default.png';
+  }
+
+  abrirPreview(historia: HistoriaModel): void {
+    this.historiaSeleccionada = historia;
+    document.body.style.overflow = 'hidden';
+  }
+
+  cerrarPreview(): void {
+    this.historiaSeleccionada = null;
+    document.body.style.overflow = 'auto';
   }
 
   eliminarHistoria(historia: HistoriaModel): void {
