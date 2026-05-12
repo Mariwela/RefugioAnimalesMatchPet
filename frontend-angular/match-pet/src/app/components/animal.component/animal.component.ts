@@ -4,15 +4,13 @@ import { AnimalService } from '../../services/animal';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
-// 👇 NUEVO: Importamos el servicio de Favoritos
 import { Favoritos } from '../../services/favoritos';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-animal',
   standalone: true,
-  imports: [CommonModule, FormsModule,],
+  imports: [CommonModule, FormsModule],
   templateUrl: './animal.component.html',
   styleUrl: './animal.component.css'
 })
@@ -21,43 +19,46 @@ export class AnimalComponent implements OnInit {
   cargando: boolean = true;
   errorMsg: string = '';
   animalIdSeleccionado: number | null = null;
+
+  // Control de paginación
   paginaActual: number = 1;
 
-  // 👇 NUEVO: Array para guardar los IDs de los animales favoritos
   favoritosIds: number[] = [];
+
+  // Objeto de filtros
   filtros = {
     texto: '',
     especie: '',
     tamano: '',
     sexo: ''
   };
+
   public authService = inject(AuthService);
   private http = inject(HttpClient);
+  private readonly URL_BASE_IMAGENES = 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/img/animales/';
 
   constructor(
     private animalService: AnimalService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private favoritosService: Favoritos // 👈 NUEVO: Inyectamos el servicio de Favoritos en el constructor
+    private favoritosService: Favoritos
   ) { }
 
   ngOnInit(): void {
-    this.cargarAnimales();
-    this.cargarFavoritosUsuario(); // 👈 NUEVO: Llamamos a cargar los favoritos al inicio
-    this.aplicarFiltros();
+    this.cargarFavoritosUsuario();
+    this.cargarAnimales(); // Solo llamamos a la lista normal al inicio
   }
 
   // ---------------------------------------------------
-  // 👇 NUEVA SECCIÓN DE FAVORITOS 👇
+  // FAVORITOS
   // ---------------------------------------------------
-
   cargarFavoritosUsuario() {
     if (this.authService.isLoggedIn()) {
       this.favoritosService.getFavoritos().subscribe({
         next: (res) => {
           if (res.status === 'success') {
             this.favoritosIds = res.data.map((fav: any) => fav.id_animal);
-            this.cdr.detectChanges(); // 👈 Avisamos a Angular que repinte la vista para mostrar los corazones rojos
+            this.cdr.detectChanges();
           }
         },
         error: (err) => console.error("Error al cargar favoritos", err)
@@ -71,20 +72,18 @@ export class AnimalComponent implements OnInit {
 
   toggleFavorito(id_animal: number) {
     if (this.isFavorito(id_animal)) {
-      // Eliminar de favoritos
       this.favoritosService.eliminarFavorito(id_animal).subscribe({
         next: () => {
           this.favoritosIds = this.favoritosIds.filter(id => id !== id_animal);
-          this.cdr.detectChanges(); // 👈 Repintamos para que el corazón se ponga blanco
+          this.cdr.detectChanges();
         },
         error: (err) => console.error("Error al eliminar de favoritos", err)
       });
     } else {
-      // Agregar a favoritos
       this.favoritosService.agregarFavorito(id_animal).subscribe({
         next: () => {
           this.favoritosIds.push(id_animal);
-          this.cdr.detectChanges(); // 👈 Repintamos para que el corazón se ponga rojo
+          this.cdr.detectChanges();
         },
         error: (err) => console.error("Error al agregar a favoritos", err)
       });
@@ -92,20 +91,17 @@ export class AnimalComponent implements OnInit {
   }
 
   // ---------------------------------------------------
-  // 👆 FIN SECCIÓN DE FAVORITOS 👆
+  // NAVEGACIÓN Y DETALLES
   // ---------------------------------------------------
-
   verDetalles(id: number) {
-    console.log('Botón pulsado. Navegando al animal con ID:', id);
     this.router.navigate(['/animal', id]).then(exito => {
-      if (exito) {
-        console.log('Navegación exitosa');
-      } else {
-        console.log('La navegación falló (probablemente la ruta no existe)');
-      }
+      if (!exito) console.log('La navegación falló');
     });
   }
 
+  // ---------------------------------------------------
+  // CARGA NORMAL Y PAGINACIÓN
+  // ---------------------------------------------------
   cargarAnimales(): void {
     this.cargando = true;
 
@@ -114,7 +110,6 @@ export class AnimalComponent implements OnInit {
         this.animales = res.data;
         this.cargando = false;
         this.cdr.detectChanges();
-        console.log(`Lista de animales (Página ${this.paginaActual}):`, this.animales);
       },
       error: (error) => {
         this.errorMsg = 'Error al cargar los animales.';
@@ -125,20 +120,76 @@ export class AnimalComponent implements OnInit {
     });
   }
 
+  hayFiltrosActivos(): boolean {
+    return this.filtros.texto !== '' ||
+      this.filtros.especie !== '' ||
+      this.filtros.tamano !== '' ||
+      this.filtros.sexo !== '';
+  }
+
   cambiarPagina(nuevaPagina: number): void {
     if (nuevaPagina >= 1) {
       this.paginaActual = nuevaPagina;
-      this.cargarAnimales();
+
+      // Decidimos qué cargar dependiendo de si hay filtros activos
+      if (this.hayFiltrosActivos()) {
+        this.aplicarFiltros();
+      } else {
+        this.cargarAnimales();
+      }
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
+  // ---------------------------------------------------
+  // FILTROS
+  // ---------------------------------------------------
+
+  // 👉 Esta es la función que debe llamar tu botón "Buscar" en el HTML
+  buscarConFiltros(): void {
+    this.paginaActual = 1; // Volvemos a la página 1 en cada nueva búsqueda
+    this.aplicarFiltros();
+  }
+
+  aplicarFiltros(): void {
+    this.cargando = true;
+    this.cdr.detectChanges();
+
+    // Agregamos la página actual al objeto de filtros
+    const filtrosConPagina = {
+      ...this.filtros,
+      pagina: this.paginaActual
+    };
+
+    this.animalService.filtrarAnimales(filtrosConPagina).subscribe({
+      next: (res) => {
+        // Asegúrate de que tu PHP devuelve los datos en res.data
+        this.animales = res.data || [];
+        this.cargando = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        this.errorMsg = 'Error al aplicar filtros.';
+        this.cargando = false;
+        this.cdr.detectChanges();
+      }
+    });
+  }
+
+  limpiarFiltros(): void {
+    this.filtros = { texto: '', especie: '', tamano: '', sexo: '' };
+    this.paginaActual = 1; // Volvemos a la primera página
+    this.cargarAnimales(); // Cargamos la lista normal
+  }
+
+  // ---------------------------------------------------
+  // ELIMINAR ANIMAL
+  // ---------------------------------------------------
   eliminarAnimal(idAnimal: number, nombreAnimal: string) {
     const confirmacion = window.confirm(`¿Estás seguro de que deseas eliminar a ${nombreAnimal}? Esta acción borrará todas sus fotos y no se puede deshacer.`);
 
-    if (!confirmacion) {
-      return;
-    }
+    if (!confirmacion) return;
 
     const apiUrlEliminar = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/eliminar_animal.php';
     const token = this.authService.getToken() || '';
@@ -169,40 +220,19 @@ export class AnimalComponent implements OnInit {
       }
     });
   }
-  aplicarFiltros(): void {
-    this.cargando = true;
-    this.cdr.detectChanges(); // 3. Fuerza la detección antes de la petición asíncrona
 
-    this.animalService.filtrarAnimales(this.filtros).subscribe({
-      next: (res) => {
-        this.animales = res.data;
-        this.cargando = false;
-        this.cdr.detectChanges(); // 4. Y otra vez al recibir los datos
-      },
-      error: (err) => {
-        this.cargando = false;
-        this.cdr.detectChanges();
-      }
-    });
-  }
-  limpiarFiltros(): void {
-    this.filtros = { texto: '', especie: '', tamano: '', sexo: '' };
-    this.aplicarFiltros(); // Volvemos a buscar todo
-  }
-  private readonly URL_BASE_IMAGENES = 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/img/animales/';
-
-  // 2. Función para construir la URL completa
+  // ---------------------------------------------------
+  // UTILIDADES (FOTOS)
+  // ---------------------------------------------------
   getFotoUrl(foto: string): string {
     if (!foto || foto === 'default_animal.jpg') {
-      return 'assets/img/default_animal.jpg'; // O la ruta a tu imagen por defecto local
+      return 'assets/img/default_animal.jpg';
     }
 
-    // Si la foto ya trae http (por si acaso), la dejamos tal cual
     if (foto.startsWith('http')) {
       return foto;
     }
 
-    // Concatenamos la ruta del servidor con la ruta de la base de datos
     return `${this.URL_BASE_IMAGENES}${foto}`;
   }
 }

@@ -22,8 +22,8 @@ export class AnimalService {
 
     // 3. Enviamos el FormData (que contiene texto e imágenes)
     return this.http.post<any>(
-      `${this.baseUrl}/insertar_animal.php`, 
-      formData, 
+      `${this.baseUrl}/insertar_animal.php`,
+      formData,
       { headers }
     );
   }
@@ -35,7 +35,7 @@ export class AnimalService {
 
   eliminarAnimal(id: number): Observable<any> {
     // 1. Rescatamos el token guardado cuando el usuario hizo login
-    const token = localStorage.getItem('auth_token'); // Asegúrate de que este es el nombre con el que guardas tu token
+    const token = localStorage.getItem('auth_token');
 
     // 2. Preparamos la cabecera (Header) con el token
     const headers = new HttpHeaders({
@@ -49,6 +49,7 @@ export class AnimalService {
       { headers: headers }
     );
   }
+
   // 3. Conecta con detalle.php (trae TODO: animal + fotos + salud)
   getAnimalById(id: number): Observable<any> {
     return this.http.get<any>(`${this.baseUrl}/detalle.php?id=${id}`);
@@ -75,9 +76,7 @@ export class AnimalService {
       { headers }
     );
   }
-  // ... (resto de tu código arriba)
 
-  // animal.service.ts
   getSolicitudes(): Observable<any> {
     const token = localStorage.getItem('auth_token') || '';
     const headers = new HttpHeaders({
@@ -144,6 +143,7 @@ export class AnimalService {
 
     return this.http.post<any>(url, body, { headers });
   }
+
   getResumenNotificaciones(): Observable<any> {
     const token = localStorage.getItem('auth_token') || '';
     const headers = new HttpHeaders({
@@ -156,6 +156,7 @@ export class AnimalService {
     return this.http.get<any>(url, { headers });
   }
 
+  // 👇 FUNCIÓN ACTUALIZADA 👇
   filtrarAnimales(filtros: any): Observable<any> {
     let params = new HttpParams();
 
@@ -173,9 +174,12 @@ export class AnimalService {
       params = params.set('sexo', filtros.sexo);
     }
 
-    // Petición GET enviando los parámetros
+    // NUEVO: Añadimos la página a los parámetros de la URL
+    if (filtros.pagina) {
+      params = params.set('pagina', filtros.pagina.toString());
+    }
+
+    // Petición GET enviando los parámetros (ejemplo: .../filtrar_animales.php?especie=Perro&pagina=2)
     return this.http.get(`${this.baseUrl}/filtrar_animales.php`, { params: params });
   }
-
 }
-
