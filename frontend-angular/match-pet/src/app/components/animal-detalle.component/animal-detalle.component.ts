@@ -15,7 +15,7 @@ import { Favoritos } from '../../services/favoritos';
   styleUrl: './animal-detalle.component.css'
 })
 export class AnimalDetalleComponent implements OnInit {
-  animal: any = null; // Guardará los datos del peludo
+  animal: any = null;
   cargando: boolean = true;
   errorMsg: string = '';
   fotosGaleria: any[] = [];
@@ -27,10 +27,10 @@ export class AnimalDetalleComponent implements OnInit {
   errorSolicitud: string = '';
 
   constructor(
-    private route: ActivatedRoute, // Para leer el "?id=" de la URL
-    private router: Router,        // Para poder volver atrás
+    private route: ActivatedRoute,
+    private router: Router,
     private animalService: AnimalService,
-    public authService: AuthService, // Cambiado a 'public' si lo usas en el HTML
+    public authService: AuthService,
     private cdr: ChangeDetectorRef,
     private dialog: MatDialog,
     private favoritosService: Favoritos
@@ -211,4 +211,38 @@ export class AnimalDetalleComponent implements OnInit {
       });
     }
   }
+
+  confirmarEliminar(): void {
+  if (!this.animal || !this.animal.id_animal) return;
+
+  const confirmar = window.confirm(
+    `¿Estás seguro de que deseas eliminar a ${this.animal.nombre}? Esta acción borrará permanentemente su ficha y todas sus fotos.`
+  );
+
+  if (confirmar) {
+    this.eliminarAnimal(this.animal.id_animal);
+  }
+}
+
+eliminarAnimal(id: number): void {
+  this.cargando = true; // Mostramos el spinner mientras borra
+
+  this.animalService.eliminarAnimal(id).subscribe({
+    next: (res) => {
+      if (res.status === 'success') {
+        alert('Animal eliminado correctamente.');
+        this.router.navigate(['/animales']); // Redirigimos a la lista
+      } else {
+        this.errorMsg = res.message || 'No se pudo eliminar el animal.';
+        this.cargando = false;
+      }
+    },
+    error: (err) => {
+      console.error('Error al eliminar:', err);
+      this.errorMsg = 'Error en el servidor al intentar eliminar.';
+      this.cargando = false;
+      this.cdr.detectChanges();
+    }
+  });
+}
 }

@@ -61,7 +61,12 @@
                     <label>Imagen de la historia</label>     
                     <div class="preview-container" style="margin-bottom: 1rem;">
                         @if (vistaPrevia) {
-                            <img [src]="vistaPrevia" alt="Vista previa" class="img-preview" style="max-width: 200px; border-radius: 8px;">
+                            <div class="preview-container">
+                                <img [src]="vistaPrevia" alt="Vista previa" class="img-preview" style="max-width: 200px; border-radius: 8px;">
+                                <button type="button" class="btn-quitar" (click)="vistaPrevia = null; fotoSeleccionada = null">
+                                    <i class="fa fa-times"></i> Quitar foto
+                                </button>
+                            </div>
                         } @else {
                             <div class="placeholder-img" style="width: 200px; height: 150px; background: #eee; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
                                 <span>Sin imagen</span>

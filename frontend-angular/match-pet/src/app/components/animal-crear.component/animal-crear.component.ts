@@ -2,6 +2,9 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
+import id from '@angular/common/locales/extra/id';
+import { response } from 'express';
 
 @Component({
   selector: 'app-animal-crear.component',
@@ -12,29 +15,48 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 export class AnimalCrearComponent {
   private fb = inject(FormBuilder);
   private http = inject(HttpClient);
+  private router = inject(Router);
 
   animalForm: FormGroup = this.fb.group({
     nombre: ['', Validators.required],
-    especie: ['', Validators.required],
+    especie: ['Perro', Validators.required],
     raza: [''],
-    sexo: [''],
+    sexo: ['Macho', Validators.required],
+    microchip: [''],
     fecha_nacimiento: [''],
-    tamano: [''],
-    descripcion: ['']
+    tamano: ['Mediano'],
+    peso: [''],
+    descripcion: [''],
+    nivel_energia: ['Media'],
+    apto_pisos: [false],
+    sociable_ninos: [false],
+    sociable_perros: [false],
+    sociable_gatos: [false],
+    enfermedad_cronica: [false],
+    esterilizado: [false],
+    nivel_paciencia: ['Baja'],
+    es_para_principiantes: [true],
+    aviso_importante: [''],
+    estado: ['Disponible']
   });
 
   mensaje: string = '';
   esError: boolean = false;
   cargando: boolean = false;
-
-  // 👇 Variable para guardar la foto que selecciona el usuario
   fotoSeleccionada: File | null = null;
+  fotoPreview: string | ArrayBuffer | null = null;
 
-  // 👇 Método que se ejecuta cuando el usuario elige una imagen
   onFileSeleccionada(event: any) {
     const file = event.target.files[0];
     if (file) {
       this.fotoSeleccionada = file;
+
+      // Lógica para generar la vista previa
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.fotoPreview = reader.result;
+      };
+      reader.readAsDataURL(file);
     }
   }
 
@@ -47,7 +69,7 @@ export class AnimalCrearComponent {
     this.cargando = true;
     this.mensaje = '';
 
-    const apiUrlCrear = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/crear_animal.php';
+    const apiUrlCrear = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/insertar_animal.php';
     const token = localStorage.getItem('auth_token') || '';
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -56,32 +78,22 @@ export class AnimalCrearComponent {
 
     // 1️⃣ PRIMER PASO: Crear el animal con los datos de texto
     this.http.post<any>(apiUrlCrear, this.animalForm.value, { headers }).subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
+      next: (res) => {
+        if (res.status === 'success') {
+          const nuevoId = res.id_animal;
 
           // 2️⃣ SEGUNDO PASO: Si hay foto, la subimos usando el nuevo ID
           if (this.fotoSeleccionada) {
-            this.subirFoto(response.id_animal);
+            this.subirFoto(res.id_animal);
           } else {
-            // Si no hay foto, terminamos aquí
-            this.cargando = false;
-            this.mensaje = 'Animal creado con éxito (Sin foto).';
-            this.esError = false;
-            this.reiniciarFormulario();
+            this.finalizarCreacion('Animal creado con éxito.');
           }
 
         } else {
-          this.cargando = false;
-          this.mensaje = response.message || 'Error al guardar el animal.';
-          this.esError = true;
+          this.mostrarError(res.message);
         }
       },
-      error: (err) => {
-        this.cargando = false;
-        this.esError = true;
-        this.mensaje = 'Error de comunicación con el servidor.';
-        console.error(err);
-      }
+      error: () => this.mostrarError('Error de comunicación con el servidor.')
     });
   }
 
@@ -94,7 +106,7 @@ export class AnimalCrearComponent {
     const formData = new FormData();
     formData.append('foto', this.fotoSeleccionada as Blob);
     formData.append('id_animal', idAnimal.toString());
-    formData.append('es_portada', '1'); // 1 = Es la foto principal
+    formData.append('es_portada', '1');
 
     // ⚠️ ATENCIÓN: Al usar FormData, NO debes enviar 'Content-Type'. 
     // El navegador lo asigna automáticamente como 'multipart/form-data'.
@@ -103,27 +115,37 @@ export class AnimalCrearComponent {
     });
 
     this.http.post<any>(apiUrlFoto, formData, { headers }).subscribe({
-      next: (response) => {
+      next: (res) => {
         this.cargando = false;
-        if (response.status === 'success') {
-          this.mensaje = '¡Animal y foto creados correctamente!';
-          this.esError = false;
-          this.reiniciarFormulario();
+        if (res.status === 'success') {
+          this.finalizarCreacion('¡Animal y foto creados correctamente!', idAnimal);
         } else {
-          this.mensaje = 'Animal creado, pero hubo un error con la foto: ' + response.message;
-          this.esError = true;
+          this.mostrarError('Animal creado, pero falló la foto: ' + res.message);
         }
       },
-      error: (err) => {
-        this.cargando = false;
-        this.mensaje = 'Animal creado, pero falló la conexión al subir la foto.';
-        this.esError = true;
-        console.error(err);
-      }
+      error: (err) => this.mostrarError('Error al subir la foto.')
     });
   }
 
-  // Limpia los campos después de un guardado exitoso
+  private finalizarCreacion(msg: string, id?: number) {
+    this.cargando = false;
+    this.mensaje = msg;
+    this.esError = false;
+    setTimeout(() => {
+      if (id) {
+        this.router.navigate(['/animal', id]); // Cambia '/animales' por tu ruta de detalle, ej: '/animales/detalle', id
+      } else {
+        this.router.navigate(['/animales']);
+      }
+    }, 2000);
+  }
+
+  private mostrarError(msg: string) {
+    this.cargando = false;
+    this.mensaje = msg;
+    this.esError = true;
+  }
+
   reiniciarFormulario() {
     this.animalForm.reset();
     this.fotoSeleccionada = null;

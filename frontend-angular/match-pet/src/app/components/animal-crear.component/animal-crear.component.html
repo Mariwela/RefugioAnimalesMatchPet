@@ -54,6 +54,11 @@
                 </div>
 
                 <div class="campo">
+                    <label>Microchip</label>
+                    <input type="text" formControlName="microchip" placeholder="Número de chip">
+                </div>
+
+                <div class="campo">
                     <label for="fecha_nacimiento">Fecha de Nacimiento</label>
                     <input type="date" id="fecha_nacimiento" formControlName="fecha_nacimiento">
                 </div>
@@ -69,44 +74,91 @@
                         </select>
                     </div>
                 </div>
+
+                <div class="campo">
+                    <label>Peso (kg)</label>
+                    <input type="number" step="0.1" formControlName="peso">
+                </div>
+
             </div>
         </div>
 
+        <!-- SECCIÓN 2: COMPORTAMIENTO Y ESTADO -->
         <div class="form-seccion">
-            <div class="seccion-titulo">
-                <i class="fa fa-file-text"></i>
-                <h3>Detalles y Fotografía</h3>
-            </div>
-
-            <div class="campo">
-                <label for="descripcion">Descripción</label>
-                <textarea id="descripcion" formControlName="descripcion" rows="4"
-                    placeholder="Cuenta un poco sobre su carácter, historia..."></textarea>
-            </div>
-
-            <div class="campo">
-                <label for="foto">Foto de Portada (Opcional)</label>
-                <div class="file-upload-wrapper">
-                    <div class="file-upload-design">
-                        <i class="fa fa-cloud-upload"></i>
-                        <p>Haz clic para seleccionar una imagen</p>
-                        <span>Formatos aceptados: PNG, JPG, WEBP</span>
-                    </div>
-                    <input type="file" id="foto" class="file-input-oculto" (change)="onFileSeleccionada($event)"
-                        accept="image/png, image/jpeg, image/jpg, image/webp">
+            <div class="seccion-titulo"><i class="fa fa-heart"></i> <h3>Comportamiento y Estado</h3></div>
+            <div class="grid-3-col">
+                <div class="campo">
+                    <label>Estado</label>
+                    <select formControlName="estado">
+                        <option value="Disponible">Disponible</option>
+                        <option value="En Acogida">En Acogida</option>
+                        <option value="Reservado">Reservado</option>
+                    </select>
                 </div>
+                <div class="campo">
+                    <label>Nivel de Energía</label>
+                    <select formControlName="nivel_energia">
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+                <div class="campo">
+                    <label>Paciencia requerida</label>
+                    <select formControlName="nivel_paciencia">
+                        <option value="Baja">Baja</option>
+                        <option value="Media">Media</option>
+                        <option value="Alta">Alta</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 3: CHECKBOXES DE SOCIABILIDAD -->
+        <div class="form-seccion">
+            <div class="seccion-titulo"><i class="fa fa-medkit"></i> <h3>Salud y Sociabilidad</h3></div>
+            <div class="grid-checkboxes">
+                <label class="checkbox-container"><input type="checkbox" formControlName="apto_pisos"> Apto para pisos</label>
+                <label class="checkbox-container"><input type="checkbox" formControlName="sociable_ninos"> Sociable con niños</label>
+                <label class="checkbox-container"><input type="checkbox" formControlName="sociable_perros"> Sociable con perros</label>
+                <label class="checkbox-container"><input type="checkbox" formControlName="sociable_gatos"> Sociable con gatos</label>
+                <label class="checkbox-container"><input type="checkbox" formControlName="esterilizado"> Esterilizado</label>
+                <label class="checkbox-container"><input type="checkbox" formControlName="enfermedad_cronica"> Enfermedad crónica</label>
+                <label class="checkbox-container"><input type="checkbox" formControlName="es_para_principiantes"> Ideal principiantes</label>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 4: FOTO Y DESCRIPCIÓN -->
+        <div class="form-seccion">
+            <div class="seccion-titulo"><i class="fa fa-file-text"></i> <h3>Descripción y Foto</h3></div>
+            <div class="campo">
+                <label>Aviso Importante</label>
+                <input type="text" formControlName="aviso_importante" placeholder="Ej. Necesita medicación">
+            </div>
+            <div class="campo">
+                <label>Historia / Descripción</label>
+                <textarea formControlName="descripcion" rows="4"></textarea>
+            </div>
+            <div class="campo">
+                <label>Foto de Portada</label>
+                <input type="file" (change)="onFileSeleccionada($event)" accept="image/*" id="inputFoto">
+            
+            @if (fotoPreview) {
+                <div class="preview-container">
+                    <img [src]="fotoPreview" alt="Vista previa" class="img-preview">
+                    <button type="button" class="btn-quitar" (click)="fotoPreview = null; fotoSeleccionada = null">
+                        <i class="fa fa-times"></i> Quitar foto
+                    </button>
+                </div>
+            }
             </div>
         </div>
 
         <div class="acciones-finales">
             <button type="submit" class="btn-guardar" [disabled]="animalForm.invalid || cargando">
-                @if (cargando) {
-                <i class="fa fa-spinner fa-spin"></i> Guardando...
-                } @else {
-                <i class="fa fa-plus-circle"></i> Guardar Animal
-                }
+                <i class="fa" [class.fa-spinner]="cargando" [class.fa-spin]="cargando" [class.fa-plus-circle]="!cargando"></i>
+                {{ cargando ? 'Guardando...' : 'Guardar Nuevo Animal' }}
             </button>
         </div>
-
     </form>
 </div>

@@ -23,10 +23,16 @@
             </button>
 
             @if (isAdmin) {
-            <button class="btn-editar-admin" (click)="irAEditar()">
-                <i class="fa fa-pencil"></i> Editar Ficha del Animal
-            </button>
+                <div class="acciones-admin">
+                    <button class="btn-editar-admin" (click)="irAEditar()">
+                        <i class="fa fa-pencil"></i> Editar Ficha del Animal
+                    </button>
+                   <button class="btn-eliminar-admin" (click)="confirmarEliminar()">
+                        <i class="fa fa-trash"></i> Eliminar Animal
+                    </button>
+                </div>
             }
+
         </div>
 
         <div class="grid-perfil">
