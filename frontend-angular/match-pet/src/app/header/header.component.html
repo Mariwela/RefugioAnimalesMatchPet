@@ -92,6 +92,7 @@
         <!-- Notificaciones -->
         <!-- Notificaciones -->
         <!-- Añadimos (click) y position relative al contenedor -->
+        <!-- Notificaciones -->
         <div class="notification-wrapper action-link" (click)="toggleNotificaciones()">
 
           <i class="fa fa-bell icon-dark" [title]="mensajeNotificaciones"></i>
@@ -113,7 +114,9 @@
             <ul class="dropdown-notificaciones-list">
 
               @for (noti of listaNotificaciones; track noti.id) {
-              <li class="dropdown-notificaciones-item">
+              <!-- 👇 AQUÍ AÑADIMOS EL EVENTO CLICK Y EL CURSOR 👇 -->
+              <li class="dropdown-notificaciones-item" style="cursor: pointer;"
+                (click)="eliminarNotificacion(noti.id, $event)">
                 <i class="fa fa-info-circle"></i>
                 {{ noti.mensaje }}
               </li>

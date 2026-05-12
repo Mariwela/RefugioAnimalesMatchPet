@@ -22,6 +22,7 @@ export class HeaderComponent implements OnInit {
   mensajeNotificaciones: string = 'No tienes notificaciones nuevas.';
   listaNotificaciones: any[] = [];
   mostrarDropdown: boolean = false;
+
   constructor(
     public authService: AuthService,
     private router: Router,
@@ -41,6 +42,7 @@ export class HeaderComponent implements OnInit {
   toggleNotificaciones(): void {
     this.mostrarDropdown = !this.mostrarDropdown;
   }
+
   cargarAlertas(): void {
     this.notificacionService.getResumenNotificaciones().subscribe({
       next: (res) => {
@@ -63,6 +65,41 @@ export class HeaderComponent implements OnInit {
       error: (err) => console.error('Error notificaciones:', err)
     });
   }
+
+  // 👇 NUEVA FUNCIÓN PARA ELIMINAR LA NOTIFICACIÓN 👇
+  eliminarNotificacion(idNotificacion: number, event: Event): void {
+    // Evita que el clic cierre el dropdown
+    event.stopPropagation();
+
+    // Llama al servicio para marcarla como leída en el backend PHP
+    // Nota: Asegúrate de haber creado 'marcarComoLeida' en tu notificacion.ts
+    this.notificacionService.marcarComoLeida(idNotificacion).subscribe({
+      next: (res: any) => {
+        if (res.status === 'success') {
+
+          // Quitamos la notificación del array local
+          this.listaNotificaciones = this.listaNotificaciones.filter(
+            (noti) => noti.id !== idNotificacion
+          );
+
+          // Actualizamos el contador de notificaciones
+          if (this.totalNotificaciones > 0) {
+            this.totalNotificaciones--;
+          }
+
+          // Si llegamos a cero, actualizamos el mensaje
+          if (this.totalNotificaciones === 0) {
+            this.mensajeNotificaciones = 'No tienes notificaciones nuevas.';
+          }
+
+          // Forzamos la actualización de la vista
+          this.cdr.detectChanges();
+        }
+      },
+      error: (err: any) => console.error('Error al eliminar la notificación:', err)
+    });
+  }
+
   get nombreUsuario(): string {
     if (isPlatformBrowser(this.platformId)) {
       return localStorage.getItem('usuario_nombre') || 'Usuario';

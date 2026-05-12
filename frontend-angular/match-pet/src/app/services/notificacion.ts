@@ -1,13 +1,17 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/internal/Observable';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class Notificacion {
-  // Apuntamos exactamente al archivo que me mostraste en tu carpeta
+
+  // URL para obtener las notificaciones
   private url = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/notificaciones/notificaciones.php';
+
+  // URL para marcar como leída (Asegúrate de que este archivo exista en tu backend)
+  private urlMarcarLeida = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/notificaciones/marcar_leida.php';
 
   constructor(private http: HttpClient) { }
 
@@ -18,5 +22,16 @@ export class Notificacion {
     });
 
     return this.http.get<any>(this.url, { headers });
+  }
+
+
+  marcarComoLeida(idNotificacion: number): Observable<any> {
+    const token = localStorage.getItem('auth_token') || '';
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+
+    return this.http.post<any>(this.urlMarcarLeida, { id: idNotificacion }, { headers });
   }
 }
