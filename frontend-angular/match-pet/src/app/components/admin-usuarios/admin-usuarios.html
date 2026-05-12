@@ -1,0 +1,166 @@
+<div class="admin-page">
+ 
+  <header class="hero">
+    <span class="hero-tag">⚙️ Panel de administración</span>
+    <h1>Gestión de <span class="accent">Usuarios</span></h1>
+    <p>Consulta y filtra los colaboradores por su rol en el refugio.</p>
+  </header>
+ 
+  <div class="container">
+ 
+    <!-- Tarjetas resumen -->
+    <div class="stats-grid">
+      <div class="stat-card stat-card--gray">
+        <span class="stat-num">{{ totales.total }}</span>
+        <span class="stat-label">👥 Total colaboradores</span>
+      </div>
+      <div class="stat-card stat-card--blue">
+        <span class="stat-num">{{ totales.adoptantes }}</span>
+        <span class="stat-label">🏠 Adoptantes</span>
+      </div>
+      <div class="stat-card stat-card--green">
+        <span class="stat-num">{{ totales.voluntarios }}</span>
+        <span class="stat-label">🤝 Voluntarios</span>
+      </div>
+      <div class="stat-card stat-card--orange">
+        <span class="stat-num">{{ totales.acogida }}</span>
+        <span class="stat-label">🐾 Acogida</span>
+      </div>
+    </div>
+ 
+    <!-- Filtros -->
+    <div class="filtros-bar">
+      <div class="tabs-grupo">
+        @for (g of grupos; track g.key) {
+          <button
+            class="tab-grupo"
+            [class.active]="grupoActivo === g.key"
+            [attr.data-color]="g.color"
+            (click)="cambiarGrupo(g.key)">
+            {{ g.emoji }} {{ g.label }}
+            <span class="tab-count">{{ getTotalGrupo(g.key) }}</span>
+          </button>
+        }
+      </div>
+ 
+      <div class="search-box">
+        <i class="fa fa-search"></i>
+        <input
+          type="text"
+          [(ngModel)]="busqueda"
+          (ngModelChange)="onBusqueda()"
+          placeholder="Buscar por nombre o email...">
+        @if (busqueda) {
+          <button class="search-clear" (click)="busqueda = ''; cargarUsuarios()">✕</button>
+        }
+      </div>
+    </div>
+ 
+    <!-- Carga / error -->
+    @if (cargando) {
+      <div class="loading">
+        <div class="spinner"></div>
+        <span>Cargando usuarios...</span>
+      </div>
+    }
+ 
+    @if (mensajeError && !cargando) {
+      <div class="alert alert--error">❌ {{ mensajeError }}</div>
+    }
+ 
+    <!-- Lista -->
+    @if (!cargando && !mensajeError) {
+      @if (usuarios.length === 0) {
+        <div class="empty-state">
+          <span class="empty-icon">🔍</span>
+          <p>No se encontraron usuarios en este grupo.</p>
+        </div>
+      }
+ 
+      <div class="usuarios-grid">
+        @for (u of usuarios; track u.id_usuario) {
+          <div class="usuario-card">
+ 
+            <div class="card-header">
+              <img [src]="getUrlAvatar(u.avatar)" [alt]="u.nombre_completo" class="card-avatar">
+              <div class="card-info">
+                <h3 class="card-nombre">{{ u.nombre_completo }}</h3>
+                <span class="card-email">{{ u.email }}</span>
+              </div>
+            </div>
+ 
+            <div class="card-badges">
+              @for (badge of getBadgesUsuario(u); track badge.label) {
+                <span class="badge" [ngClass]="badge.clase">{{ badge.label }}</span>
+              }
+            </div>
+ 
+            <div class="card-meta">
+              @if (u.poblacion) {
+                <span class="meta-item">📍 {{ u.poblacion }}{{ u.provincia ? ', ' + u.provincia : '' }}</span>
+              }
+              @if (u.telefono) {
+                <span class="meta-item">📞 {{ u.telefono }}</span>
+              }
+              @if (u.es_acogida) {
+                <span class="meta-item">{{ getEstadoAcogida(u.disponibilidad_acogida) }}</span>
+              }
+              @if (u.es_voluntario && u.area_interes) {
+                <span class="meta-item">🎯 {{ u.area_interes }}</span>
+              }
+              @if (u.es_adoptante && u.pref_especie) {
+                <span class="meta-item">🐶 Prefiere: {{ u.pref_especie }}</span>
+              }
+            </div>
+ 
+            <div class="card-footer">
+              <span class="fecha-registro">
+                Desde {{ u.fecha_registro | date:'MMM yyyy' }}
+              </span>
+              <div class="card-actions">
+                <button class="btn-ver-perfil" (click)="verPerfil(u.id_usuario)">
+                  Ver perfil →
+                </button>
+                <button class="btn-eliminar" (click)="abrirConfirmacion(u)" title="Eliminar cuenta">
+                  🗑️
+                </button>
+              </div>
+            </div>
+ 
+          </div>
+        }
+      </div>
+    }
+ 
+  </div>
+</div>
+ 
+<!-- Modal de confirmación -->
+@if (usuarioAEliminar) {
+  <div class="modal-overlay" (click)="cerrarConfirmacion()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+ 
+      <div class="danger-icon">⚠️</div>
+      <h3>Eliminar cuenta</h3>
+      <p>
+        Vas a eliminar permanentemente la cuenta de
+        <strong>{{ usuarioAEliminar.nombre_completo }}</strong>.
+        Esta acción es <strong>irreversible</strong>.
+      </p>
+ 
+      @if (mensajeEliminacion) {
+        <div class="alert alert--error">❌ {{ mensajeEliminacion }}</div>
+      }
+ 
+      <div class="confirm-actions">
+        <button class="btn-cancel" (click)="cerrarConfirmacion()" [disabled]="eliminando">
+          Cancelar
+        </button>
+        <button class="btn-danger" (click)="confirmarEliminar()" [disabled]="eliminando">
+          {{ eliminando ? 'Eliminando...' : 'Eliminar definitivamente' }}
+        </button>
+      </div>
+ 
+    </div>
+  </div>
+}

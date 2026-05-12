@@ -21,6 +21,7 @@ import { Donar } from './pages/donar/donar';
 import { Acogida } from './components/acogida/acogida';
 import { Voluntariado } from './components/voluntariado/voluntariado';
 import { ComoAdoptarComponent } from './components/como-adoptar/como-adoptar';
+import { AdminUsuariosComponent } from './components/admin-usuarios/admin-usuarios';
 import { MatchpetComponent } from './components/matchpet/matchpet.component';
 
 // 👇 IMPORTACIÓN DE GUARDS 👇
@@ -55,6 +56,6 @@ export const routes: Routes = [
     { path: 'historias/publicar', component: PublicarHistoriasComponent, canActivate: [authGuard] },
     { path: 'editar-historia/:id', component: EditarHistoriasComponent, canActivate: [authGuard] },
     { path: 'matchpet', component: MatchpetComponent },
-
+    { path: 'admin-usuarios', component: AdminUsuariosComponent, canActivate: [adminGuard] },
     { path: '**', redirectTo: '' }
 ];
