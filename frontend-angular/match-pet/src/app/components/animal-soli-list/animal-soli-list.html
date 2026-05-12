@@ -28,7 +28,10 @@
                     <tr>
                         <th>ID</th>
                         <th>Animal</th>
+                        <!-- 👇 SOLO ADMIN VE EL ENCABEZADO DE SOLICITANTE 👇 -->
+                        @if (isAdmin) {
                         <th>Solicitante</th>
+                        }
                         <th>Fecha</th>
                         <th>Estado</th>
                         @if (isAdmin) {
@@ -50,6 +53,8 @@
                             </a>
                         </td>
 
+                        <!-- 👇 SOLO ADMIN VE LOS DATOS DEL SOLICITANTE 👇 -->
+                        @if (isAdmin) {
                         <td class="col-solicitante">
                             <div class="solicitante-info">
 
@@ -74,7 +79,8 @@
                                         (click)="toggleComentario(solicitud.id_solicitud)">
                                         <i class="fa"
                                             [ngClass]="comentarioAbiertoId === solicitud.id_solicitud ? 'fa-chevron-up' : 'fa-comment-dots'"></i>
-                                        {{ comentarioAbiertoId === solicitud.id_solicitud ? 'Ocultar' : 'Ver respuesta Admin' }}
+                                        {{ comentarioAbiertoId === solicitud.id_solicitud ? 'Ocultar' : 'Ver respuesta
+                                        Admin' }}
                                     </button>
 
                                     @if (comentarioAbiertoId === solicitud.id_solicitud) {
@@ -87,6 +93,7 @@
                                 }
                             </div>
                         </td>
+                        }
 
                         <td class="col-fecha">{{ solicitud.fecha_solicitud | date:'dd/MM/yyyy HH:mm' }}</td>
 
@@ -126,7 +133,8 @@
                     </tr>
                     } @empty {
                     <tr>
-                        <td [attr.colspan]="isAdmin ? 6 : 5" class="sin-registros">
+                        <!-- 👇 AJUSTAMOS EL COLSPAN A 4 PARA USUARIOS Y 6 PARA ADMIN 👇 -->
+                        <td [attr.colspan]="isAdmin ? 6 : 4" class="sin-registros">
                             <div class="empty-state">
                                 <i class="fa fa-inbox"></i>
                                 <p>No se encontraron solicitudes de adopción.</p>
