@@ -18,8 +18,8 @@ if (!empty($data['id_animal'])) {
         // 1. Si el usuario cambió el nombre, debemos actualizar la ruta de la foto 
         // para que no apunte a la carpeta vieja.
         if (!empty($data['nombre'])) {
-            $nombre_carpeta = strtolower(str_replace(' ', '_', $data['nombre']));
-            $data['foto_portada'] = $nombre_carpeta . "/1.jpg";
+            $base_path = dirname(__FILE__, 3) . '/public/img/animales/';
+            $data['foto_portada'] = $base_path . "/1.jpg";
         } else {
             // Si no envió nombre, eliminamos foto_portada del JSON para 
             // asegurarnos de que no se modifique por error.

@@ -165,7 +165,7 @@
                 <i class="fa fa-file-text-o"></i>
                 <h3>Descripción</h3>
             </div>
-            <div class="campo" style="margin-bottom: 1rem;">
+            <div class="campo">
                 <label>Aviso Importante</label>
                 <input type="text" formControlName="aviso_importante" class="input-aviso"
                     placeholder="Ej. Necesita licencia PPP o medicación especial">
@@ -188,6 +188,83 @@
             <i class="fa fa-exclamation-circle"></i> {{ mensajeError }}
         </div>
         }
+
+        <div class="form-seccion">
+        <div class="seccion-titulo">
+            <i class="fa fa-camera"></i>
+            <h3>Fotos</h3>
+        </div>
+
+        <!-- Portada actual -->
+<!-- Portada actual -->
+        <div class="campo">
+        <label>Foto de Portada actual</label>
+        @if (fotoPortadaUrl) {
+        <div class="preview-portada">
+            <img [src]="fotoPortadaUrl" alt="Portada" class="img-preview">
+        </div>
+        }
+        <label class="btn-secundario">
+            <i class="fa fa-upload"></i> Cambiar portada
+            <input type="file" accept="image/*" (change)="onNuevaPortada($event)" style="display:none">
+        </label>
+        @if (nuevaPortadaPreview) {
+            <div class="preview-item" style="margin-top:0.5rem">
+            <img [src]="nuevaPortadaPreview" alt="Nueva portada">
+            <button type="button" class="btn-quitar" (click)="nuevaPortada=null; nuevaPortadaPreview=null">
+                <i class="fa fa-times"></i>
+            </button>
+            </div>
+        }
+        </div>
+
+        <!-- Galería actual -->
+        <div class="campo">
+            <label>Galería actual</label>
+            @if (fotosGaleria.length === 0) {
+            <p class="text-muted">No hay fotos en la galería.</p>
+            }
+            <div class="preview-galeria">
+            @for (foto of fotosGaleria; track foto.id_foto) {
+                <div class="preview-item">
+                <img [src]="foto.url_completa" alt="Foto galería" class="img-preview">
+                <button type="button" class="btn-quitar" (click)="eliminarFotoExistente(foto)">
+                    <i class="fa fa-times"></i>
+                </button>
+                </div>
+            }
+            </div>
+        </div>
+
+        <!-- Añadir fotos nuevas -->
+        <div class="campo">
+            <label>Añadir fotos a la galería</label>
+            <label class="btn-secundario">
+            <i class="fa fa-plus"></i> Añadir fotos
+            <input type="file" accept="image/*" multiple (change)="onNuevasFotosGaleria($event)" style="display:none">
+            </label>
+           @if (nuevasFotosPreview.length > 0) {
+            <div class="preview-galeria" >
+                @for (preview of nuevasFotosPreview; track $index) {
+                <div class="preview-item">
+                    <img [src]="preview" alt="Nueva foto">
+                    <button type="button" class="btn-quitar" style="margin-top: 1rem;" (click)="quitarNuevaFotoGaleria($index)">
+                    <i class="fa fa-times"></i>
+                    </button>
+                </div>
+                }
+            </div>
+            }
+        </div>
+
+        <!-- Botón guardar fotos -->
+        <button type="button" class="btn-guardar" 
+            (click)="guardarFotos()" 
+            [disabled]="subiendoFotos || (!nuevaPortada && nuevasFotosGaleria.length === 0)">
+            <i class="fa" [class.fa-spinner]="subiendoFotos" [class.fa-spin]="subiendoFotos" [class.fa-upload]="!subiendoFotos"></i>
+            {{ subiendoFotos ? 'Subiendo...' : 'Guardar fotos' }}
+        </button>
+        </div>
 
         <div class="acciones-finales">
             <button type="button" class="btn-delete" (click)="eliminarAnimal()" [disabled]="guardando || borrando">

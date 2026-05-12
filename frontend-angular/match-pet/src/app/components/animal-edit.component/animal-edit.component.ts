@@ -5,12 +5,14 @@ import { AnimalService } from '../../services/animal';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 @Component({
   selector: 'app-animal-edit.component',
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './animal-edit.component.html',
   styleUrl: './animal-edit.component.css',
 })
+
 export class AnimalEditComponent implements OnInit {
   animalForm!: FormGroup;
   cargando: boolean = true;
@@ -21,6 +23,16 @@ export class AnimalEditComponent implements OnInit {
   notificacionVisible: boolean = true;
   idAnimal!: number;
   borrando: boolean = false;
+  fotosGaleria: any[] = [];
+  fotoPortadaUrl: string = '';
+  nuevaPortada: File | null = null;
+  nuevaPortadaPreview: string | null = null;
+  nuevasFotosGaleria: File[] = [];
+  nuevasFotosPreview: string[] = [];
+  subiendoFotos: boolean = false;
+
+  public baseImageUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/img/animales/';
+  
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -43,7 +55,7 @@ export class AnimalEditComponent implements OnInit {
       // Opcional: Lo expulsamos de vuelta a la lista tras 3 segundos
       setTimeout(() => this.router.navigate(['/animales']), 3000);
 
-      return; // ¡ESTO ES CLAVE! Detiene la función aquí mismo. No lee más código.
+      return;
     }
 
     // 2. Si pasa la barrera (es admin), entonces sí buscamos el ID y cargamos los datos
@@ -128,8 +140,9 @@ export class AnimalEditComponent implements OnInit {
 
             console.log('3. Datos traducidos, listos para el formulario:', animalData);
 
-            // Rellenamos el formulario
             this.animalForm.patchValue(animalData);
+            this.fotoPortadaUrl = animalData.foto_portada;
+            this.fotosGaleria = res.data.galeria || [];
             console.log('4. ¡Formulario rellenado con éxito!');
 
           } catch (error) {
@@ -226,5 +239,97 @@ export class AnimalEditComponent implements OnInit {
         console.error(err);
       }
     });
+  }
+
+  onNuevaPortada(event: any): void {
+    const file = event.target.files[0];
+    if (!file) return;
+    this.nuevaPortada = file;
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.nuevaPortadaPreview = e.target.result;
+      this.cdr.detectChanges();
+    };
+    reader.readAsDataURL(file);
+  }
+
+  onNuevasFotosGaleria(event: any): void {
+    const files: FileList = event.target.files;
+    if (!files) return;
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.nuevasFotosPreview.push(e.target.result);
+        this.nuevasFotosGaleria.push(file);
+        this.cdr.detectChanges();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  getFotoUrl(ruta: string): string {
+    if (!ruta) return this.baseImageUrl + 'default.jpg';
+    // Si ya viene con http, la devolvemos tal cual
+    if (ruta.startsWith('http')) return ruta;
+    return this.baseImageUrl + ruta;
+  }
+
+  quitarNuevaFotoGaleria(index: number): void {
+    this.nuevasFotosGaleria.splice(index, 1);
+    this.nuevasFotosPreview.splice(index, 1);
+  }
+
+  eliminarFotoExistente(foto: any): void {
+    if (!confirm('¿Eliminar esta foto?')) return;
+    this.animalService.eliminarFotoAnimal({ id_foto: foto.id_foto }).subscribe({
+      next: (res) => {
+        if (res.status === 'success') {
+          this.fotosGaleria = this.fotosGaleria.filter(f => f.id_foto !== foto.id_foto);
+          this.cdr.detectChanges();
+        } else {
+          this.mensajeError = 'Error al eliminar la foto';
+          this.notificacionFadeOut();
+        }
+      },
+      error: () => {
+        this.mensajeError = 'Error de conexión al eliminar';
+        this.notificacionFadeOut();
+      }
+    });
+  }
+
+  async guardarFotos(): Promise<void> {
+    if (!this.nuevaPortada && this.nuevasFotosGaleria.length === 0) return;
+
+    this.subiendoFotos = true;
+    this.cdr.detectChanges();
+
+    // Subir portada
+    if (this.nuevaPortada) {
+      const fd = new FormData();
+      fd.append('foto', this.nuevaPortada);
+      fd.append('id_animal', this.idAnimal.toString());
+      fd.append('es_portada', '1');
+      await this.animalService.subirFotoAnimal(fd).toPromise();
+      this.nuevaPortada = null;
+      this.nuevaPortadaPreview = null;
+    }
+
+    // Subir fotos de galería
+    for (const foto of this.nuevasFotosGaleria) {
+      const fd = new FormData();
+      fd.append('foto', foto);
+      fd.append('id_animal', this.idAnimal.toString());
+      fd.append('es_portada', '0');
+      await this.animalService.subirFotoAnimal(fd).toPromise();
+    }
+
+    this.nuevasFotosGaleria = [];
+    this.nuevasFotosPreview = [];
+    this.subiendoFotos = false;
+    this.mensajeExito = 'Fotos actualizadas correctamente';
+    this.notificacionFadeOut();
+
+    this.cargarDatosAnimal(this.idAnimal);
   }
 }

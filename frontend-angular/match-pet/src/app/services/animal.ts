@@ -182,4 +182,28 @@ export class AnimalService {
     // Petición GET enviando los parámetros (ejemplo: .../filtrar_animales.php?especie=Perro&pagina=2)
     return this.http.get(`${this.baseUrl}/filtrar_animales.php`, { params: params });
   }
+
+  subirFotoAnimal(formData: FormData): Observable<any> {
+    const token = localStorage.getItem('auth_token') || '';
+    const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
+    return this.http.post<any>(
+      `${this.baseUrl}/subir_foto_animal.php`,
+      formData,
+      { headers }
+    );
+  }
+
+  eliminarFotoAnimal(data: { id_foto?: number, id_animal?: number, es_portada?: number }): Observable<any> {
+    const token = localStorage.getItem('auth_token') || '';
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post<any>(
+      `${this.baseUrl}/eliminar_foto_animal.php`,
+      data,
+      { headers }
+    );
+  }
+
 }

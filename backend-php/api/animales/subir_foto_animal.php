@@ -29,12 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit;
             }
 
-       // Reemplaza la línea de iconv y nombre_carpeta por esta:
             $nombre_carpeta = strtolower(str_replace(' ', '_', $nombre_animal));      
             $base_path = dirname(__FILE__, 3) . '/public/img/animales/';
             $ruta_subcarpeta = $base_path . $nombre_carpeta . '/';
 
-            // Crear carpeta si no existe (Seguridad extra)
             if (!file_exists($ruta_subcarpeta)) {
                 if (!mkdir($ruta_subcarpeta, 0777, true)) {
                     echo json_encode(["status" => "error", "message" => "No se pudo crear la carpeta: $ruta_subcarpeta"]);

@@ -43,7 +43,7 @@ if (!empty($data['id_foto']) || !empty($data['es_portada'])) {
 
         // 3. ELIMINAR ARCHIVO FÍSICO
         if ($ruta_archivo && $ruta_archivo !== 'default.png') {
-            $ruta_completa = __DIR__ . "/../../public/img/animales/" . $ruta_archivo;
+            $ruta_completa = dirname(__FILE__, 3) . '/public/img/animales/' . $ruta_archivo;
             if (file_exists($ruta_completa)) {
                 unlink($ruta_completa);
             }

@@ -311,7 +311,7 @@
   color: #C85A2A;
 }
 
-/* BOTÓN GUARDAR (Ajustado de tu CSS) */
+/* BOTÓN GUARDAR */
 .btn-guardar {
   display: flex;
   align-items: center;
@@ -345,6 +345,111 @@
   cursor: not-allowed;
   box-shadow: none;
 }
+
+/* ─── Fotos ─────────────────────────── */
+.preview-galeria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 0.8rem;
+}
+
+.preview-item {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #D8EED8;
+  box-shadow: 0 2px 6px rgba(26, 58, 26, 0.08);
+}
+
+.preview-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.img-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-quitar {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(200, 90, 42, 0.85);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+  line-height: 1;
+  padding: 0;
+}
+
+.btn-quitar:hover {
+  background: #A84520;
+}
+
+.preview-portada {
+  width: 160px;
+  height: 160px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 2px solid #C8DFC8;
+  margin-top: 0.5rem;
+  box-shadow: 0 4px 10px rgba(26, 58, 26, 0.08);
+}
+
+.preview-portada img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-secundario {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: 1px solid #C8DFC8;
+  color: #4A6A4A;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  margin-top: 0.5rem;
+}
+
+.btn-secundario:hover {
+  background: #EAF5EA;
+  color: #C85A2A;
+}
+
+.btn-secundario + button {
+  margin-top: 1rem;
+}
+
+.text-muted {
+  font-size: 13px;
+  color: #8AAA8A;
+  font-style: italic;
+  margin: 0.3rem 0;
+}
+
 
 /* ─── Responsive ────────────────────── */
 @media (max-width: 640px) {
@@ -390,5 +495,17 @@
 
   .grid-checkboxes {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .preview-portada {
+    width: 120px;
+    height: 120px;
+  }
+
+  .preview-item {
+    width: 85px;
+    height: 85px;
   }
 }
