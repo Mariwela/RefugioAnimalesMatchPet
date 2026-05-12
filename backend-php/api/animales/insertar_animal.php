@@ -5,17 +5,17 @@ require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 requiere_rol('admin');
 
-// 'true' convierte el objeto en array
-$data = json_decode(file_get_contents("php://input"), true);
+$nombre = $_POST['nombre'] ?? null;
+$especie = $_POST['especie'] ?? null;
 
-if (!empty($data['nombre']) && !empty($data['especie'])) {
+if (!empty($nombre) && !empty($especie)) {
     try {
         $database = new Database();
         $db = $database->getConnection();
 
-        $nombre_animal = $data['nombre'];
-        $nombre_carpeta = strtolower(str_replace(' ', '_', $nombre_animal));
-        $ruta_portada = "default.jpg"; 
+        $nombre_carpeta = strtolower(str_replace(' ', '_', $nombre));
+        $ruta_portada = "default.jpg";
+        $microchip = (!empty($_POST['microchip'])) ? trim($_POST['microchip']) : null;
 
         $query = "INSERT INTO animales (
                     nombre, especie, raza, sexo, microchip, fecha_nacimiento, 
@@ -33,33 +33,36 @@ if (!empty($data['nombre']) && !empty($data['especie'])) {
 
         $stmt = $db->prepare($query);
 
-        $stmt->bindValue(':nombre', $data['nombre']);
-        $stmt->bindValue(':especie', $data['especie']);
-        $stmt->bindValue(':raza', $data['raza'] ?? null);
-        $stmt->bindValue(':sexo', $data['sexo'] ?? 'Macho');
-        $stmt->bindValue(':microchip', $data['microchip'] ?? null);
-        $stmt->bindValue(':fecha_nacimiento', $data['fecha_nacimiento'] ?? null);
-        $stmt->bindValue(':tamano', $data['tamano'] ?? 'Mediano');
-        $stmt->bindValue(':peso', $data['peso'] ?? null);
-        $stmt->bindValue(':descripcion', $data['descripcion'] ?? null);
-        $stmt->bindValue(':nivel_energia', $data['nivel_energia'] ?? 'Media');
-        $stmt->bindValue(':apto_pisos', isset($data['apto_pisos']) && $data['apto_pisos'] ? 1 : 0);
-        $stmt->bindValue(':sociable_ninos', isset($data['sociable_ninos']) && $data['sociable_ninos'] ? 1 : 0);
-        $stmt->bindValue(':sociable_perros', isset($data['sociable_perros']) && $data['sociable_perros'] ? 1 : 0);
-        $stmt->bindValue(':sociable_gatos', isset($data['sociable_gatos']) && $data['sociable_gatos'] ? 1 : 0);
-        $stmt->bindValue(':enfermedad_cronica', isset($data['enfermedad_cronica']) && $data['enfermedad_cronica'] ? 1 : 0);
-        $stmt->bindValue(':esterilizado', isset($data['esterilizado']) && $data['esterilizado'] ? 1 : 0);
-        $stmt->bindValue(':nivel_paciencia', $data['nivel_paciencia'] ?? 'Baja');
-        $stmt->bindValue(':es_para_principiantes', isset($data['es_para_principiantes']) && $data['es_para_principiantes'] ? 1 : 0);
-        $stmt->bindValue(':aviso_importante', $data['aviso_importante'] ?? null);
-        $stmt->bindValue(':estado', $data['estado'] ?? 'Disponible');
+        $stmt->bindValue(':nombre', $nombre);
+        $stmt->bindValue(':especie', $especie);
+        $stmt->bindValue(':raza', $_POST['raza'] ?? null);
+        $stmt->bindValue(':sexo', $_POST['sexo'] ?? 'Macho');
+        $stmt->bindValue(':microchip', $microchip, $microchip === null ? PDO::PARAM_NULL : PDO::PARAM_STR);
+        $stmt->bindValue(':fecha_nacimiento', $_POST['fecha_nacimiento'] ?? null);
+        $stmt->bindValue(':tamano', $_POST['tamano'] ?? 'Mediano');
+        $stmt->bindValue(':peso', $_POST['peso'] ?? null);
+        $stmt->bindValue(':descripcion', $_POST['descripcion'] ?? null);
+        $stmt->bindValue(':nivel_energia', $_POST['nivel_energia'] ?? 'Media');
+        
+        // Los booleanos llegan como '1' o '0' desde tu Angular
+        $stmt->bindValue(':apto_pisos', $_POST['apto_pisos'] == '1' ? 1 : 0);
+        $stmt->bindValue(':sociable_ninos', $_POST['sociable_ninos'] == '1' ? 1 : 0);
+        $stmt->bindValue(':sociable_perros', $_POST['sociable_perros'] == '1' ? 1 : 0);
+        $stmt->bindValue(':sociable_gatos', $_POST['sociable_gatos'] == '1' ? 1 : 0);
+        $stmt->bindValue(':enfermedad_cronica', $_POST['enfermedad_cronica'] == '1' ? 1 : 0);
+        $stmt->bindValue(':esterilizado', $_POST['esterilizado'] == '1' ? 1 : 0);
+        $stmt->bindValue(':nivel_paciencia', $_POST['nivel_paciencia'] ?? 'Baja');
+        $stmt->bindValue(':es_para_principiantes', $_POST['es_para_principiantes'] == '1' ? 1 : 0);
+        
+        $stmt->bindValue(':aviso_importante', $_POST['aviso_importante'] ?? null);
+        $stmt->bindValue(':estado', $_POST['estado'] ?? 'Disponible');
         $stmt->bindValue(':foto_portada', $ruta_portada);
 
         if($stmt->execute()) {
             $nuevo_id = $db->lastInsertId();
 
             // Crear carpeta física
-            $dir = "../../public/img/animales/" . $nombre_carpeta;
+            $dir = dirname(__FILE__, 3) . '/public/img/animales/' . $nombre_carpeta;
             if (!file_exists($dir)) {
                 mkdir($dir, 0777, true);
             }
@@ -67,11 +70,9 @@ if (!empty($data['nombre']) && !empty($data['especie'])) {
             // URL Dinámica para que Angular sepa qué mostrar (la default)
             $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
             $base_url = $protocol . "://" . $_SERVER['HTTP_HOST'];
-            $project_path = str_replace('/api/animales', '', dirname($_SERVER['SCRIPT_NAME']));
             
             // Si es default.jpg, la ruta es directa, si no, es dentro de la carpeta
-            $img_path = $base_url . $project_path . '/public/img/animales/' . $ruta_portada;
-
+            $img_path = $base_url . '/RefugioAnimalesMatchPet/public/img/animales/' . $ruta_portada;
             echo json_encode([
                 "status" => "success", 
                 "message" => "Animal creado con imagen por defecto", 
