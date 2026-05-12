@@ -1,356 +1,346 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap');
+ 
 :host {
-    --primary: #FF7E67;
-    --secondary: #2C3E50;
-    --bg-body: #f4f7f6;
-    --white: #ffffff;
-    --border: #e0e6ed;
-    --text-main: #444;
-    --text-muted: #888;
-    --shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+  display: block;
+  width: 100%;
 }
-
+ 
 .solicitudes-container {
-    max-width: 1200px;
-    margin: 40px auto;
-    padding: 0 20px;
-    font-family: 'Segoe UI', sans-serif;
+  font-family: 'DM Sans', sans-serif;
+  background: #F7FBF7;
+  min-height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
 }
-
-/* Cabecera */
+ 
+/* ─── Cabecera ──────────────────────── */
 .cabecera-seccion {
-    margin-bottom: 30px;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid #C8DFC8;
 }
-
+ 
 .cabecera-seccion h2 {
-    color: var(--secondary);
-    font-size: 2rem;
-    font-weight: 800;
-    margin: 0 0 5px 0;
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 600;
+  color: #1A3A1A;
+  margin: 0 0 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
-
+ 
 .cabecera-seccion h2 i {
-    color: var(--primary);
+  color: #7AB07A;
+  font-size: 22px;
 }
-
+ 
 .cabecera-seccion p {
-    color: var(--text-muted);
-    font-size: 1.1rem;
-    margin: 0;
+  font-size: 14px;
+  color: #4A6A4A;
+  margin: 0;
 }
-
-/* Estados (Carga / Error) */
+ 
+/* ─── Estados ───────────────────────── */
 .estado-box {
-    padding: 30px;
-    border-radius: 15px;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 4rem 0;
+  font-size: 14px;
+  text-align: center;
 }
-
-.estado-box i {
-    font-size: 2.5rem;
-}
-
-.estado-box.cargando {
-    background: var(--white);
-    color: var(--secondary);
-    box-shadow: var(--shadow);
-}
-
-.estado-box.cargando i {
-    color: var(--primary);
-}
-
-.estado-box.error {
-    background: #ffebee;
-    color: #c62828;
-    border: 1px solid #ffcdd2;
-}
-
-/* Contenedor de la Tabla */
+ 
+.estado-box i { font-size: 2rem; }
+.estado-box.cargando { color: #5A8060; }
+.estado-box.error { color: #C85A2A; }
+ 
+/* ─── Tarjeta tabla ─────────────────── */
 .tarjeta-tabla {
-    background: var(--white);
-    border-radius: 20px;
-    box-shadow: var(--shadow);
-    overflow: hidden;
-    /* Importante para que los bordes de la tabla se redondeen */
-    border: 1px solid rgba(0, 0, 0, 0.02);
+  background: #FFFFFF;
+  border: 1px solid #C8DFC8;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(26, 58, 26, 0.05);
+  overflow: hidden;
 }
-
+ 
 .table-responsive {
-    width: 100%;
-    overflow-x: auto;
-    /* Scroll horizontal en móviles */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
-
+ 
+/* ─── Tabla ─────────────────────────── */
 .tabla-solicitudes {
-    width: 100%;
-    border-collapse: collapse;
-    white-space: nowrap;
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
 }
-
-/* Encabezados */
+ 
+.tabla-solicitudes thead tr {
+  background: #ffebc7;
+  border-bottom: 1px solid #dfd8c8;
+}
+ 
 .tabla-solicitudes th {
-    background-color: #f8f9fa;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    padding: 18px 20px;
-    text-align: left;
-    border-bottom: 2px solid var(--border);
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 500;
+  color: #5A8060;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
-
-.tabla-solicitudes th.th-centro {
-    text-align: center;
+ 
+.th-centro {
+  text-align: center;
 }
-
-/* Filas y Celdas */
-.tabla-solicitudes td {
-    padding: 18px 20px;
-    color: var(--text-main);
-    border-bottom: 1px solid var(--border);
-    vertical-align: middle;
-}
-
+ 
 .tabla-solicitudes tbody tr {
-    transition: background-color 0.2s;
+  border-bottom: 1px solid #EAF5EA;
+  transition: background 0.12s;
 }
-
+ 
+.tabla-solicitudes tbody tr:last-child {
+  border-bottom: none;
+}
+ 
 .tabla-solicitudes tbody tr:hover {
-    background-color: #fafcfc;
+  background: #F9FDF9;
 }
-
-.tabla-solicitudes tbody tr:last-child td {
-    border-bottom: none;
+ 
+.tabla-solicitudes td {
+  padding: 12px 16px;
+  color: #1A3A1A;
+  vertical-align: middle;
 }
-
-/* Estilos específicos de columnas */
+ 
+/* ─── Columnas ──────────────────────── */
+.col-id { width: 60px; }
+.col-fecha { white-space: nowrap; color: #5A8060; }
+.col-acciones { text-align: center; }
+ 
 .id-badge {
-    background: var(--bg-body);
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--text-muted);
+  display: inline-block;
+  background: #EAF5EA;
+  color: #3B6B3B;
+  border: 1px solid #C8DFC8;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 20px;
 }
-
-.col-animal strong {
-    color: var(--secondary);
-    font-size: 1.05rem;
-}
-
+ 
+/* ─── Solicitante ───────────────────── */
 .solicitante-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 500;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
-
-.avatar-placeholder {
-    font-size: 1.5rem;
-    color: #bdc3c7;
-}
-
-.icono-comentario {
-    color: var(--primary);
-    cursor: help;
-    font-size: 1.1rem;
-}
-
-/* Badges de Estado */
-.badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.badge-pendiente {
-    background-color: #fff3cd;
-    color: #856404;
-}
-
-.badge-aprobada {
-    background-color: #d4edda;
-    color: #155724;
-}
-
-.badge-rechazada {
-    background-color: #f8d7da;
-    color: #721c24;
-}
-
-/* Botones de Acción (Admin) */
-.col-acciones {
-    text-align: center;
-}
-
-.botones-accion {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-}
-
-.btn-accion {
-    border: none;
-    padding: 8px 15px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.btn-aprobar {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-}
-
-.btn-aprobar:hover:not(:disabled) {
-    background-color: #4caf50;
-    color: white;
-}
-
-.btn-rechazar {
-    background-color: #ffebee;
-    color: #c62828;
-    padding: 8px 12px;
-    /* Un poco más pequeño que aprobar para jerarquía */
-}
-
-.btn-rechazar:hover:not(:disabled) {
-    background-color: #e53935;
-    color: white;
-}
-
-.btn-accion:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
-
-.texto-procesada {
-    color: var(--text-muted);
-    font-size: 0.9rem;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    background: var(--bg-body);
-    padding: 6px 12px;
-    border-radius: 8px;
-    display: inline-flex;
-}
-
-/* Estado Vacío (Sin resultados) */
-.empty-state {
-    padding: 50px 20px;
-    text-align: center;
-    color: var(--text-muted);
-}
-
-.empty-state i {
-    font-size: 3rem;
-    color: #dcdde1;
-    margin-bottom: 15px;
-}
-
-.empty-state p {
-    font-size: 1.1rem;
-    margin: 0;
-}
-
-/* ─── Ajustes para la columna del Solicitante ─── */
-.solicitante-info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    font-weight: 500;
-}
-
+ 
 .solicitante-header {
-    display: flex;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
-
+ 
+.avatar-placeholder {
+  color: #B0CFB0;
+  font-size: 18px;
+}
+ 
 .link-perfil {
-    text-decoration: none;
-    color: var(--secondary);
-    font-weight: 600;
-    transition: color 0.2s;
+  color: #3B6B3B;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.12s;
 }
-
+ 
 .link-perfil:hover {
-    color: var(--primary);
+  color: #C85A2A;
+  text-decoration: underline;
 }
-
-/* ─── Acordeón de Comentarios ─── */
+ 
+/* ─── Comentario admin ──────────────── */
 .comentario-wrapper {
-    margin-left: 34px;
-    /* Alineado con el texto, saltando el avatar */
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
 }
-
+ 
 .btn-toggle-comentario {
-    background: none;
-    border: none;
-    color: var(--text-muted);
-    cursor: pointer;
-    padding: 2px 0;
-    font-size: 0.8rem;
-    font-weight: 700;
-    font-family: inherit;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: none;
+  border: 1px solid #C8DFC8;
+  color: #5A8060;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  cursor: pointer;
+  width: fit-content;
+  transition: background 0.12s, color 0.12s;
 }
-
+ 
 .btn-toggle-comentario:hover {
-    color: var(--primary);
+  background: #EAF5EA;
+  color: #1A3A1A;
 }
-
+ 
 .comentario-caja {
-    margin-top: 8px;
-    font-size: 0.85rem;
-    background-color: var(--bg-body);
-    border-left: 3px solid var(--primary);
-    padding: 10px 12px;
-    border-radius: 0 8px 8px 0;
-    color: var(--text-main);
-    white-space: normal;
-    /* Permite que el texto baje de línea si es largo */
-    max-width: 250px;
-    line-height: 1.4;
-    animation: slideDown 0.3s ease-out;
+  background: #F4FAF4;
+  border: 1px solid #D8EED8;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 12.5px;
+  color: #4A6A4A;
+  line-height: 1.5;
 }
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+ 
+.comentario-caja strong {
+  color: #3B6B3B;
+}
+ 
+/* ─── Badges estado ─────────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+ 
+.badge-pendiente {
+  background: #FEF3E2;
+  color: #8B5A00;
+  border: 1px solid #E0C878;
+}
+ 
+.badge-aprobada {
+  background: #EAF5EA;
+  color: #3B6B3B;
+  border: 1px solid #B0CFB0;
+}
+ 
+.badge-rechazada {
+  background: #FBF0EA;
+  color: #C85A2A;
+  border: 1px solid #E8C4A8;
+}
+ 
+/* ─── Botones acción ────────────────── */
+.botones-accion {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+}
+ 
+.btn-accion {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+ 
+.btn-accion:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+ 
+.btn-aprobar {
+  background: #EAF5EA;
+  color: #3B6B3B;
+  border: 1px solid #B0CFB0;
+}
+ 
+.btn-aprobar:hover:not(:disabled) {
+  background: #C8EEC8;
+  border-color: #7AB07A;
+}
+ 
+.btn-rechazar {
+  background: #FBF0EA;
+  color: #C85A2A;
+  border: 1px solid #E8C4A8;
+}
+ 
+.btn-rechazar:hover:not(:disabled) {
+  background: #F5D5C0;
+  border-color: #C85A2A;
+}
+ 
+.texto-procesada {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #9AB89A;
+}
+ 
+/* ─── Empty state ───────────────────── */
+.sin-registros {
+  padding: 3rem !important;
+}
+ 
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.8rem;
+  color: #7AB07A;
+  text-align: center;
+}
+ 
+.empty-state i {
+  font-size: 2.5rem;
+  color: #B0CFB0;
+}
+ 
+.empty-state p {
+  font-size: 13.5px;
+  color: #4A6A4A;
+  margin: 0;
+}
+ 
+/* ─── Responsive ────────────────────── */
+@media (max-width: 768px) {
+  .solicitudes-container {
+    padding: 1rem;
+  }
+ 
+  .cabecera-seccion h2 {
+    font-size: 22px;
+  }
+ 
+  .tabla-solicitudes th,
+  .tabla-solicitudes td {
+    padding: 10px 12px;
+  }
+}
+ 
+@media (max-width: 500px) {
+  .tabla-solicitudes {
+    font-size: 12px;
+  }
+ 
+  .btn-accion {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
 }

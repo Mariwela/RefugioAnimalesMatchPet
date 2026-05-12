@@ -74,8 +74,7 @@
                                         (click)="toggleComentario(solicitud.id_solicitud)">
                                         <i class="fa"
                                             [ngClass]="comentarioAbiertoId === solicitud.id_solicitud ? 'fa-chevron-up' : 'fa-comment-dots'"></i>
-                                        {{ comentarioAbiertoId === solicitud.id_solicitud ? 'Ocultar' : 'Ver respuesta
-                                        Admin' }}
+                                        {{ comentarioAbiertoId === solicitud.id_solicitud ? 'Ocultar' : 'Ver respuesta Admin' }}
                                     </button>
 
                                     @if (comentarioAbiertoId === solicitud.id_solicitud) {
