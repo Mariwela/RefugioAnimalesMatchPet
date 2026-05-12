@@ -16,6 +16,7 @@ export class ModerarHistoriasComponent implements OnInit {
 
   todasHistorias: HistoriaModel[] = [];
   historiasFiltradas: HistoriaModel[] = [];
+  historiaSeleccionada: HistoriaModel | null = null;
   filtroActivo: string = 'todas';
   cargando: boolean = true;
   error: string = '';
@@ -108,5 +109,13 @@ export class ModerarHistoriasComponent implements OnInit {
       },
       error: () => alert('Error al eliminar la historia.')
     });
-  }  
+  }
+
+  abrirPreview(historia: HistoriaModel): void {
+    this.historiaSeleccionada = historia;
+  }
+
+  cerrarPreview(): void {
+    this.historiaSeleccionada = null;
+  }
 }
