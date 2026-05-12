@@ -54,25 +54,7 @@
                         <i class="far fa-calendar-alt"></i> {{ historia.fecha | date:'dd MMM, yyyy' }}
                     </span>
                 </div>
-
                 <p class="resumen-texto">{{ historia.contenido }}</p>
-
-                <!-- AQUÍ ES DONDE AGREGAMOS EL BOTÓN DE EDITAR -->
-                @if (authService.isLoggedIn() && (esAdmin || historia.id_usuario === usuarioActualId)) {
-                <footer class="pie-tarjeta" style="display: flex; gap: 10px; align-items: center;">
-
-                    <!-- NUEVO BOTÓN: Editar (Pasa los datos por el [state]) -->
-                    <button [routerLink]="['/editar-historia', historia.id_historia]"
-                        [state]="{ historiaData: historia }" class="btn-editar" title="Editar historia">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
-
-                    <!-- TU BOTÓN ACTUAL: Eliminar -->
-                    <button (click)="eliminarHistoria(historia)" class="btn-borrar" title="Eliminar historia">
-                        <i class="fas fa-trash-alt"></i> Eliminar
-                    </button>
-                </footer>
-                }
             </div>
         </article>
         } @empty {
