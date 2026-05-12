@@ -40,7 +40,10 @@
                     'etiqueta-perro':   animal.especie === 'Perro',
                     'etiqueta-gato':    animal.especie === 'Gato',
                     'etiqueta-otro':    animal.especie === 'Otro'
-                }">{{ animal.especie }}</span>                
+                }">{{ animal.especie }}</span> 
+                <p><strong>Raza:</strong> {{ animal.raza }}</p>
+                <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
+                <p><strong>Tamaño:</strong> {{ animal.tamano }}</p>               
 
                 <div class="acciones-tarjeta">
                     <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
