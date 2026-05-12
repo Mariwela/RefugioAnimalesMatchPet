@@ -11,26 +11,26 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // 1. Contar solicitudes para el resumen
+    // 1. Contar SOLO las solicitudes finalizadas que NO se han leído (notificacion_leida = 0)
     $stmtSol = $db->prepare("SELECT COUNT(*) as total FROM solicitudes 
-                             WHERE id_usuario = :id_u AND estado_solicitud != 'Pendiente'");
+                             WHERE id_usuario = :id_u 
+                             AND estado_solicitud != 'Pendiente' 
+                             AND notificacion_leida = 0");
     $stmtSol->execute([':id_u' => $id_u]);
     $resSol = $stmtSol->fetch(PDO::FETCH_ASSOC);
     $solicitudesActualizadas = $resSol ? (int)$resSol['total'] : 0;
 
-    // 2. Historias totales
+    // 2. Historias totales (Esto lo dejamos igual)
     $stmtHist = $db->prepare("SELECT COUNT(*) as total FROM historias_adopcion WHERE id_usuario = :id_u");
     $stmtHist->execute([':id_u' => $id_u]);
     $resHist = $stmtHist->fetch(PDO::FETCH_ASSOC);
     $historiasTotales = $resHist ? (int)$resHist['total'] : 0;
 
-    // --- NUEVO: 3. Obtener los detalles de las solicitudes para la lista ---
-    // (Asegúrate de que 'id_solicitud' o 'id' sea el nombre correcto de tu clave primaria)
-   // ... tu código PHP ...
-    
-    // TIENES QUE TENER ESTA CONSULTA QUE TRAE LOS DETALLES
+    // 3. Obtener los detalles SOLO de las no leídas
     $stmtDetalles = $db->prepare("SELECT id_solicitud, estado_solicitud FROM solicitudes 
-                                  WHERE id_usuario = :id_u AND estado_solicitud != 'Pendiente' 
+                                  WHERE id_usuario = :id_u 
+                                  AND estado_solicitud != 'Pendiente' 
+                                  AND notificacion_leida = 0 
                                   ORDER BY id_solicitud DESC LIMIT 10");
     $stmtDetalles->execute([':id_u' => $id_u]);
     $listaSolicitudes = $stmtDetalles->fetchAll(PDO::FETCH_ASSOC);
@@ -50,7 +50,7 @@ try {
             "solicitudes_finalizadas" => $solicitudesActualizadas,
             "historias_publicadas" => $historiasTotales
         ],
-        "notificaciones_detalle" => $notificacionesArray, // <--- ¡ESTO ES VITAL!
+        "notificaciones_detalle" => $notificacionesArray,
         "mensaje_global" => "Tienes " . ($solicitudesActualizadas) . " actualizaciones."
     ]);
 
