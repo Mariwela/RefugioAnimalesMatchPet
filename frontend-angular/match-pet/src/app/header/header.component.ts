@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, ChangeDetectorRef, HostListener } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../services/auth';
 import { Notificacion } from '../services/notificacion';
@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit {
   totalNotificaciones: number = 0;
   mensajeNotificaciones: string = 'No tienes notificaciones nuevas.';
   listaNotificaciones: any[] = [];
-  mostrarDropdown: boolean = false;
+  menuAbierto: string | null = null;
 
   constructor(
     public authService: AuthService,
@@ -37,10 +37,6 @@ export class HeaderComponent implements OnInit {
         this.cargarAlertas();
       }
     }
-  }
-
-  toggleNotificaciones(): void {
-    this.mostrarDropdown = !this.mostrarDropdown;
   }
 
   cargarAlertas(): void {
@@ -116,6 +112,17 @@ export class HeaderComponent implements OnInit {
       }
     }
     return `${this.URL_BASE_AVATARS}default_avarar.PNG`;
+  }
+
+  toggleMenu(menu: string, event: Event): void {
+    event.stopPropagation();
+    this.menuAbierto = this.menuAbierto === menu ? null : menu;
+  }
+
+  @HostListener('document:click')
+  cerrarMenus(): void {
+    this.menuAbierto = null;
+    this.cdr.detectChanges();
   }
 
   cerrarSesion() {

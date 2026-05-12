@@ -1,156 +1,121 @@
 <header class="main-header">
-  <div class="container">
+  <div class="header-inner">
 
-    <!-- ── Logo ── -->
-    <div class="logo-container">
-      <a routerLink="/" class="brand-logo">
-        <span class="logo-icon">🐾</span>
-        <span class="logo-match">Match</span><span class="logo-pet">Pet</span>
-      </a>
-    </div>
+    <!-- LOGO -->
+    <a routerLink="/" class="logo">
+      <div class="logo-paws">
+        <span class="paw-left">🐾</span>
+      </div>
+      <div class="logo-text">
+        <span class="logo-match">Match</span>
+        <span class="logo-pet">Pet</span>
+      </div>
+    </a>
 
-    <!-- ── Navegación principal ── -->
+    <!-- NAV PRINCIPAL -->
     <nav class="main-nav">
       <ul>
-
         <li>
-          <a routerLink="/animales" routerLinkActive="active">
-            Adopta
-          </a>
+          <a routerLink="/animales" routerLinkActive="active">Adopta</a>
         </li>
         <li>
-          <a routerLink="/historias/moderar" routerLinkActive="active">
-            Moderar Historias
-          </a>
+          <a routerLink="/como-adoptar" routerLinkActive="active">Cómo adoptar</a>
         </li>
-
-        <!-- Cómo ayudar -->
         <li class="dropdown">
-          <a href="javascript:void(0)">
-            Ayúdanos
+          <a href="javascript:void(0)" (click)="toggleMenu('ayudanos', $event)">
+            Ayúdanos <i class="fa fa-chevron-down"></i>
           </a>
-
-          <ul class="dropdown-menu">
-            <li>
-              <a routerLink="/donar" routerLinkActive="active">
-                Dona
-              </a>
-            </li>
-            <li>
-              <a routerLink="/acogida" routerLinkActive="active">
-                Acoge
-              </a>
-            </li>
-            <li>
-              <a routerLink="/voluntariado" routerLinkActive="active">
-                Voluntario
-              </a>
-            </li>
-          </ul>
+          @if (menuAbierto === 'ayudanos') {
+            <ul class="dropdown-menu">
+              <li><a routerLink="/donar" routerLinkActive="active"><i class="fa fa-heart"></i> Donar</a></li>
+              <li><a routerLink="/acogida" routerLinkActive="active"><i class="fa fa-home"></i> Acoger</a></li>
+              <li><a routerLink="/voluntariado" routerLinkActive="active"><i class="fa fa-hands-helping"></i> Voluntariado</a></li>
+            </ul>
+          }
         </li>
 
         <li>
-          <a routerLink="/historias" routerLinkActive="active">
-            Historias de Adopción
-          </a>
+          <a routerLink="/historias" routerLinkActive="active">Historias</a>
         </li>
 
+        <!-- Admin -->
+        @if (authService.isAdmin()) {
+          <li class="dropdown">
+            <a href="javascript:void(0)" (click)="toggleMenu('admin', $event)" class="admin-toggle">
+              <i class="fa fa-shield"></i> Admin <i class="fa fa-chevron-down"></i>
+            </a>
+            @if (menuAbierto === 'admin') {
+              <ul class="dropdown-menu">
+                <li><a routerLink="/historias/moderar" routerLinkActive="active"><i class="fa fa-newspaper-o"></i> Moderar historias</a></li>
+                <li><a routerLink="/admin-usuarios" routerLinkActive="active"><i class="fa fa-users"></i> Usuarios</a></li>
+              </ul>
+            }
+          </li>
+        }
       </ul>
     </nav>
 
-    <!-- ── Acciones usuario ── -->
+    <!-- ACCIONES USUARIO -->
     <div class="user-actions">
 
-      <!-- Usuario NO logeado -->
       @if (!authService.isLoggedIn()) {
-
-      <div class="auth-buttons">
-        <a routerLink="/login" class="btn-login">
-          Entrar
-        </a>
-      </div>
-
+        <a routerLink="/login" class="btn-entrar">Entrar</a>
       }
 
-      <!-- Usuario logeado -->
       @else {
+        <div class="user-icons">
 
-      <div class="user-icons">
-
-        <!-- Favoritos -->
-        <a routerLink="/mis-favoritos" routerLinkActive="active" class="action-link" title="Mis Favoritos">
-          <i class="fa fa-heart icon-salmon"></i>
-          <span class="action-text">Favoritos</span>
-        </a>
-
-        <!-- Solicitudes -->
-        <a routerLink="/mis-solicitudes" routerLinkActive="active" class="action-link" title="Mis Solicitudes">
-          <i class="fa fa-list-alt icon-dark"></i>
-          <span class="action-text">Solicitudes</span>
-        </a>
-
-        <!-- Notificaciones -->
-        <!-- Notificaciones -->
-        <!-- Añadimos (click) y position relative al contenedor -->
-        <!-- Notificaciones -->
-        <div class="notification-wrapper action-link" (click)="toggleNotificaciones()">
-
-          <i class="fa fa-bell icon-dark" [title]="mensajeNotificaciones"></i>
-          <span class="action-text">Notificaciones</span>
-
-          @if (totalNotificaciones > 0) {
-          <span class="badge-notificacion">
-            {{ totalNotificaciones }}
-          </span>
-          }
-
-          @if (mostrarDropdown) {
-          <div class="dropdown-notificaciones" (click)="$event.stopPropagation()">
-
-            <div class="dropdown-notificaciones-header">
-              Notificaciones
-            </div>
-
-            <ul class="dropdown-notificaciones-list">
-
-              @for (noti of listaNotificaciones; track noti.id) {
-              <!-- 👇 AQUÍ AÑADIMOS EL EVENTO CLICK Y EL CURSOR 👇 -->
-              <li class="dropdown-notificaciones-item" style="cursor: pointer;"
-                (click)="eliminarNotificacion(noti.id, $event)">
-                <i class="fa fa-info-circle"></i>
-                {{ noti.mensaje }}
-              </li>
-              } @empty {
-              <li class="dropdown-notificaciones-empty">
-                No hay notificaciones recientes.
-              </li>
-              }
-
-            </ul>
-          </div>
-          }
-        </div>
-        <!-- Perfil usuario -->
-        <div class="user-profile">
-
-          <a [routerLink]="['/perfil']" class="profile-link"
-            style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; cursor: pointer;"
-            title="Ir a mi perfil">
-            <span class="user-greeting">
-              Hola, {{ nombreUsuario }}
-            </span>
-
-            <img [src]="urlAvatar" [alt]="nombreUsuario" class="avatar">
+          <!-- Favoritos -->
+          <a routerLink="/mis-favoritos" routerLinkActive="active" class="icon-link" title="Mis Favoritos">
+            <i class="fa fa-heart"></i>
+            <span>Favoritos</span>
           </a>
 
-          <button (click)="cerrarSesion()" class="btn-logout" title="Cerrar sesión" style="margin-left: 10px;">
+          <!-- Solicitudes -->
+          <a routerLink="/mis-solicitudes" routerLinkActive="active" class="icon-link" title="Mis Solicitudes">
+            <i class="fa fa-list-alt"></i>
+            <span>Solicitudes</span>
+          </a>
+
+          <!-- Notificaciones -->
+          <div class="icon-link notif-wrapper" (click)="toggleMenu('notif', $event)">
+            <div class="notif-icon-container">
+              <i class="fa fa-bell"></i>
+              @if (totalNotificaciones > 0) {
+                <span class="badge-notif">{{ totalNotificaciones }}</span>
+              }
+            </div>
+            <span>Alertas</span>
+
+            @if (menuAbierto === 'notif') {
+              <div class="notif-dropdown" (click)="$event.stopPropagation()">
+                <div class="notif-dropdown-header">Notificaciones</div>
+                <ul>
+                  @for (noti of listaNotificaciones; track noti.id) {
+                    <li (click)="eliminarNotificacion(noti.id, $event)">
+                      <i class="fa fa-info-circle"></i> {{ noti.mensaje }}
+                    </li>
+                  } @empty {
+                    <li class="notif-empty">No hay notificaciones nuevas.</li>
+                  }
+                </ul>
+              </div>
+            }
+          </div>
+
+          <!-- Avatar + nombre -->
+          <a [routerLink]="['/perfil']" class="user-profile" title="Mi perfil">
+            <img [src]="urlAvatar" [alt]="nombreUsuario" class="avatar">
+            <span class="user-name">{{ nombreUsuario }}</span>
+          </a>
+
+          <!-- Salir -->
+          <button (click)="cerrarSesion()" class="btn-salir" title="Cerrar sesión">
             <i class="fa fa-sign-out"></i>
-            Salir
+            <span>Salir</span>
           </button>
+
         </div>
-
-      </div>
-
       }
 
     </div>
