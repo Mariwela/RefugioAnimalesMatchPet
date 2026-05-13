@@ -73,7 +73,19 @@
                 }">{{ animal.especie }}</span>
                 <p><strong>Raza:</strong> {{ animal.raza }}</p>
                 <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
-                <p><strong>Energía:</strong> {{ animal.nivel_energia }}</p>
+                <p class="dato-energia">
+                    <strong>Energía:</strong>
+                    <span class="etiqueta-energia" [ngClass]="{
+        'energia-baja': animal.nivel_energia === 'Baja',
+        'energia-media': animal.nivel_energia === 'Media',
+        'energia-alta': animal.nivel_energia === 'Alta'
+    }">
+                        @if (animal.nivel_energia === 'Baja') { 🔋 Baja }
+                        @if (animal.nivel_energia === 'Media') { ⚡ Media }
+                        @if (animal.nivel_energia === 'Alta') { 🔥 Alta }
+                        @if (!animal.nivel_energia) { Desconocida }
+                    </span>
+                </p>
 
                 <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
             </div>

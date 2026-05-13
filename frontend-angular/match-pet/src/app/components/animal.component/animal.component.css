@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap');
- 
+
 :host {
   display: block;
   width: 100%;
 }
- 
+
 .contenedor-animales {
   font-family: 'DM Sans', sans-serif;
   background: #F7FBF7;
@@ -13,7 +13,7 @@
   margin: 0 auto;
   padding: 1.5rem;
 }
- 
+
 /* ─── Título ────────────────────────── */
 .contenedor-animales h2 {
   font-family: 'Playfair Display', serif;
@@ -22,7 +22,7 @@
   color: #1A3A1A;
   margin: 0 0 1.2rem;
 }
- 
+
 /* ─── Barra filtros ─────────────────── */
 .barra-filtros {
   display: flex;
@@ -32,7 +32,7 @@
   padding-bottom: 1.2rem;
   border-bottom: 1px solid #C8DFC8;
 }
- 
+
 .filtro-grupo select {
   padding: 9px 14px;
   border: 1px solid #D8EED8;
@@ -49,13 +49,13 @@
   background-repeat: no-repeat;
   background-position: right 12px center;
 }
- 
+
 .filtro-grupo select:focus {
   outline: none;
   border-color: #7AB07A;
   box-shadow: 0 0 0 3px rgba(122, 176, 122, 0.1);
 }
- 
+
 /* ─── Estados carga/error ───────────── */
 .mensaje-carga {
   display: flex;
@@ -65,11 +65,11 @@
   font-size: 14px;
   color: #5A8060;
 }
- 
+
 .mensaje-carga i {
   margin-right: 8px;
 }
- 
+
 .mensaje-error {
   background: #FBF0EA;
   border: 1px solid #E8C4A8;
@@ -79,7 +79,7 @@
   color: #C85A2A;
   margin-bottom: 1rem;
 }
- 
+
 /* ─── Grid animales ─────────────────── */
 .grid-animales {
   display: grid;
@@ -87,7 +87,7 @@
   gap: 1.2rem;
   margin-bottom: 1.5rem;
 }
- 
+
 /* ─── Tarjeta animal ────────────────── */
 .tarjeta-animal {
   background: #FFFFFF;
@@ -100,13 +100,13 @@
   box-shadow: 0 4px 12px rgba(26, 58, 26, 0.05);
   transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
 }
- 
+
 .tarjeta-animal:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(26, 58, 26, 0.1);
   border-color: #7AB07A;
 }
- 
+
 .foto-animal {
   width: 100%;
   height: 190px;
@@ -115,11 +115,11 @@
   transition: transform 0.3s;
   flex-shrink: 0;
 }
- 
+
 .tarjeta-animal:hover .foto-animal {
   transform: scale(1.04);
 }
- 
+
 /* ─── Botón favorito ────────────────── */
 .btn-favorito {
   position: absolute;
@@ -138,14 +138,14 @@
   font-size: 16px;
   transition: transform 0.15s, background 0.15s;
   backdrop-filter: blur(4px);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
- 
+
 .btn-favorito:hover {
   transform: scale(1.15);
   background: #fff;
 }
- 
+
 /* ─── Info animal ───────────────────── */
 .info-animal {
   padding: 1rem 1.1rem;
@@ -154,7 +154,7 @@
   gap: 4px;
   flex: 1;
 }
- 
+
 .info-animal h3 {
   font-family: 'Playfair Display', serif;
   font-size: 17px;
@@ -162,7 +162,7 @@
   color: #1A3A1A;
   margin: 0 0 4px;
 }
- 
+
 /* ─── Etiquetas por especie ─────────── */
 .etiqueta {
   display: inline-flex;
@@ -192,19 +192,19 @@
   color: #a82255;
   border: 1px solid #C8DFC8;
 }
- 
+
 .info-animal p {
   font-size: 13px;
   color: #4A6A4A;
   margin: 0;
   line-height: 1.5;
 }
- 
+
 .info-animal p strong {
   color: #3B6B3B;
   font-weight: 500;
 }
- 
+
 .btn-adoptar {
   width: 100%;
   background: #C85A2A;
@@ -221,12 +221,12 @@
   transition: background 0.15s, transform 0.1s;
   box-shadow: 0 3px 8px rgba(200, 90, 42, 0.2);
 }
- 
+
 .btn-adoptar:hover {
   background: #A84520;
   transform: translateY(-1px);
 }
- 
+
 /* ─── Sin resultados ────────────────── */
 .sin-resultados {
   display: flex;
@@ -237,18 +237,18 @@
   text-align: center;
   gap: 0.8rem;
 }
- 
+
 .sin-resultados i {
   font-size: 3rem;
   color: #B0CFB0;
 }
- 
+
 .sin-resultados p {
   font-size: 14px;
   color: #4A6A4A;
   margin: 0;
 }
- 
+
 .btn-limpiar {
   display: inline-flex;
   align-items: center;
@@ -263,12 +263,12 @@
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 }
- 
+
 .btn-limpiar:hover {
   background: #EAF5EA;
   color: #1A3A1A;
 }
- 
+
 /* ─── Paginación ────────────────────── */
 .paginacion {
   display: flex;
@@ -278,13 +278,13 @@
   padding-top: 1rem;
   border-top: 1px solid #C8DFC8;
 }
- 
+
 .paginacion span {
   font-size: 13px;
   color: #5A8060;
   font-weight: 500;
 }
- 
+
 .paginacion button {
   display: inline-flex;
   align-items: center;
@@ -300,53 +300,93 @@
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
 }
- 
+
 .paginacion button:hover:not(:disabled) {
   background: #EAF5EA;
   color: #1A3A1A;
   border-color: #7AB07A;
 }
- 
+
 .paginacion button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
- 
+
 /* ─── Responsive ────────────────────── */
 @media (max-width: 768px) {
   .barra-filtros {
     gap: 8px;
   }
- 
+
   .filtro-grupo select {
     font-size: 12px;
     padding: 8px 28px 8px 12px;
   }
 }
- 
+
 @media (max-width: 640px) {
   .contenedor-animales {
     padding: 1rem;
   }
- 
+
   .contenedor-animales h2 {
     font-size: 22px;
   }
- 
+
   .grid-animales {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 0.8rem;
   }
- 
+
   .foto-animal {
     height: 150px;
   }
- 
+
   .barra-filtros {
     flex-direction: column;
   }
- 
+
   .filtro-grupo select {
     width: 100%;
   }
+}
+
+/* ─── Etiquetas de Energía ─────────────────── */
+.dato-energia {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 5px;
+}
+
+.etiqueta-energia {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* Color para Energía Baja (Verde relajado) */
+.energia-baja {
+  background-color: #EAF5EA;
+  color: #2E7D32;
+  border: 1px solid #A5D6A7;
+}
+
+/* Color para Energía Media (Naranja vibrante) */
+.energia-media {
+  background-color: #FFF4E5;
+  color: #E65100;
+  border: 1px solid #FFCC80;
+}
+
+/* Color para Energía Alta (Rojo intenso) */
+.energia-alta {
+  background-color: #FFEBEE;
+  color: #C62828;
+  border: 1px solid #EF9A9A;
 }
