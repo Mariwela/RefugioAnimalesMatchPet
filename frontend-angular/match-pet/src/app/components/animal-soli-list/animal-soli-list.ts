@@ -101,6 +101,7 @@ export class AnimalSoliList implements OnInit {
       });
     }
   }
+  
   toggleComentario(id: number): void {
     if (this.comentarioAbiertoId === id) {
       this.comentarioAbiertoId = null; // Si ya estaba abierto, lo cerramos
