@@ -1,8 +1,5 @@
 USE matchpet_db;
 
--- ======================================================
--- ANIMALES, FOTOS y SALUD
--- ======================================================
 INSERT INTO animales (nombre, especie, raza, sexo, fecha_nacimiento, tamano, peso, descripcion, nivel_energia, apto_pisos, sociable_ninos, sociable_perros, sociable_gatos, enfermedad_cronica, esterilizado, estado, foto_portada)
 VALUES ('Oliver', 'Gato', 'Común europeo', 'Macho', '2025-05-01', 'Pequeño', NULL, 'Oliver fue rescatado de la calle junto a sus hermanitos. A pesar de su difícil comienzo, es increíblemente cariñoso, juguetón y sociable. Le encanta el contacto humano, los mimos y hacer compañía. Está sano, desparasitado y listo para comenzar una nueva vida en un hogar donde lo quieran de verdad. Si estás buscando un compañero fiel y tierno, ¡él está esperando por ti!', 'Alta', 1, 1, NULL, NULL, 0, 1, 'Disponible', 'fotos/oliver/1.jpg');
 SET @id_animal = LAST_INSERT_ID();
@@ -3062,23 +3059,16 @@ VALUES (@id_animal, 'fotos/nika/2.jpg', 0);
 INSERT INTO animal_fotos (id_animal, ruta_foto, es_principal)
 VALUES (@id_animal, 'fotos/nika/3.jpg', 0);
 
-
--- MICROCHIP (Mínimo 2 meses de edad) --
--- Para Perros (Prefijo 981)
 UPDATE animales 
 SET microchip = CONCAT('981', LPAD(id_animal, 12, '0'))
 WHERE especie = 'Perro' 
   AND TIMESTAMPDIFF(MONTH, fecha_nacimiento, CURDATE()) >= 2;
 
--- Para Gatos (Prefijo 900)
 UPDATE animales 
 SET microchip = CONCAT('900', LPAD(id_animal, 12, '0'))
 WHERE especie = 'Gato' 
   AND TIMESTAMPDIFF(MONTH, fecha_nacimiento, CURDATE()) >= 2;
 
-
--- INTERPRETACION SEMÁNTICA POR IA--
--- Nivel paciencia, Principiantes y AVISO 
 UPDATE animales SET nivel_paciencia = 'Alta', es_para_principiantes = FALSE, aviso_importante = 'Rescatada de criadero. Presenta estereotipias (movimientos circulares). Requiere un hogar muy tranquilo y rutina estable.' WHERE nombre IN ('Barbie', 'Diva');
 UPDATE animales SET nivel_paciencia = 'Alta', es_para_principiantes = FALSE, aviso_importante = 'Cachorro con miedos profundos. Es obligatorio que conviva con otro perro sociable que le sirva de guía y apoyo.' WHERE nombre = 'Porthos';
 UPDATE animales SET nivel_paciencia = 'Alta', es_para_principiantes = FALSE, aviso_importante = 'Animal con miedos o timidez extrema hacia los humanos. Requiere protocolo de adaptación lento y mucha calma.' WHERE nombre IN ('Lima', 'Gaia', 'Brownie', 'Dori', 'Perla');
@@ -3157,20 +3147,16 @@ UPDATE animales SET nivel_paciencia = 'Alta',  es_para_principiantes = 0, aviso_
 UPDATE animales SET nivel_paciencia = 'Muy Alta', es_para_principiantes = 0, aviso_importante = 'TRAUMA SEVERO. Tiene terror al ser humano y no permite la manipulación. Adopción solo para expertos en rehabilitación o santuarios.' WHERE nombre = 'Valkiria';
 UPDATE animales SET nivel_paciencia = 'Alta',     es_para_principiantes = 0, aviso_importante = 'EX-CRIADERO. No sabe pasear con correa ni hacer sus necesidades fuera. Necesita aprender a vivir en libertad.' WHERE nombre = 'Nika';
 
--- Historial Médico: Casos Crónicos y Especiales, Cachorros y Sanos
-/* Casos de Leishmaniosis (Tratamiento Crónico) */
 INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, estado)
 SELECT id_animal, 'Tratamiento', 'Protocolo Leishmaniosis', 'Control de enfermedad crónica. Requiere Alopurinol (oral) 2 veces al día. Analítica de control cada 6 meses.', '2026-03-01', 'Completado'
 FROM animales 
 WHERE nombre IN ('Mateo', 'Chocolate', 'Yuca', 'Beto', 'Bruji', 'Brio', 'Nala', 'Súper', 'Eme');
 
-/* Enfermedades Infecciosas / Garrapatas (Tratamiento) */
 INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, estado)
 SELECT id_animal, 'Tratamiento', 'Tratamiento Ehrlichia/Anaplasma', 'Protocolo de antibióticos (Doxiciclina) para tratar enfermedad transmitida por garrapatas detectada en test.', '2026-03-10', 'Completado'
 FROM animales 
 WHERE nombre IN ('Maya', 'Lena', 'Fenix', 'Ara', 'Hugo', 'Zaira');
 
-/* Secuelas Físicas, Movilidad e Incontinencia */
 INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, estado)
 SELECT id_animal, 'Revisión', 'Seguimiento de Lesión Medular', 'Control de incontinencia urinaria y fecal derivada de traumatismo antiguo en columna. Requiere higiene constante.', '2026-02-15', 'Completado'
 FROM animales WHERE nombre = 'Leo';
@@ -3179,30 +3165,24 @@ INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, 
 SELECT id_animal, 'Revisión', 'Seguimiento Ocular (Tuerto/a)', 'Control de cavidad ocular tras enucleación quirúrgica por traumatismo previo.', '2026-01-20', 'Completado'
 FROM animales WHERE nombre IN ('Mauri', 'Nerea');
 
-/* Casos Geriátricos y Demencia Senil */
 INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, estado)
 SELECT id_animal, 'Revisión', 'Evaluación Geriátrica Completa', 'Seguimiento de cataratas, demencia senil y artrosis. Requiere entorno adaptado y paseos cortos.', '2026-03-05', 'Completado'
 FROM animales WHERE nombre IN ('Gitana', 'Bruce', 'Martin', 'Romina');
 
-/* Salud Mental y Secuelas Psicológicas Graves */
--- Aunque no es una "enfermedad física", en el historial médico es crucial registrar el tratamiento etológico.
 INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, estado)
 SELECT id_animal, 'Tratamiento', 'Terapia de Rehabilitación Etológica', 'Tratamiento por trauma severo, estereotipias (Barbie) o pánico humano (Brownie). Requiere pautas específicas de manejo.', '2026-02-28', 'Completado'
 FROM animales WHERE nombre IN ('Brownie', 'Barbie', 'Valkiria', 'Punky', 'Mía', 'Galo', 'Sleepy', 'Manchitas');
 
-/* Protocolo Especial para Casos de Criadero (Nika, Harry, Lena) */
 INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, estado)
 SELECT id_animal, 'Revisión', 'Chequeo Post-Rescate Criadero', 'Evaluación de soplos cardíacos, salud dental y atrofia muscular por confinamiento prolongado.', '2026-03-15', 'Completado'
 FROM animales WHERE nombre IN ('Nika', 'Harry', 'Lena');
 
-/* Otros Casos con enfermedad_cronica = 1 (Genéricos) */
 INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, estado)
 SELECT id_animal, 'Revisión', 'Seguimiento Médico Periódico', 'Paciente catalogado con patología crónica. Control de constantes y estado general.', '2026-03-20', 'Completado'
 FROM animales 
 WHERE nombre IN ('Leia', 'Aria', 'Noel', 'Pipo', 'Manolo', 'Zafiro', 'Chendo') 
 AND NOT EXISTS (SELECT 1 FROM salud_historial WHERE id_animal = animales.id_animal AND titulo = 'Seguimiento Médico Periódico');
 
-/* Protocolo de Vacunación y Desparasitación (Cachorros y Sanos) */
 INSERT INTO salud_historial (id_animal, evento, titulo, detalles, fecha_evento, estado)
 SELECT id_animal, 'Vacuna', 'Protocolo Inicial Completo', 'Administración de vacunas (Polivalente/Triple Felina) y desparasitación interna.', '2026-03-25', 'Completado'
 FROM animales 
@@ -3214,7 +3194,6 @@ UPDATE salud_historial SET id_usuario = (SELECT id_usuario FROM usuarios WHERE r
 UPDATE animal_fotos SET ruta_foto = REPLACE(ruta_foto, 'fotos/', '') WHERE ruta_foto LIKE 'fotos/%';
 UPDATE animales SET foto_portada = REPLACE(foto_portada, 'fotos/', '') WHERE foto_portada LIKE 'fotos/%';
 
--- 1. Crear 8 Usuarios para evitar el error de clave foránea
 INSERT INTO usuarios (nombre_completo, email, password, rol) VALUES 
 ('Carlos Martínez', 'carlos@ejemplo.com', 'pass123', 'colaborador'),
 ('Laura Gómez', 'laura@ejemplo.com', 'pass123', 'colaborador'),
@@ -3225,7 +3204,6 @@ INSERT INTO usuarios (nombre_completo, email, password, rol) VALUES
 ('Pedro Jiménez', 'pedro@ejemplo.com', 'pass123', 'colaborador'),
 ('Usuario Prueba', 'prueba@ejemplo.com', 'pass123', 'colaborador');
 
--- 2. Crear 8 Animales para las historias
 INSERT INTO animales (nombre, especie, sexo, estado) VALUES 
 ('Kira', 'Perro', 'Hembra', 'Adoptado'),
 ('Toby', 'Perro', 'Macho', 'Adoptado'),
@@ -3236,11 +3214,9 @@ INSERT INTO animales (nombre, especie, sexo, estado) VALUES
 ('Bagheera', 'Gato', 'Hembra', 'Adoptado'),
 ('Firulais', 'Perro', 'Desconocido', 'Adoptado');
 
--- 3. Insertar las 8 historias SOLO con las fotos indicadas
 INSERT INTO historias_adopcion 
     (id_usuario, id_animal, titulo, contenido, imagen_url, estado, comentario_admin) 
 VALUES 
-    -- Imagen 8
     (1, 1, 
     'De la calle al sofá', 
     'Kira llegó a casa muy asustadiza. El proceso de adaptación fue lento; tuvimos que enseñarle que los humanos también pueden dar caricias. Hoy, tres meses después, por fin ha aprendido a jugar con la pelota.', 
@@ -3248,7 +3224,6 @@ VALUES
     'Aprobada', 
     'Historia destacada para nuestras redes sociales. ¡Gran trabajo de rehabilitación!'),
 
-    -- Imagen 9
     (2, 2, 
     'Un torbellino de energía', 
     'Adoptar a este pequeño cachorro ha puesto nuestra rutina patas arriba, ¡pero en el buen sentido! Está en plena fase de morderlo todo, pero sus siestas en nuestro regazo lo compensan. Estamos yendo a un educador y va genial.', 
@@ -3256,7 +3231,6 @@ VALUES
     'Pendiente', 
     NULL),
 
-    -- Imagen 10
     (3, 3, 
     'Paciencia, ronroneos y amor', 
     'Nos dijeron que Salem era un gato "invisible" del refugio porque siempre se escondía de las visitas. Decidimos darle la oportunidad. Tardó dos semanas en salir de debajo del mueble, pero hoy nos ha despertado con un concierto de ronroneos.', 
@@ -3264,7 +3238,6 @@ VALUES
     'Aprobada', 
     '¡Qué emocionante! Salem necesitaba exactamente una familia comprensiva como la vuestra.'),
 
-    -- Imagen 11
     (4, 4, 
     'Mejor en pareja', 
     'No podíamos separar a estos dos hermanos. Sabíamos que adoptar dos perros de golpe era un reto, pero verlos jugar juntos y darse calor al dormir nos confirma que tomamos la decisión correcta. Son inseparables.', 
@@ -3272,7 +3245,6 @@ VALUES
     'Aprobada', 
     NULL),
 
-    -- Imagen 12
     (5, 5, 
     'Saltos de alegría en el jardín', 
     'Nunca habíamos tenido un conejo antes, pero Tambor nos ha sorprendido por lo listo que es. Ya sabe usar su esquinero y le encanta dar carreras por el pasillo cuando le abrimos su parque. Es un glotón con las zanahorias.', 
@@ -3280,7 +3252,6 @@ VALUES
     'Pendiente', 
     NULL),
 
-    -- Imagen 13
     (6, 6, 
     'La vida después de las carreras', 
     'Adoptar a un galgo rescatado es conocer lo que es la nobleza pura. Al principio no sabía lo que era subir unas escaleras ni pasear por la ciudad, pero confía ciegamente en nosotros. Ahora su pasatiempo favorito es dormir 18 horas al día en el sofá.', 
@@ -3288,7 +3259,6 @@ VALUES
     'Aprobada', 
     'Los galgos son mágicos. Nos alegra saber que por fin conoce lo que es una cama de verdad.'),
 
-    -- Imagen 16
     (7, 7, 
     'Mi pequeña pantera', 
     'Adopté a este gato negro porque me enteré de que son los menos adoptados por culpa de supersticiones absurdas. Es el animal más charlatán y cariñoso que he conocido. Me sigue a todas partes por la casa como si fuera un perrito.', 
@@ -3296,7 +3266,6 @@ VALUES
     'Aprobada', 
     '¡Totalmente cierto! Rompiendo mitos gracias a familias como la tuya.'),
 
-    -- Imagen 23
     (8, 8, 
     'Prueba de adopción (Rechazar esta historia)', 
     'Esta es una historia de prueba para ver si funciona el sistema. El perrito es muy bonito y bla bla bla. Insertando texto de relleno para probar el límite de caracteres del formulario de la web.', 

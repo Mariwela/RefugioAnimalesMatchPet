@@ -2,7 +2,6 @@ DROP DATABASE IF EXISTS matchpet_db;
 CREATE DATABASE matchpet_db;
 USE matchpet_db;
 
--- 1. Usuarios
 CREATE TABLE IF NOT EXISTS usuarios (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre_completo VARCHAR(100) NOT NULL,
@@ -31,8 +30,6 @@ CREATE TABLE IF NOT EXISTS usuarios (
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
--- 2. Animales
 CREATE TABLE IF NOT EXISTS animales (
     id_animal INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(50) NOT NULL,
@@ -62,8 +59,6 @@ CREATE TABLE IF NOT EXISTS animales (
     fecha_entrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
--- 3. Animales fotos
 CREATE TABLE IF NOT EXISTS animal_fotos (
     id_foto INT AUTO_INCREMENT PRIMARY KEY,
     id_animal INT NOT NULL,
@@ -73,8 +68,6 @@ CREATE TABLE IF NOT EXISTS animal_fotos (
     FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-
--- 4. Historial de Salud
 CREATE TABLE IF NOT EXISTS salud_historial (
     id_libro INT AUTO_INCREMENT PRIMARY KEY,
     id_animal INT NOT NULL,
@@ -92,8 +85,6 @@ CREATE TABLE IF NOT EXISTS salud_historial (
         FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
--- 5. Solicitudes de Adopción
 CREATE TABLE IF NOT EXISTS solicitudes (
     id_solicitud INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
@@ -112,7 +103,6 @@ CREATE TABLE IF NOT EXISTS solicitudes (
         FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 6. Historias de adopción
 CREATE TABLE IF NOT EXISTS historias_adopcion (
     id_historia INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT,
@@ -129,7 +119,6 @@ CREATE TABLE IF NOT EXISTS historias_adopcion (
     FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 7. Favoritos
 CREATE TABLE IF NOT EXISTS favoritos (
     id_usuario INT NOT NULL,
     id_animal INT NOT NULL,
@@ -144,5 +133,4 @@ CREATE TABLE IF NOT EXISTS favoritos (
         FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Ahora sí (cuando ya existe la tabla)
 INSERT INTO favoritos (id_usuario, id_animal) VALUES (1, 1);
