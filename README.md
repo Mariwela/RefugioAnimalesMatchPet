@@ -78,7 +78,7 @@ RefugioAnimalesMatchPet/
 │   │   └── scraper.py           # Web scraper original de datos
 │   ├── public/                  # Imágenes subidas (avatares, fotos animales, historias)
 │   ├── install.php              # Instalador web guiado
-│   └── .htaccess                # Reescritura de URLs para Apache
+│   └── importar_datos.php       # Importa datos guiado
 │
 └── frontend-angular/
     └── match-pet/
