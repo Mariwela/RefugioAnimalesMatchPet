@@ -15,6 +15,10 @@ export interface PreguntaMatchPet {
     icono: string;
     tipoPregunta: 'rango' | 'energia' | 'booleano';
     opciones?: { label: string; valor: any }[];
+    /** Si es false, no aparece el botón "No tengo preferencia" y la respuesta es obligatoria */
+    sinPreferencia?: false;
+    /** Si es true, no se muestra el slider de importancia (preguntas de contexto puro) */
+    soloContexto?: true;
 }
 
 export interface Pesos {
@@ -138,6 +142,9 @@ export class MatchpetComponent implements OnInit {
     resultados: ResultadoAnimal[] = [];
     error: string | null = null;
 
+    /** Registra qué prefKeys ha tocado el usuario en esta sesión del wizard */
+    preguntasTocadas = new Set<string>();
+
     private apiUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api';
 
     // ────────────────────────────────────────────
@@ -189,7 +196,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 3 – Niños
+        // 3 – Niños (obligatoria, sin opción "no tengo preferencia")
         {
             key: 'sociable_ninos',
             prefKey: 'sociable_ninos',
@@ -197,6 +204,7 @@ export class MatchpetComponent implements OnInit {
             descripcion: 'Algunos animales se adaptan mejor a convivencias frecuentes con niños.',
             icono: '👶',
             tipoPregunta: 'booleano',
+            sinPreferencia: false,
             opciones: [
                 { label: '🏠 Sí, viven en casa', valor: 'casa' },
                 { label: '🎈 Sí, pero vienen de visita', valor: 'visita' },
@@ -204,7 +212,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 4 – Perros en casa
+        // 4 – Perros en casa (obligatoria, sin preferencia, sin slider)
         {
             key: 'sociable_perros',
             prefKey: 'tiene_perros',
@@ -212,6 +220,8 @@ export class MatchpetComponent implements OnInit {
             descripcion: '',
             icono: '🐕',
             tipoPregunta: 'booleano',
+            sinPreferencia: false,
+            soloContexto: true,
             opciones: [
                 { label: '✅ Sí', valor: true },
                 { label: '❌ No', valor: false },
@@ -226,13 +236,14 @@ export class MatchpetComponent implements OnInit {
             descripcion: '',
             icono: '🐶',
             tipoPregunta: 'booleano',
+            sinPreferencia: false,
             opciones: [
                 { label: '✅ Sí', valor: true },
                 { label: '❌ No', valor: false },
             ],
         },
 
-        // 6 – Gatos en casa
+        // 6 – Gatos en casa (obligatoria, sin preferencia, sin slider)
         {
             key: 'sociable_gatos',
             prefKey: 'tiene_gatos',
@@ -240,6 +251,8 @@ export class MatchpetComponent implements OnInit {
             descripcion: '',
             icono: '🐈',
             tipoPregunta: 'booleano',
+            sinPreferencia: false,
+            soloContexto: true,
             opciones: [
                 { label: '✅ Sí', valor: true },
                 { label: '❌ No', valor: false },
@@ -254,6 +267,7 @@ export class MatchpetComponent implements OnInit {
             descripcion: '',
             icono: '🐱',
             tipoPregunta: 'booleano',
+            sinPreferencia: false,
             opciones: [
                 { label: '✅ Sí', valor: true },
                 { label: '❌ No', valor: false },
@@ -274,7 +288,7 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 9 – Experiencia ← NUEVA
+        // 9 – Experiencia ← NUEVA (obligatoria)
         {
             key: 'experiencia',
             prefKey: 'tiene_experiencia',
@@ -282,13 +296,14 @@ export class MatchpetComponent implements OnInit {
             descripcion: 'Algunos animales necesitan un adoptante experimentado que sepa leer su lenguaje.',
             icono: '🎓',
             tipoPregunta: 'booleano',
+            sinPreferencia: false,
             opciones: [
                 { label: '🐾 Sí, llevo años con animales', valor: true },
                 { label: '🌱 Soy nuevo en esto', valor: false },
             ],
         },
 
-        // 10 – Paciencia ← NUEVA
+        // 10 – Paciencia ← NUEVA (obligatoria)
         {
             key: 'paciencia',
             prefKey: 'tiene_paciencia',
@@ -296,6 +311,7 @@ export class MatchpetComponent implements OnInit {
             descripcion: 'Algunos animales con traumas o malos hábitos necesitan mucho tiempo y constancia.',
             icono: '🧘',
             tipoPregunta: 'booleano',
+            sinPreferencia: false,
             opciones: [
                 { label: '🚀 Quiero resultados rápidos', valor: 'Baja' },
                 { label: '🙂 Soy bastante paciente', valor: 'Alta' },
@@ -331,6 +347,7 @@ export class MatchpetComponent implements OnInit {
     seleccionarPreferencia(valor: any): void {
         const prefKey = this.preguntaActual.prefKey;
         (this.preferencias as any)[prefKey] = valor;
+        this.preguntasTocadas.add(prefKey);
     }
 
     get preferenciaActual(): any {
@@ -412,6 +429,7 @@ export class MatchpetComponent implements OnInit {
         };
         this.resultados = [];
         this.error = null;
+        this.preguntasTocadas.clear();
     }
 
     // ─── Llamada al backend ────────────────────
@@ -490,7 +508,14 @@ export class MatchpetComponent implements OnInit {
     }
 
     get puedeAvanzar(): boolean {
-        return this.preferenciaActual !== undefined;
+        const prefKey = this.preguntaActual.prefKey;
+        // El usuario debe haber interactuado con esta pregunta concreta
+        if (!this.preguntasTocadas.has(prefKey)) return false;
+        // En preguntas obligatorias, null no es válido (no se puede pulsar "sin preferencia")
+        if (this.preguntaActual.sinPreferencia === false) {
+            return (this.preferencias as any)[prefKey] !== null;
+        }
+        return true;
     }
 
     getImageUrl(foto: string): string {

@@ -88,17 +88,22 @@
                     </div>
                 }
 
-                <!-- Opción "No tengo preferencia" (se oculta en preguntas de vivienda y exterior) -->
-                @if (preguntaActual.prefKey !== 'tipo_vivienda' && preguntaActual.prefKey !== 'acceso_exterior') {
+                <!-- Opción "No tengo preferencia" — solo en preguntas que lo permiten -->
+                @if (preguntaActual.sinPreferencia !== false &&
+                     preguntaActual.prefKey !== 'tipo_vivienda' &&
+                     preguntaActual.prefKey !== 'acceso_exterior') {
                     <button class="mp-opcion-btn mp-opcion-skip"
-                        [class.selected]="preferenciaActual === null"
+                        [class.selected]="preferenciaActual === null && preguntasTocadas.has(preguntaActual.prefKey)"
                         (click)="seleccionarPreferencia(null)">
                         🤷 No tengo preferencia
                     </button>
                 }
 
-                <!-- Slider de importancia -->
-                @if (preferenciaActual !== null && preguntaActual.prefKey !== 'tipo_vivienda') {
+                <!-- Slider de importancia — se oculta en preguntas de contexto puro -->
+                @if (!preguntaActual.soloContexto &&
+                     preferenciaActual !== null &&
+                     preferenciaActual !== undefined &&
+                     preguntaActual.prefKey !== 'tipo_vivienda') {
                     <div class="mp-importancia">
                         <label class="mp-importancia-label">
                             @if (preguntaActual.prefKey === 'acceso_exterior') {
