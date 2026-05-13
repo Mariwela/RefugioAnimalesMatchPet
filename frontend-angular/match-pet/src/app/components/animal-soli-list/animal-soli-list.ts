@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common'; // Importante para usar DatePipe
 import { AnimalService } from '../../services/animal'; // ¡Ajusta esta ruta a donde esté tu servicio!
 import { AuthService } from '../../services/auth';
 import { RouterLink } from '@angular/router';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-animal-soli-list',
@@ -76,32 +77,40 @@ export class AnimalSoliList implements OnInit {
   }
   // Nueva función exclusiva para la validación completa
   aprobarAdopcion(solicitud: any): void {
-    const confirmacion = confirm(`¿Estás seguro de aprobar la adopción de ${solicitud.nombre_animal} para este usuario?\n\n⚠️ IMPORTANTE: Esto marcará al animal como adoptado y rechazará automáticamente las demás solicitudes pendientes.`);
-
-    if (confirmacion) {
+  Swal.fire({
+    title: '¿Estás seguro?',
+    text: `¿Deseas aprobar la adopción de ${solicitud.nombre_animal}? Esto rechazará automáticamente las demás solicitudes pendientes.`,
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#c3552b', // Color naranja de tu app
+    cancelButtonColor: '#6c757d',
+    confirmButtonText: 'Sí, aprobar',
+    cancelButtonText: 'Cancelar',
+    didOpen: (popup) => {
+      popup.style.borderRadius = '20px'; // Esto aplica el redondeado sin errores de TS
+    }
+  }).then((result) => {
+    if (result.isConfirmed) {
       this.procesandoId = solicitud.id_solicitud;
-
-      this.animalService.validarAdopcion(solicitud.id_solicitud, solicitud.id_animal).subscribe({
+      this.animalService.validarAdopcion(solicitud.id_solicitud, solicitud.id_animal).subscribe({ 
         next: (response) => {
           if (response.status === 'success') {
-            alert(`✅ ${response.message}`);
-            // RECARGAMOS LA LISTA COMPLETA
-            // Esto es vital porque otras solicitudes en pantalla acaban de pasar a "Rechazada" en la BD
+            Swal.fire('¡Aprobado!', response.message, 'success');
             this.cargarSolicitudes();
           } else {
-            alert(`❌ Error: ${response.message}`);
+            Swal.fire('Error', response.message, 'error');
           }
           this.procesandoId = null;
         },
-        error: (error) => {
-          console.error(error);
-          alert('❌ Error al procesar la adopción en el servidor.');
+        error: () => {
+          Swal.fire('Error', 'Ocurrió un error en el servidor', 'error');
           this.procesandoId = null;
         }
       });
     }
-  }
-  
+  });
+}
+
   toggleComentario(id: number): void {
     if (this.comentarioAbiertoId === id) {
       this.comentarioAbiertoId = null; // Si ya estaba abierto, lo cerramos
