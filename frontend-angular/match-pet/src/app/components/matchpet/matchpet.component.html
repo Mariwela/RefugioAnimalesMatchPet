@@ -1,4 +1,3 @@
-
 <div class="matchpet-wrapper">
 
     <header class="mp-header">
@@ -7,244 +6,229 @@
     </header>
 
     @if (error) {
-        <div class="mp-error">
-            <span>⚠️ {{ error }}</span>
-            <button (click)="reiniciar()">Volver a empezar</button>
-        </div>
+    <div class="mp-error">
+        <span>⚠️ {{ error }}</span>
+        <button (click)="reiniciar()">Volver a empezar</button>
+    </div>
     }
 
- 
+
     @if (pasoActual === 'especie') {
-        <section class="mp-step step-especie">
+    <section class="mp-step step-especie">
 
-            <h2 class="mp-step-title">¿Qué tipo de animal estás buscando?</h2>
-            <p class="mp-step-sub">Puedes abrir el match a todos o elegir tu preferido.</p>
+        <h2 class="mp-step-title">¿Qué tipo de animal estás buscando?</h2>
+        <p class="mp-step-sub">Puedes abrir el match a todos o elegir tu preferido.</p>
 
-            <div class="mp-especie-cards">
+        <div class="mp-especie-cards">
 
-                <button class="mp-especie-card" (click)="seleccionarEspecie(null)">
-                    <span class="mp-especie-emoji">🐾</span>
-                    <span class="mp-especie-label">Cualquier animal</span>
-                    <span class="mp-especie-desc">Quiero ver todas las opciones</span>
-                </button>
+            <button class="mp-especie-card" (click)="seleccionarEspecie(null)">
+                <span class="mp-especie-emoji">🐾</span>
+                <span class="mp-especie-label">Cualquier animal</span>
+                <span class="mp-especie-desc">Quiero ver todas las opciones</span>
+            </button>
 
-                <button class="mp-especie-card" (click)="seleccionarEspecie('Perro')">
-                    <span class="mp-especie-emoji">🐕</span>
-                    <span class="mp-especie-label">Perro</span>
-                    <span class="mp-especie-desc">Solo quiero ver perros</span>
-                </button>
+            <button class="mp-especie-card" (click)="seleccionarEspecie('Perro')">
+                <span class="mp-especie-emoji">🐕</span>
+                <span class="mp-especie-label">Perro</span>
+                <span class="mp-especie-desc">Solo quiero ver perros</span>
+            </button>
 
-                <button class="mp-especie-card" (click)="seleccionarEspecie('Gato')">
-                    <span class="mp-especie-emoji">🐈</span>
-                    <span class="mp-especie-label">Gato</span>
-                    <span class="mp-especie-desc">Solo quiero ver gatos</span>
-                </button>
+            <button class="mp-especie-card" (click)="seleccionarEspecie('Gato')">
+                <span class="mp-especie-emoji">🐈</span>
+                <span class="mp-especie-label">Gato</span>
+                <span class="mp-especie-desc">Solo quiero ver gatos</span>
+            </button>
 
-            </div>
-        </section>
+        </div>
+    </section>
     }
 
     @if (pasoActual.startsWith('pregunta')) {
-        <section class="mp-step step-pregunta">
+    <section class="mp-step step-pregunta">
 
-            <div class="mp-progress-bar">
-                <div class="mp-progress-fill"
-                    [style.width.%]="((indicePregunta + 1) / totalPreguntas) * 100">
+        <div class="mp-progress-bar">
+            <div class="mp-progress-fill" [style.width.%]="((indicePregunta + 1) / totalPreguntas) * 100">
+            </div>
+        </div>
+        <p class="mp-progress-text">
+            Pregunta {{ indicePregunta + 1 }} de {{ totalPreguntas }}
+        </p>
+
+        <div class="mp-pregunta-card">
+            <span class="mp-pregunta-icono">{{ preguntaActual.icono }}</span>
+            <h2 class="mp-pregunta-titulo">{{ preguntaActual.titulo }}</h2>
+            <p class="mp-pregunta-desc">{{ preguntaActual.descripcion }}</p>
+
+            @if (preguntaActual.opciones) {
+            <div class="mp-opciones">
+                @for (op of preguntaActual.opciones; track op.valor) {
+                <button class="mp-opcion-btn" [class.selected]="preferenciaActual === op.valor"
+                    (click)="seleccionarPreferencia(op.valor)">
+                    {{ op.label }}
+                </button>
+                }
+            </div>
+            }
+
+            @if (preguntaActual.sinPreferencia !== false &&
+            preguntaActual.prefKey !== 'tipo_vivienda' &&
+            preguntaActual.prefKey !== 'acceso_exterior') {
+            <button class="mp-opcion-btn mp-opcion-skip"
+                [class.selected]="preferenciaActual === null && preguntasTocadas.has(preguntaActual.prefKey)"
+                (click)="seleccionarPreferencia(null)">
+                🤷 No tengo preferencia
+            </button>
+            }
+
+            @if (!preguntaActual.soloContexto &&
+            preferenciaActual !== null &&
+            preferenciaActual !== undefined &&
+            preguntaActual.prefKey !== 'tipo_vivienda') {
+            <div class="mp-importancia">
+                <label class="mp-importancia-label">
+                    @if (preguntaActual.prefKey === 'acceso_exterior') {
+                    ¿Cuánto dirías tú?
+                    } @else {
+                    ¿Qué importancia tiene para ti este aspecto?
+                    }
+                    <strong>{{ pesoActual }}/5</strong>
+                </label>
+                <div class="mp-slider-row">
+                    <span class="mp-slider-hint">Poco</span>
+                    <input type="range" min="1" max="5" step="1" [value]="pesoActual"
+                        (input)="setPeso(+$any($event.target).value)" class="mp-slider" />
+                    <span class="mp-slider-hint">Mucho</span>
                 </div>
             </div>
-            <p class="mp-progress-text">
-                Pregunta {{ indicePregunta + 1 }} de {{ totalPreguntas }}
-            </p>
+            }
+        </div>
 
-            <div class="mp-pregunta-card">
-                <span class="mp-pregunta-icono">{{ preguntaActual.icono }}</span>
-                <h2 class="mp-pregunta-titulo">{{ preguntaActual.titulo }}</h2>
-                <p class="mp-pregunta-desc">{{ preguntaActual.descripcion }}</p>
+        <div class="mp-nav">
+            <button class="mp-btn mp-btn-secondary" (click)="anteriorPregunta()">
+                ← Atrás
+            </button>
+            <button class="mp-btn mp-btn-primary" [disabled]="!puedeAvanzar" (click)="siguientePregunta()">
+                {{ indicePregunta < totalPreguntas - 1 ? 'Siguiente →' : '🔍 Ver mis matches' }} </button>
+        </div>
 
-                @if (preguntaActual.opciones) {
-                    <div class="mp-opciones">
-                        @for (op of preguntaActual.opciones; track op.valor) {
-                            <button class="mp-opcion-btn"
-                                [class.selected]="preferenciaActual === op.valor"
-                                (click)="seleccionarPreferencia(op.valor)">
-                                {{ op.label }}
-                            </button>
-                        }
-                    </div>
-                }
-
-                @if (preguntaActual.sinPreferencia !== false &&
-                     preguntaActual.prefKey !== 'tipo_vivienda' &&
-                     preguntaActual.prefKey !== 'acceso_exterior') {
-                    <button class="mp-opcion-btn mp-opcion-skip"
-                        [class.selected]="preferenciaActual === null && preguntasTocadas.has(preguntaActual.prefKey)"
-                        (click)="seleccionarPreferencia(null)">
-                        🤷 No tengo preferencia
-                    </button>
-                }
-
-                @if (!preguntaActual.soloContexto &&
-                     preferenciaActual !== null &&
-                     preferenciaActual !== undefined &&
-                     preguntaActual.prefKey !== 'tipo_vivienda') {
-                    <div class="mp-importancia">
-                        <label class="mp-importancia-label">
-                            @if (preguntaActual.prefKey === 'acceso_exterior') {
-                                ¿Cuánto dirías tú?
-                            } @else {
-                                ¿Qué importancia tiene para ti este aspecto?
-                            }
-                            <strong>{{ pesoActual }}/5</strong>
-                        </label>
-                        <div class="mp-slider-row">
-                            <span class="mp-slider-hint">Poco</span>
-                            <input type="range" min="1" max="5" step="1"
-                                [value]="pesoActual"
-                                (input)="setPeso(+$any($event.target).value)"
-                                class="mp-slider" />
-                            <span class="mp-slider-hint">Mucho</span>
-                        </div>
-                    </div>
-                }
-            </div>
-
-            <div class="mp-nav">
-                <button class="mp-btn mp-btn-secondary" (click)="anteriorPregunta()">
-                    ← Atrás
-                </button>
-                <button class="mp-btn mp-btn-primary"
-                    [disabled]="!puedeAvanzar"
-                    (click)="siguientePregunta()">
-                    {{ indicePregunta < totalPreguntas - 1 ? 'Siguiente →' : '🔍 Ver mis matches' }}
-                </button>
-            </div>
-
-        </section>
+    </section>
     }
 
     @if (pasoActual === 'cargando') {
-        <section class="mp-step step-cargando">
-            <div class="mp-loader">
-                <span class="mp-loader-paw">🐾</span>
-                <p>Buscando tu match perfecto…</p>
-            </div>
-        </section>
+    <section class="mp-step step-cargando">
+        <div class="mp-loader">
+            <span class="mp-loader-paw">🐾</span>
+            <p>Buscando tu match perfecto…</p>
+        </div>
+    </section>
     }
 
     @if (pasoActual === 'resultados') {
-        <section class="mp-step step-resultados">
+    <section class="mp-step step-resultados">
 
-            <h2 class="mp-resultados-titulo">Tus mejores matches</h2>
-            <p class="mp-resultados-sub">
-                Estos son los animales que mejor encajan con lo que buscas.
-                ¡Conoce su perfil y da el primer paso!
-            </p>
+        <h2 class="mp-resultados-titulo">Tus mejores matches</h2>
+        <p class="mp-resultados-sub">
+            Estos son los animales que mejor encajan con lo que buscas.
+            ¡Conoce su perfil y da el primer paso!
+        </p>
 
-            @if (resultados.length === 0) {
-                <div class="mp-sin-resultados">
-                    <span>😿</span>
-                    <p>No encontramos animales disponibles con esos criterios. Prueba a ampliar tu búsqueda.</p>
-                    <button class="mp-btn mp-btn-primary" (click)="reiniciar()">Volver a empezar</button>
+        @if (resultados.length === 0) {
+        <div class="mp-sin-resultados">
+            <span>😿</span>
+            <p>No encontramos animales disponibles con esos criterios. Prueba a ampliar tu búsqueda.</p>
+            <button class="mp-btn mp-btn-primary" (click)="reiniciar()">Volver a empezar</button>
+        </div>
+        }
+
+        @if (resultados.length > 0) {
+        <div class="mp-resultados-grid">
+
+            @for (animal of resultados; track animal.id_animal; let i = $index) {
+            <article class="mp-animal-card" [class.top-match]="i === 0">
+
+                @if (i === 0) {
+                <div class="mp-rank-badge">⭐ Mejor match</div>
+                }
+
+                @if (animal.aviso_importante) {
+                <div class="mp-rank-badge mp-aviso-badge" [title]="animal.aviso_importante">
+                    ⚠️
                 </div>
+                }
+
+                <div class="mp-animal-foto-wrap">
+                    <img [src]="getImageUrl(animal.foto)" [alt]="animal.nombre" class="mp-animal-foto"
+                        (error)="$any($event.target).src = 'assets/img/default.jpg'" />
+
+                    <div class="mp-afinidad-badge" [style.background]="getColorAfinidad(animal.afinidad)">
+                        <span class="mp-afinidad-num">{{ animal.afinidad }}%</span>
+                        <span class="mp-afinidad-label">{{ getLabelAfinidad(animal.afinidad) }}</span>
+                    </div>
+                </div>
+
+                <div class="mp-animal-info">
+                    <h3 class="mp-animal-nombre">{{ animal.nombre }}</h3>
+                    <p class="mp-animal-meta">
+                        {{ animal.especie }} · {{ animal.raza }} · {{ animal.edad }}
+                    </p>
+
+                    <div class="mp-badges">
+                        <span class="mp-badge mp-badge-energia">
+                            ⚡ {{ animal.badges.nivel_energia }}
+                        </span>
+                        <span class="mp-badge" [class.mp-badge-ok]="animal.badges.apto_pisos"
+                            [class.mp-badge-no]="!animal.badges.apto_pisos">
+                            🏠 {{ animal.badges.apto_pisos ? 'Apto piso' : 'Necesita espacio' }}
+                        </span>
+                        <span class="mp-badge" [class.mp-badge-ok]="animal.badges.sociable_ninos"
+                            [class.mp-badge-no]="!animal.badges.sociable_ninos">
+                            👶 {{ animal.badges.sociable_ninos ? 'Con niños ✓' : 'Sin niños' }}
+                        </span>
+
+                        @if (animal.badges.enfermedad_cronica) {
+                        <span class="mp-badge mp-badge-medicacion">
+                            💊 Medicación diaria
+                        </span>
+                        }
+
+                        <span class="mp-badge" [class.mp-badge-ok]="animal.badges.es_para_principiantes"
+                            [class.mp-badge-no]="!animal.badges.es_para_principiantes">
+                            🎓 {{ animal.badges.es_para_principiantes ? 'Apto principiantes' : 'Requiere experiencia' }}
+                        </span>
+
+                        @if (animal.badges.nivel_paciencia) {
+                        <span class="mp-badge mp-badge-paciencia">
+                            🧘 Paciencia {{ animal.badges.nivel_paciencia }}
+                        </span>
+                        }
+
+                        @if (animal.badges.esterilizado) {
+                        <span class="mp-badge mp-badge-esterilizado">
+                            ✂️ Esterilizado
+                        </span>
+                        }
+                    </div>
+
+                    <p class="mp-animal-desc">{{ animal.descripcion }}</p>
+
+                    <button class="mp-btn mp-btn-primary mp-btn-full" (click)="irAPerfil(animal.id_animal)">
+                        Ver perfil de {{ animal.nombre }} →
+                    </button>
+                </div>
+
+            </article>
             }
 
-            @if (resultados.length > 0) {
-                <div class="mp-resultados-grid">
+        </div>
+        }
 
-                    @for (animal of resultados; track animal.id_animal; let i = $index) {
-                        <article class="mp-animal-card" [class.top-match]="i === 0">
+        <div class="mp-reiniciar">
+            <button class="mp-btn mp-btn-secondary" (click)="reiniciar()">
+                🔄 Repetir test
+            </button>
+        </div>
 
-                            @if (i === 0) {
-                                <div class="mp-rank-badge">⭐ Mejor match</div>
-                            }
-
-                            @if (animal.aviso_importante) {
-                                <div class="mp-aviso-importante">
-                                    <span class="mp-aviso-icono">⚠️</span>
-                                    <p>{{ animal.aviso_importante }}</p>
-                                </div>
-                            }
-
-                            <div class="mp-animal-foto-wrap">
-                                <img [src]="getImageUrl(animal.foto)"
-                                    [alt]="animal.nombre"
-                                    class="mp-animal-foto"
-                                    (error)="$any($event.target).src = 'assets/img/default.jpg'" />
-
-                                <div class="mp-afinidad-badge"
-                                    [style.background]="getColorAfinidad(animal.afinidad)">
-                                    <span class="mp-afinidad-num">{{ animal.afinidad }}%</span>
-                                    <span class="mp-afinidad-label">{{ getLabelAfinidad(animal.afinidad) }}</span>
-                                </div>
-                            </div>
-
-                            <div class="mp-animal-info">
-                                <h3 class="mp-animal-nombre">{{ animal.nombre }}</h3>
-                                <p class="mp-animal-meta">
-                                    {{ animal.especie }} · {{ animal.raza }} · {{ animal.edad }}
-                                </p>
-
-                                <div class="mp-badges">
-                                    <span class="mp-badge mp-badge-energia">
-                                        ⚡ {{ animal.badges.nivel_energia }}
-                                    </span>
-                                    <span class="mp-badge"
-                                        [class.mp-badge-ok]="animal.badges.apto_pisos"
-                                        [class.mp-badge-no]="!animal.badges.apto_pisos">
-                                        🏠 {{ animal.badges.apto_pisos ? 'Apto piso' : 'Necesita espacio' }}
-                                    </span>
-                                    <span class="mp-badge"
-                                        [class.mp-badge-ok]="animal.badges.sociable_ninos"
-                                        [class.mp-badge-no]="!animal.badges.sociable_ninos">
-                                        👶 {{ animal.badges.sociable_ninos ? 'Con niños ✓' : 'Sin niños' }}
-                                    </span>
-
-                                    @if (animal.badges.enfermedad_cronica) {
-                                        <span class="mp-badge mp-badge-medicacion">
-                                            💊 Medicación diaria
-                                        </span>
-                                    }
-
-                                    <span class="mp-badge"
-                                        [class.mp-badge-ok]="animal.badges.es_para_principiantes"
-                                        [class.mp-badge-no]="!animal.badges.es_para_principiantes">
-                                        🎓 {{ animal.badges.es_para_principiantes ? 'Apto principiantes' : 'Requiere experiencia' }}
-                                    </span>
-
-                                    @if (animal.badges.nivel_paciencia) {
-                                        <span class="mp-badge mp-badge-paciencia">
-                                            🧘 Paciencia {{ animal.badges.nivel_paciencia }}
-                                        </span>
-                                    }
-
-                                    @if (animal.badges.esterilizado) {
-                                        <span class="mp-badge mp-badge-esterilizado">
-                                            ✂️ Esterilizado
-                                        </span>
-                                    }
-                                </div>
-
-                                <p class="mp-animal-desc">{{ animal.descripcion }}</p>
-
-                                <button class="mp-btn mp-btn-primary mp-btn-full"
-                                    (click)="irAPerfil(animal.id_animal)">
-                                    Ver perfil de {{ animal.nombre }} →
-                                </button>
-                            </div>
-
-                        </article>
-                    }
-
-                </div>
-            }
-
-            <div class="mp-reiniciar">
-                <button class="mp-btn mp-btn-secondary" (click)="reiniciar()">
-                    🔄 Repetir test
-                </button>
-            </div>
-
-        </section>
+    </section>
     }
 
 </div>
