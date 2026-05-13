@@ -7,25 +7,24 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // 1. Recibimos la página desde Angular (por URL via GET)
     $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $por_pagina = 20;
     $inicio = ($pagina - 1) * $por_pagina;
 
-    // 2. Recibimos los filtros (por URL via GET)
     $texto = isset($_GET['texto']) ? $_GET['texto'] : '';
     $especie = isset($_GET['especie']) ? $_GET['especie'] : '';
     $tamano = isset($_GET['tamano']) ? $_GET['tamano'] : '';
     $sexo = isset($_GET['sexo']) ? $_GET['sexo'] : '';
+    $nivel_energia = isset($_GET['nivel_energia']) ? $_GET['nivel_energia'] : '';
 
-    // 3. Consulta base
-    $query = "SELECT id_animal, nombre, especie, raza, sexo, tamano, foto_portada, estado 
-              FROM animales 
-              WHERE estado = 'Disponible'";
+    // 🚨 CORRECCIÓN: La consulta base se detiene en "Disponible"
+    // No podemos poner el ORDER BY ni el LIMIT aquí si vamos a añadir "AND" después.
+    $query = "SELECT id_animal, nombre, especie, raza, sexo, tamano, nivel_energia, foto_portada, estado 
+          FROM animales 
+          WHERE estado = 'Disponible'";
 
     $parametros = [];
 
-    // 4. Construimos las condiciones dinámicamente
     if (!empty($texto)) {
         $query .= " AND (nombre LIKE :texto OR raza LIKE :texto)";
         $parametros[':texto'] = "%" . $texto . "%";
@@ -42,25 +41,26 @@ try {
         $query .= " AND sexo = :sexo";
         $parametros[':sexo'] = $sexo;
     }
+    if (!empty($nivel_energia)) {
+        $query .= " AND nivel_energia = :nivel_energia";
+        $parametros[':nivel_energia'] = $nivel_energia;
+    }
 
-    // 5. Añadimos el ORDEN y la PAGINACIÓN al final
+    // 🚨 CORRECCIÓN: Aquí es donde finalmente se añade el ORDEN y el LÍMITE
     $query .= " ORDER BY fecha_entrada DESC LIMIT :inicio, :por_pagina";
 
     $stmt = $db->prepare($query);
 
-    // Bindeamos los filtros
     foreach ($parametros as $key => &$val) {
         $stmt->bindParam($key, $val);
     }
 
-    // Bindeamos los parámetros del LIMIT como enteros (FUNDAMENTAL)
     $stmt->bindParam(':inicio', $inicio, PDO::PARAM_INT);
     $stmt->bindParam(':por_pagina', $por_pagina, PDO::PARAM_INT);
 
     $stmt->execute();
     $animales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // --- BLOQUE DE URL DINÁMICA ---
     $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
     $base_url = $protocol . "://" . $_SERVER['HTTP_HOST'];
     $project_path = str_replace('/api/animales', '', dirname($_SERVER['SCRIPT_NAME']));

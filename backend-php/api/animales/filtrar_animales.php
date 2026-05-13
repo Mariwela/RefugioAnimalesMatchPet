@@ -7,13 +7,14 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // 👉 NUEVO: 1. Calculamos los datos de la paginación
+    // 1. Calculamos los datos de la paginación
     $pagina = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
     $por_pagina = 20;
     $inicio = ($pagina - 1) * $por_pagina;
 
     // 2. Iniciamos la consulta base
-    $query = "SELECT id_animal, nombre, especie, raza, sexo, tamano, foto_portada 
+    // 👉 NUEVO: Añadimos 'nivel_energia' al SELECT
+    $query = "SELECT id_animal, nombre, especie, raza, sexo, tamano, nivel_energia, foto_portada 
               FROM animales 
               WHERE estado = 'Disponible'";
     
@@ -43,18 +44,24 @@ try {
         $params[':sexo'] = trim($_GET['sexo']);
     }
 
-    // 👉 NUEVO: 7. Ordenamos Y aplicamos el límite para sacar solo 20
+    // 👉 NUEVO: Filtro por Nivel de Energía
+    if (isset($_GET['nivel_energia']) && !empty(trim($_GET['nivel_energia']))) {
+        $query .= " AND nivel_energia = :nivel_energia";
+        $params[':nivel_energia'] = trim($_GET['nivel_energia']);
+    }
+
+    // 7. Ordenamos Y aplicamos el límite para sacar solo 20
     $query .= " ORDER BY fecha_entrada DESC LIMIT :inicio, :por_pagina";
 
     // 8. Preparamos
     $stmt = $db->prepare($query);
 
-    // 👉 NUEVO: Bindeamos los parámetros de filtros (si hay alguno)
+    // Bindeamos los parámetros de filtros (si hay alguno)
     foreach ($params as $key => $val) {
         $stmt->bindValue($key, $val); // bindValue asigna el valor directo
     }
 
-    // 👉 NUEVO: Bindeamos obligatoriamente inicio y por_pagina como números ENTEROS
+    // Bindeamos obligatoriamente inicio y por_pagina como números ENTEROS
     $stmt->bindValue(':inicio', $inicio, PDO::PARAM_INT);
     $stmt->bindValue(':por_pagina', $por_pagina, PDO::PARAM_INT);
 
