@@ -156,6 +156,11 @@
 }
 
 /* ─── Foto ──────────────────────────── */
+.columna-foto {
+  position: sticky;
+  top: 24px;
+}
+
 .marco-foto {
   border-radius: 16px;
   overflow: hidden;
@@ -463,7 +468,8 @@
 
 .grid-galeria {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  /* CAMBIADO: auto-fit para que las fotos llenen todo el hueco */
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
 }
 
@@ -490,6 +496,11 @@
 @media (max-width: 768px) {
   .grid-perfil {
     grid-template-columns: 1fr;
+  }
+
+  .columna-foto {
+    position: static;
+    /* En móviles quitamos el sticky porque la foto va arriba */
   }
 
   .marco-foto {
