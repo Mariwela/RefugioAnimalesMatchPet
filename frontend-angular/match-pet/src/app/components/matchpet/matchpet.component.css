@@ -18,7 +18,7 @@
 }
 
 .matchpet-wrapper {
-  min-height: 100vh;
+  min-height: auto;
   background: var(--mp-bg);
   font-family: var(--mp-font);
   color: var(--mp-text);
