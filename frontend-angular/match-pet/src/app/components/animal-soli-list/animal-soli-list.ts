@@ -52,56 +52,124 @@ export class AnimalSoliList implements OnInit {
   }
 
   cambiarEstado(solicitud: any, nuevoEstado: string): void {
-    const comentario = prompt(`¿Deseas añadir un comentario al cambiar a ${nuevoEstado}? (Opcional)`) || '';
+    Swal.fire({
+      title: `<span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.4rem; color: #1a3a3a;">¿Deseas añadir un comentario?</span>`,
+      html: `<p style="color: #7a7a7a; font-size: 0.95rem; margin-top: 5px;">Cambiando estado a: <b>${nuevoEstado}</b></p>`,
+      input: 'text',
+      inputPlaceholder: 'Escribe aquí tu observación...',
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      cancelButtonText: 'Volver',
+      confirmButtonColor: '#c3552b',
+      cancelButtonColor: '#6c757d',
+      
+      background: '#fdfbf9',
+      padding: '2em',
+      didOpen: (popup) => {
+        popup.style.borderRadius = '25px';
 
-    this.procesandoId = solicitud.id_solicitud;
-
-    this.animalService.gestionarSolicitud(solicitud.id_solicitud, nuevoEstado, comentario).subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          solicitud.estado_solicitud = nuevoEstado;
-          solicitud.comentario_admin = comentario;
-          alert(`✅ Solicitud ${nuevoEstado} exitosamente.`);
-        } else {
-          alert(`❌ Error: ${response.message}`);
+        const input = popup.querySelector('.swal2-input') as HTMLElement;
+        if (input) {
+          input.style.borderRadius = '12px';
+          input.style.border = '1px solid #d1d1d1';
+          input.style.boxShadow = 'none';
         }
-        this.procesandoId = null;
-      },
-      error: (error) => {
-        alert('❌ Error al procesar la solicitud.');
-        this.procesandoId = null;
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const comentario = result.value || '';
+        this.procesandoId = solicitud.id_solicitud;
+
+        this.animalService.gestionarSolicitud(solicitud.id_solicitud, nuevoEstado, comentario).subscribe({
+          next: (response) => {
+            if (response.status === 'success') {
+              solicitud.estado_solicitud = nuevoEstado;
+              solicitud.comentario_admin = comentario;
+              
+              Swal.fire({
+                icon: 'success',
+                title: `<span style="font-family: 'Playfair Display', serif; font-weight: 700;">¡Actualizado!</span>`,
+                text: `La solicitud ahora está como ${nuevoEstado}`,
+                confirmButtonColor: '#c3552b',
+                background: '#fdfbf9',
+                didOpen: (p) => p.style.borderRadius = '25px'
+              });
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: response.message,
+                background: '#fdfbf9',
+                didOpen: (p) => p.style.borderRadius = '25px'
+              });
+            }
+            this.procesandoId = null;
+          },
+          error: () => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error de conexión',
+              background: '#fdfbf9',
+              didOpen: (p) => p.style.borderRadius = '25px'
+            });
+            this.procesandoId = null;
+          }
+        });
       }
     });
   }
 
   aprobarAdopcion(solicitud: any): void {
   Swal.fire({
-    title: '¿Estás seguro?',
-    text: `¿Deseas aprobar la adopción de ${solicitud.nombre_animal}? Esto rechazará automáticamente las demás solicitudes pendientes.`,
+    title: `<span style="font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.4rem; color: #1a3a3a;">¿Confirmar adopción?</span>`,
+    html: `<p style="color: #7a7a7a; font-size: 0.95rem;">¿Deseas aprobar la adopción de <b>${solicitud.nombre_animal}</b>?<br><br><small>⚠️ Esto rechazará automáticamente las demás solicitudes pendientes.</small></p>`,
     icon: 'warning',
     showCancelButton: true,
-    confirmButtonColor: '#c3552b',
-    cancelButtonColor: '#6c757d',
     confirmButtonText: 'Sí, aprobar',
     cancelButtonText: 'Cancelar',
+    confirmButtonColor: '#c3552b',
+    cancelButtonColor: '#6c757d',
+    
+    background: '#fdfbf9',
+    padding: '2em',
     didOpen: (popup) => {
-      popup.style.borderRadius = '20px';
+      popup.style.borderRadius = '25px';
     }
   }).then((result) => {
     if (result.isConfirmed) {
       this.procesandoId = solicitud.id_solicitud;
+      
       this.animalService.validarAdopcion(solicitud.id_solicitud, solicitud.id_animal).subscribe({ 
         next: (response) => {
           if (response.status === 'success') {
-            Swal.fire('¡Aprobado!', response.message, 'success');
+            Swal.fire({
+              icon: 'success',
+              title: `<span style="font-family: 'Playfair Display', serif; font-weight: 700;">¡Aprobado!</span>`,
+              text: response.message,
+              confirmButtonColor: '#c3552b',
+              background: '#fdfbf9',
+              didOpen: (p) => p.style.borderRadius = '25px'
+            });
             this.cargarSolicitudes();
           } else {
-            Swal.fire('Error', response.message, 'error');
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: response.message,
+              background: '#fdfbf9',
+              didOpen: (p) => p.style.borderRadius = '25px'
+            });
           }
           this.procesandoId = null;
         },
         error: () => {
-          Swal.fire('Error', 'Ocurrió un error en el servidor', 'error');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Ocurrió un error en el servidor',
+            background: '#fdfbf9',
+            didOpen: (p) => p.style.borderRadius = '25px'
+          });
           this.procesandoId = null;
         }
       });
