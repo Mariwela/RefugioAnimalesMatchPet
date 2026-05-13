@@ -1,7 +1,5 @@
 <header class="main-header">
   <div class="header-inner">
-
-    <!-- LOGO -->
     <a routerLink="/" class="logo">
       <div class="logo-paws">
         <span class="paw-left">🐾</span>
@@ -12,7 +10,6 @@
       </div>
     </a>
 
-    <!-- NAV PRINCIPAL -->
     <nav class="main-nav">
       <ul>
         <li>
@@ -38,7 +35,6 @@
           <a routerLink="/historias" routerLinkActive="active">Historias</a>
         </li>
 
-        <!-- Admin -->
         @if (authService.isAdmin()) {
           <li class="dropdown">
             <a href="javascript:void(0)" (click)="toggleMenu('admin', $event)" class="admin-toggle">
@@ -55,7 +51,6 @@
       </ul>
     </nav>
 
-    <!-- ACCIONES USUARIO -->
     <div class="user-actions">
 
       @if (!authService.isLoggedIn()) {
@@ -65,19 +60,16 @@
       @else {
         <div class="user-icons">
 
-          <!-- Favoritos -->
           <a routerLink="/mis-favoritos" routerLinkActive="active" class="icon-link" title="Mis Favoritos">
             <i class="fa fa-heart"></i>
             <span>Favoritos</span>
           </a>
 
-          <!-- Solicitudes -->
           <a routerLink="/mis-solicitudes" routerLinkActive="active" class="icon-link" title="Mis Solicitudes">
             <i class="fa fa-list-alt"></i>
             <span>Solicitudes</span>
           </a>
 
-          <!-- Notificaciones -->
           <div class="icon-link notif-wrapper" (click)="toggleMenu('notif', $event)">
             <div class="notif-icon-container">
               <i class="fa fa-bell"></i>
@@ -103,13 +95,11 @@
             }
           </div>
 
-          <!-- Avatar + nombre -->
           <a [routerLink]="['/perfil']" class="user-profile" title="Mi perfil">
             <img [src]="urlAvatar" [alt]="nombreUsuario" class="avatar">
             <span class="user-name">{{ nombreUsuario }}</span>
           </a>
 
-          <!-- Salir -->
           <button (click)="cerrarSesion()" class="btn-salir" title="Cerrar sesión">
             <i class="fa fa-sign-out"></i>
             <span>Salir</span>

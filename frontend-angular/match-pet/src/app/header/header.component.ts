@@ -44,14 +44,10 @@ export class HeaderComponent implements OnInit {
       next: (res) => {
         setTimeout(() => {
           if (res.status === 'success') {
-
-            // 🔥 AÑADE ESTA LÍNEA PARA VER QUÉ LLEGA EXACTAMENTE 🔥
             console.log("Respuesta del servidor:", res);
 
             this.totalNotificaciones = res.alertas.solicitudes_finalizadas;
             this.mensajeNotificaciones = res.mensaje_global;
-
-            // Asignamos la lista. Si no existe, se pone un array vacío []
             this.listaNotificaciones = res.notificaciones_detalle || [];
 
             this.cdr.detectChanges();
@@ -62,33 +58,24 @@ export class HeaderComponent implements OnInit {
     });
   }
 
-  // 👇 NUEVA FUNCIÓN PARA ELIMINAR LA NOTIFICACIÓN 👇
   eliminarNotificacion(idNotificacion: number, event: Event): void {
-    // Evita que el clic cierre el dropdown
     event.stopPropagation();
-
-    // Llama al servicio para marcarla como leída en el backend PHP
-    // Nota: Asegúrate de haber creado 'marcarComoLeida' en tu notificacion.ts
     this.notificacionService.marcarComoLeida(idNotificacion).subscribe({
       next: (res: any) => {
         if (res.status === 'success') {
 
-          // Quitamos la notificación del array local
           this.listaNotificaciones = this.listaNotificaciones.filter(
             (noti) => noti.id !== idNotificacion
           );
 
-          // Actualizamos el contador de notificaciones
           if (this.totalNotificaciones > 0) {
             this.totalNotificaciones--;
           }
 
-          // Si llegamos a cero, actualizamos el mensaje
           if (this.totalNotificaciones === 0) {
             this.mensajeNotificaciones = 'No tienes notificaciones nuevas.';
           }
 
-          // Forzamos la actualización de la vista
           this.cdr.detectChanges();
         }
       },

@@ -12,7 +12,6 @@
   padding: 0 2rem 4rem;
 }
 
-/* ── Hero ── */
 .hero {
   text-align: center;
   padding: 3.5rem 1rem 2.5rem;
@@ -38,7 +37,6 @@
   line-height: 1.75;
 }
 
-/* ── Grid ── */
 .donate-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -46,7 +44,6 @@
   margin-top: 2rem;
 }
 
-/* ── Cards ── */
 .card {
   background: #fff;
   border: 1px solid #C8DFC8;
@@ -75,12 +72,10 @@
   word-break: break-word;
 }
 
-/* ── Card full ── */
 .full {
   grid-column: span 2;
 }
 
-/* ── Responsive ── */
 @media (max-width: 640px) {
   .donate-grid {
     grid-template-columns: 1fr;

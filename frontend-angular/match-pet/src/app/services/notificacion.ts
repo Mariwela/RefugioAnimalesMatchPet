@@ -6,11 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class Notificacion {
-
-  // URL para obtener las notificaciones
   private url = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/notificaciones/notificaciones.php';
-
-  // URL para marcar como leída (Asegúrate de que este archivo exista en tu backend)
   private urlMarcarLeida = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/notificaciones/marcar_leida.php';
 
   constructor(private http: HttpClient) { }

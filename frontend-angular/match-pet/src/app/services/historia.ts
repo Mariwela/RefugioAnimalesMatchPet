@@ -15,7 +15,6 @@ export class HistoriaService {
     private authService: AuthService
   ) { }
 
-  //Genera las cabeceras con el token de autenticación
   private getHeaders() {
     const token = this.authService.getToken();
     return new HttpHeaders({
@@ -23,12 +22,10 @@ export class HistoriaService {
     });
   }
 
-  // --- MÉTODO PÚBLICOS ---
   obtenerHistorias(): Observable<RespuestaHistorias> {
     return this.http.get<RespuestaHistorias>(this.apiUrl + 'listar_historias.php');
   }
 
-  // --- MÉTODOS PROTEGIDOS (Requieren Token) ---
   publicarHistoria(datos: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/publicar_historia.php`, datos, { 
       headers: this.getHeaders() 
@@ -66,7 +63,6 @@ export class HistoriaService {
     return this.http.get(`${this.apiUrl}/historiaID.php?id=${id}`);
   }
 
-  // --- MÉTODOS DE ADMINISTRACIÓN (Requieren Token y Rol Admin) ---
   obtenerPendientes(): Observable<RespuestaHistorias> {
     return this.http.get<RespuestaHistorias>(`${this.apiUrl}listar_pendientes.php`, { headers: this.getHeaders() });
   }

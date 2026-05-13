@@ -5,7 +5,6 @@
   width: 100%;
 }
 
-/* ─── Header ────────────────────────── */
 .main-header {
   background: #C8DFC8;
   border-bottom: 3px solid #7AB07A;
@@ -25,7 +24,6 @@
   gap: 2rem;
 }
 
-/* ─── Logo ──────────────────────────── */
 .logo {
   display: flex;
   align-items: center;
@@ -60,7 +58,6 @@
   color: #C85A2A;
 }
 
-/* ─── Nav ───────────────────────────── */
 .main-nav {
   flex: 1;
 }
@@ -103,12 +100,10 @@
   opacity: 0.6;
 }
 
-/* Admin toggle */
 .admin-toggle {
   color: #C85A2A !important;
 }
 
-/* ─── Dropdown ──────────────────────── */
 .dropdown-menu {
   display: none;
   flex-direction: column;
@@ -144,7 +139,6 @@
   color: #C85A2A !important;
 }
 
-/* ─── User actions ──────────────────── */
 .user-actions {
   flex-shrink: 0;
   display: flex;
@@ -185,7 +179,6 @@
   color: #C85A2A;
 }
 
-/* ─── Notificaciones ────────────────── */
 .notif-wrapper {
   position: relative;
 }
@@ -274,7 +267,6 @@
   background: none !important;
 }
 
-/* ─── Avatar ────────────────────────── */
 .user-profile {
   display: flex;
   align-items: center;
@@ -309,7 +301,6 @@
   white-space: nowrap;
 }
 
-/* ─── Botones auth ──────────────────── */
 .btn-entrar {
   background: #1A3A1A;
   color: #fff;
@@ -351,7 +342,6 @@
   color: #C85A2A;
 }
 
-/* ─── Responsive ────────────────────── */
 @media (max-width: 900px) {
   .icon-link span,
   .btn-salir span,

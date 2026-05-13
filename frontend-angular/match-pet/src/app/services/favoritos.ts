@@ -6,14 +6,11 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class Favoritos {
-  // 👇 URL base sacada de tu captura de pantalla 👇
   private apiUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/favoritos';
 
   constructor(private http: HttpClient) { }
 
-  // Método auxiliar para obtener los headers con el token
   private getHeaders(): HttpHeaders {
-    // 👇 CAMBIA 'token' POR 'auth_token' (o el nombre que uses al hacer login)
     const token = localStorage.getItem('auth_token');
 
     console.log("Token recuperado para la petición:", token);

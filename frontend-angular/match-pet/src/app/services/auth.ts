@@ -13,7 +13,7 @@ export interface AuthResponse {
     rol: string;
     avatar: string;
   };
-  token?: string; // Por si en el futuro usas JWT
+  token?: string;
 }
 
 @Injectable({

@@ -7,11 +7,9 @@ export interface HistoriaModel {
     imagen_url?: string;
     fecha: string;
 
-    // Nuevos campos de moderación añadidos
-    estado: string; // 'Pendiente', 'Aprobada', 'Rechazada'
+    estado: string;
     comentario_admin?: string;
 
-    // Estos vienen del JOIN en tu PHP (a.nombre y u.nombre_completo)
     nombre_animal: string;
     nombre_usuario: string;
 }
