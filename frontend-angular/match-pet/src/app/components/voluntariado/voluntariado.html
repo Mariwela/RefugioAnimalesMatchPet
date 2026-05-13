@@ -5,32 +5,28 @@
     <p>Tu tiempo es el mejor regalo que puedes hacerles. Ayúdanos en el refugio o en eventos.</p>
   </div>
 
+
   <div class="container">
     <p class="section-label">Formulario de Voluntariado</p>
-    
+
     <div class="info-card">
       <form #voluntForm="ngForm" (ngSubmit)="guardarVoluntariado(voluntForm)">
-        
+
         <div class="form-group">
           <label>¿En qué área te gustaría ayudar?</label>
-            <select name="area_interes" [(ngModel)]="opcionSeleccionada" (change)="gestionarCambioArea()">
-              <option value="Paseo de perros">Paseo de perros</option>
-              <option value="Cuidado y Limpieza">Cuidado y Limpieza</option>
-              <option value="Eventos y Difusión">Eventos y Difusión</option>
-              <option value="Apoyo Veterinario">Apoyo Veterinario</option>
-              <option value="Otros">-- Otra (Especificar) --</option>
-            </select>
-           @if (opcionSeleccionada === 'Otros') {
-            <div class="input-extra">
-                <input 
-                    type="text" 
-                    name="area_interes_texto" 
-                    [(ngModel)]="areaPersonalizada" 
-                    class="form-control mt-2" 
-                    placeholder="¿Cuál es tu habilidad? (ej: Fotografía)"
-                    (input)="actualizarAreaTexto()">
-                </div>
-            }
+          <select name="area_interes" [(ngModel)]="opcionSeleccionada" (change)="gestionarCambioArea()">
+            <option value="Paseo de perros">Paseo de perros</option>
+            <option value="Cuidado y Limpieza">Cuidado y Limpieza</option>
+            <option value="Eventos y Difusión">Eventos y Difusión</option>
+            <option value="Apoyo Veterinario">Apoyo Veterinario</option>
+            <option value="Otros">-- Otra (Especificar) --</option>
+          </select>
+          @if (opcionSeleccionada === 'Otros') {
+          <div class="input-extra">
+            <input type="text" name="area_interes_texto" [(ngModel)]="areaPersonalizada" class="form-control mt-2"
+              placeholder="¿Cuál es tu habilidad? (ej: Fotografía)" (input)="actualizarAreaTexto()">
+          </div>
+          }
         </div>
 
         <div class="form-group">
@@ -45,7 +41,8 @@
 
         <div class="form-group">
           <label>¿Por qué quieres ser voluntario?</label>
-          <textarea name="comentarios_voluntario" [(ngModel)]="perfilVoluntario.comentarios_voluntario" rows="2" placeholder="Cuéntanos un poco sobre ti..."></textarea>
+          <textarea name="comentarios_voluntario" [(ngModel)]="perfilVoluntario.comentarios_voluntario" rows="2"
+            placeholder="Cuéntanos un poco sobre ti..."></textarea>
         </div>
 
         <button type="submit" class="btn-save" [disabled]="guardando">
@@ -54,14 +51,14 @@
         <a routerLink="/perfil" class="btn-link">Ver perfil</a>
 
         @if (mensajeExito) {
-          <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
-            ✅ {{ mensajeExito }}
-          </div>
+        <div class="alert alert--success" [class.fade-out]="!notificacionVisible">
+          ✅ {{ mensajeExito }}
+        </div>
         }
         @if (mensajeError) {
-          <div class="alert alert--error" [class.fade-out]="!notificacionVisible">
-            ❌ {{ mensajeError }}
-          </div>
+        <div class="alert alert--error" [class.fade-out]="!notificacionVisible">
+          ❌ {{ mensajeError }}
+        </div>
         }
 
       </form>

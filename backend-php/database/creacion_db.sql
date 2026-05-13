@@ -94,16 +94,14 @@ CREATE TABLE IF NOT EXISTS salud_historial (
 
 
 -- 5. Solicitudes de Adopción
-
 CREATE TABLE IF NOT EXISTS solicitudes (
     id_solicitud INT AUTO_INCREMENT PRIMARY KEY,
     id_usuario INT NOT NULL,
     id_animal INT NOT NULL,
     fecha_solicitud TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     estado_solicitud ENUM('Pendiente', 'Aprobada', 'Rechazada') DEFAULT 'Pendiente',
-    
-    -- 👇 ESTA ES LA LÍNEA QUE DEBES AÑADIR 👇
-    notificacion_leida TINYINT(1) DEFAULT 0,
+
+    notificacion_leida TINYINT(1) DEFAULT 0, 
 
     UNIQUE (id_usuario, id_animal),
 
@@ -113,7 +111,6 @@ CREATE TABLE IF NOT EXISTS solicitudes (
     CONSTRAINT fk_animal 
         FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
 
 -- 6. Historias de adopción
 CREATE TABLE IF NOT EXISTS historias_adopcion (
