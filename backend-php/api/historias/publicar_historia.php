@@ -6,15 +6,11 @@ require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
 try {
-    // 1. Verificamos usuario
     $payload = autenticar();
     $id_usuario = $payload['id_usuario'];
-
-    // 2. Leemos los datos enviados por Angular (Angular envía JSON en el body)
     $datos_json = file_get_contents("php://input");
     $data = json_decode($datos_json, true);
 
-    // 3. Validamos que lleguen los datos
     if (empty($data['id_animal']) || empty($data['titulo']) || empty($data['contenido'])) {
         throw new Exception("Faltan datos obligatorios para publicar la historia.");
     }
@@ -22,7 +18,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // 4. Insertamos en la base de datos (por defecto la imagen será nula por ahora)
     $query = "INSERT INTO historias_adopcion (id_usuario, id_animal, titulo, contenido, estado) 
               VALUES (:id_usuario, :id_animal, :titulo, :contenido, 'Pendiente')";
               
@@ -33,7 +28,6 @@ try {
     $stmt->bindParam(':contenido', $data['contenido'], PDO::PARAM_STR);
     
     if ($stmt->execute()) {
-        // Devolvemos el ID de la historia por si luego queremos adjuntarle una foto
         $id_nueva_historia = $db->lastInsertId();
         echo json_encode([
             "status" => "success", 

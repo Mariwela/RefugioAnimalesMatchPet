@@ -10,7 +10,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Si es admin, ve todas. Si no, solo las suyas.
     if ($payload['rol'] === 'admin') {
         $query = "SELECT s.*, u.nombre_completo, a.nombre AS nombre_animal 
                   FROM solicitudes s

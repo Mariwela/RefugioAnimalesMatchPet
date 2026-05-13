@@ -4,14 +4,12 @@ require_once '../../config/config.php';
 require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
-// Verificamos que la sesión sea válida
 $payload = autenticar();
 
 try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Consulta SQL explícita para evitar ambigüedades
     $query = "SELECT a.* 
               FROM animales a
               INNER JOIN favoritos f ON a.id_animal = f.id_animal
@@ -19,7 +17,6 @@ try {
 
     $stmt = $db->prepare($query);
     
-    // Verificamos si la ejecución falla
     if (!$stmt->execute([':id_u' => $payload['id_usuario']])) {
         $errorInfo = $stmt->errorInfo();
         throw new Exception("Error en SQL: " . $errorInfo[2]);

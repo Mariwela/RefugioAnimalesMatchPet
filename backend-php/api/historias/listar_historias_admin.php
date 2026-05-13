@@ -15,8 +15,6 @@ if ($payload['rol'] !== 'admin') {
 try {
     $database = new Database();
     $db = $database->getConnection();
-
-    // Recibe filtro opcional: ?estado=Pendiente | Aprobada | Rechazada | (vacío = todas)
     $estado = $_GET['estado'] ?? null;
 
     $query = "SELECT h.*, a.nombre AS nombre_animal, u.nombre_completo AS nombre_usuario 

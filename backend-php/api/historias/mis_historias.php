@@ -10,7 +10,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Consultamos las historias que pertenecen al usuario del token
     $query = "SELECT 
                 h.id_historia,
                 h.id_animal,

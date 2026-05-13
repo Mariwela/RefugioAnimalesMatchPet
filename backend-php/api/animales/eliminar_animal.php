@@ -12,25 +12,19 @@ if (!empty($data['id_animal'])) {
         $database = new Database();
         $db = $database->getConnection();
 
-        // 1. Obtener el nombre del animal para localizar su carpeta física
+        // Obtener el nombre del animal para localizar su carpeta física
         $stmtNombre = $db->prepare("SELECT nombre FROM animales WHERE id_animal = :id");
         $stmtNombre->execute([':id' => $data['id_animal']]);
         $animal = $stmtNombre->fetch(PDO::FETCH_ASSOC);
 
         if ($animal) {
-            // Normalizamos el nombre para la carpeta (minúsculas y sin espacios)
             $nombre_carpeta = strtolower(str_replace(' ', '_', $animal['nombre']));
-            
-            // Construimos la ruta física absoluta partiendo desde donde está este script
             $ruta_carpeta = __DIR__ . "/../../public/img/animales/" . $nombre_carpeta;
-
-            // 2. Borrar registro de la BD
             $query = "DELETE FROM animales WHERE id_animal = :id";
             $stmt = $db->prepare($query);
             
             if ($stmt->execute([':id' => $data['id_animal']])) {
-                
-                // 3. Borrar la carpeta física y todas las fotos numeradas dentro
+
                 if (is_dir($ruta_carpeta)) {
                     $files = glob($ruta_carpeta . '/*'); 
                     foreach($files as $file) {

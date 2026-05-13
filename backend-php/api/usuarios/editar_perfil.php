@@ -21,7 +21,6 @@ if (empty($data)) {
     exit;
 }
 
-// Si Apache borra el header, intentamos recuperarlo así
 if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
     $headers = apache_request_headers();
     if (isset($headers['Authorization'])) {
@@ -29,7 +28,6 @@ if (!isset($_SERVER['HTTP_AUTHORIZATION'])) {
     }
 }
 
-// Campos que el usuario puede modificar
 $campos_permitidos = [
     'nombre_completo',
     'dni_nie',
@@ -72,9 +70,7 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // COMPROBACIÓN DE DNI/NIE
     if (isset($data['dni_nie'])) {
-        // Buscamos si el DNI ya existe, pero que NO sea el del usuario actual
         $stmtCheck = $db->prepare("SELECT id_usuario FROM usuarios WHERE dni_nie = :dni AND id_usuario != :id");
         $stmtCheck->execute([
             ':dni' => $data['dni_nie'],
@@ -92,7 +88,6 @@ try {
     $stmt = $db->prepare($sql);
     $stmt->execute($params);
 
-    // Devolvemos el perfil actualizado
     $stmtPerfil = $db->prepare("SELECT 
         id_usuario, nombre_completo, dni_nie, fecha_nacimiento,
         email, telefono, direccion, poblacion, provincia,

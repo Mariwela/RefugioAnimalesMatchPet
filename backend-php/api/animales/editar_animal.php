@@ -15,14 +15,10 @@ if (!empty($data['id_animal'])) {
         $id = $data['id_animal'];
         unset($data['id_animal']); 
 
-        // 1. Si el usuario cambió el nombre, debemos actualizar la ruta de la foto 
-        // para que no apunte a la carpeta vieja.
         if (!empty($data['nombre'])) {
             $base_path = dirname(__FILE__, 3) . '/public/img/animales/';
             $data['foto_portada'] = $base_path . "/1.jpg";
         } else {
-            // Si no envió nombre, eliminamos foto_portada del JSON para 
-            // asegurarnos de que no se modifique por error.
             unset($data['foto_portada']);
         }
 
@@ -38,11 +34,6 @@ if (!empty($data['id_animal'])) {
             $sql = "UPDATE animales SET " . implode(', ', $fields) . " WHERE id_animal = :id";
             $stmt = $db->prepare($sql);
             $stmt->execute($params);
-
-            // Respondemos éxito si hubo cambios o si la consulta fue exitosa
-            // Nota: rowCount() puede ser 0 si envías los mismos datos, por eso usamos execute()
-            
-            // --- URL DINÁMICA PARA LA RESPUESTA ---
             $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
             $base_url = $protocol . "://" . $_SERVER['HTTP_HOST'];
             $project_path = str_replace('/api/animales', '', dirname($_SERVER['SCRIPT_NAME']));

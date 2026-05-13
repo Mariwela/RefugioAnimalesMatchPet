@@ -10,7 +10,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // 🔥 LA MAGIA AQUÍ: Si viene un ID en la URL lo usamos, si no, usamos el del token 🔥
  $id_a_buscar = (isset($_GET['id']) && !empty($_GET['id'])) ? intval($_GET['id']) : $payload['id_usuario'];
 
     $query = "SELECT 
@@ -40,7 +39,6 @@ try {
               WHERE id_usuario = :id";
 
     $stmt = $db->prepare($query);
-    // Ejecutamos la consulta con el ID que determinamos arriba
     $stmt->execute([':id' => $id_a_buscar]);
 
     $usuario = $stmt->fetch(PDO::FETCH_ASSOC);

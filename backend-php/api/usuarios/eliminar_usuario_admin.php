@@ -5,8 +5,7 @@ require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
  
 $payload = autenticar();
- 
-// Solo admin puede usar este endpoint
+
 if ($payload['rol'] !== 'admin') {
     http_response_code(403);
     echo json_encode(["status" => "error", "message" => "Acceso denegado. Solo administradores."]);
@@ -22,8 +21,7 @@ try {
         echo json_encode(["status" => "error", "message" => "ID de usuario no válido."]);
         exit;
     }
- 
-    // Seguridad: un admin no puede eliminarse a sí mismo por aquí
+
     if ($id_a_eliminar === $payload['id_usuario']) {
         http_response_code(400);
         echo json_encode(["status" => "error", "message" => "No puedes eliminarte a ti mismo desde este panel."]);
@@ -32,8 +30,6 @@ try {
  
     $database = new Database();
     $db = $database->getConnection();
- 
-    // Verificamos que el usuario existe y es colaborador (nunca eliminar otro admin o vet por error)
     $check = $db->prepare("SELECT rol FROM usuarios WHERE id_usuario = :id");
     $check->execute([':id' => $id_a_eliminar]);
     $usuario = $check->fetch(PDO::FETCH_ASSOC);

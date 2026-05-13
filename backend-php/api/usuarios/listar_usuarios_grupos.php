@@ -15,14 +15,10 @@ if ($payload['rol'] !== 'admin') {
 try {
     $database = new Database();
     $db = $database->getConnection();
- 
-    // Validamos el grupo contra una lista blanca para poder interpolarlo en el SQL sin riesgo
     $gruposValidos = ['todos', 'adoptante', 'voluntario', 'acogida'];
     $grupo = in_array($_GET['grupo'] ?? '', $gruposValidos) ? $_GET['grupo'] : 'todos';
  
     $busqueda = isset($_GET['busqueda']) ? trim($_GET['busqueda']) : '';
- 
-    // Fragmento SQL del filtro de grupo (interpolado directamente al ser valor validado)
     $filtroGrupo = match($grupo) {
         'adoptante'  => "AND (
                             u.pref_especie IS NOT NULL
@@ -41,10 +37,9 @@ try {
                             OR u.pref_vivienda IS NOT NULL
                             OR (u.bio_experiencia IS NOT NULL AND u.bio_experiencia != '')
                          )",
-        default      => '' // todos: sin filtro extra
+        default      => ''
     };
- 
-    // Filtro de busqueda con parametros enlazados (estos si son input del usuario)
+
     $filtroBusqueda = '';
     $params = [];
     if ($busqueda !== '') {

@@ -18,7 +18,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Insertar la solicitud
     $query = "INSERT INTO solicitudes (id_usuario, id_animal) VALUES (:id_u, :id_a)";
     $stmt = $db->prepare($query);
 
@@ -34,7 +33,6 @@ try {
     ]);
 
 } catch (PDOException $e) {
-    // Si el error es 23000 es por el UNIQUE (ya existe la solicitud)
     if ($e->getCode() == 23000) {
         http_response_code(409);
         echo json_encode(["message" => "Ya has enviado una solicitud para este animal anteriormente."]);

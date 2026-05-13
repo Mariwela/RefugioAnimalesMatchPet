@@ -16,9 +16,6 @@ try {
     $tamano = isset($_GET['tamano']) ? $_GET['tamano'] : '';
     $sexo = isset($_GET['sexo']) ? $_GET['sexo'] : '';
     $nivel_energia = isset($_GET['nivel_energia']) ? $_GET['nivel_energia'] : '';
-
-    // 🚨 CORRECCIÓN: La consulta base se detiene en "Disponible"
-    // No podemos poner el ORDER BY ni el LIMIT aquí si vamos a añadir "AND" después.
     $query = "SELECT id_animal, nombre, especie, raza, sexo, tamano, nivel_energia, foto_portada, estado 
           FROM animales 
           WHERE estado = 'Disponible'";
@@ -46,7 +43,6 @@ try {
         $parametros[':nivel_energia'] = $nivel_energia;
     }
 
-    // 🚨 CORRECCIÓN: Aquí es donde finalmente se añade el ORDEN y el LÍMITE
     $query .= " ORDER BY fecha_entrada DESC LIMIT :inicio, :por_pagina";
 
     $stmt = $db->prepare($query);

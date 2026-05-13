@@ -7,7 +7,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Traemos TODAS las historias aprobadas
     $query = "SELECT h.*, a.nombre AS nombre_animal, u.nombre_completo AS nombre_usuario 
               FROM historias_adopcion h
               JOIN animales a ON h.id_animal = a.id_animal
@@ -19,8 +18,6 @@ try {
     $stmt->execute();
     
     $historias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // Devolvemos el JSON exacto que espera Angular
     echo json_encode(["status" => "success", "data" => $historias]);
 
 } catch (Exception $e) {

@@ -18,7 +18,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // Verificamos que el animal existe
     $stmtCheck = $db->prepare("SELECT id_animal FROM animales WHERE id_animal = :id");
     $stmtCheck->execute([':id' => $id_animal]);
 

@@ -18,12 +18,10 @@ try {
 
     $animales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // --- BLOQUE DE URL DINÁMICA ---
     $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
     $base_url = $protocol . "://" . $_SERVER['HTTP_HOST'];
     $project_path = str_replace('/api/animales', '', dirname($_SERVER['SCRIPT_NAME']));
     $img_base = $base_url . $project_path . '/public/img/animales/';
-    // ------------------------------
 
     foreach ($animales as &$animal) {
         if (!empty($animal['foto_portada'])) {

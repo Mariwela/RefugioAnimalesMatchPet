@@ -25,21 +25,17 @@ try {
     $id_historia = (int)$_POST['id_historia'];
     $nombre_base = $_POST['nombre_final_archivo'];
 
-    // 1. Validar errores de subida de PHP (tamaño excedido, etc.)
     if ($_FILES['foto']['error'] !== UPLOAD_ERR_OK) {
         throw new Exception("Error en la subida del archivo. Código: " . $_FILES['foto']['error']);
     }
 
-    // 2. Procesar el nombre y la ruta
     $extension = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
     $nombre_completo = $nombre_base . "." . $extension;
 
     $ruta_fisica = $directorio_destino . $nombre_completo;
     $ruta_base_datos = $nombre_completo;
 
-    // 3. Intentar mover el archivo temporal a la carpeta pública
     if (move_uploaded_file($_FILES['foto']['tmp_name'], $ruta_fisica)) {
-        // 4. Si el archivo se movió con éxito, actualizamos la Base de Datos
         $query = "UPDATE historias_adopcion SET imagen_url = :img WHERE id_historia = :id";
         $stmt = $db->prepare($query);
         
@@ -56,8 +52,6 @@ try {
             ]);
             exit;
         } else {
-            // Si no se actualizó ninguna fila (ID no encontrado)
-            // Borrar el archivo físico que acabamos de subir para no dejar basura
             unlink($ruta_fisica);
             throw new Exception("No se pudo actualizar la base de datos.");
         }

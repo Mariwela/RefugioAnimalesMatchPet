@@ -28,7 +28,6 @@ try {
         if (password_verify($data->password, $user['password'])) {
             unset($user['password']);
 
-            // --- NUEVO: Generamos el token JWT ---
             $token = jwt_generar([
                 'id_usuario' => $user['id_usuario'],
                 'email'      => $user['email'],

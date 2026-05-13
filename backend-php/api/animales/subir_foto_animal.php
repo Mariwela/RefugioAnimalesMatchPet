@@ -4,13 +4,10 @@ require_once '../../config/config.php';
 require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 requiere_rol('admin');
-
-// Iniciamos la respuesta con un mensaje más descriptivo para debug
 $response = ["status" => "error", "message" => "No se recibió una petición válida o el archivo es demasiado grande"];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    
-    // Capturamos datos y nos aseguramos de que sean válidos
+
     $id_animal = isset($_POST['id_animal']) ? (int)$_POST['id_animal'] : null;
     $es_portada = isset($_POST['es_portada']) ? (int)$_POST['es_portada'] : 0;
 
@@ -19,7 +16,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $database = new Database();
             $db = $database->getConnection();
 
-            // 1. Obtener nombre para la carpeta
             $stmtNombre = $db->prepare("SELECT nombre FROM animales WHERE id_animal = :id");
             $stmtNombre->execute([':id' => $id_animal]);
             $nombre_animal = $stmtNombre->fetchColumn();
@@ -40,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
 
-            // 2. Definir nombre del archivo
             $file = $_FILES['foto'];
             $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
             

@@ -14,7 +14,6 @@ if (!$data || empty($data->id_solicitud) || empty($data->nuevo_estado)) {
     exit;
 }
 
-// Validar que el estado sea correcto según el ENUM
 $estados_permitidos = ['Pendiente', 'Aprobada', 'Rechazada'];
 if (!in_array($data->nuevo_estado, $estados_permitidos)) {
     http_response_code(400);

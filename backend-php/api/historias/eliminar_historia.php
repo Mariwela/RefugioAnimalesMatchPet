@@ -6,7 +6,6 @@ require_once '../../config/auth_middleware.php';
 
 $payload = autenticar(); 
 
-// Obtener ID de la historia (puede venir por GET o POST, usaremos GET por simplicidad en Angular)
 $id_historia = isset($_GET['id']) ? (int)$_GET['id'] : 0;
 
 if ($id_historia <= 0) {
@@ -19,7 +18,6 @@ try {
     $database = new Database();
     $db = $database->getConnection();
 
-    // 1. Consultar la historia para obtener la ruta de la imagen y el autor
     $querySelect = "SELECT id_usuario, imagen_url FROM historias_adopcion WHERE id_historia = :id";
     $stmtSelect = $db->prepare($querySelect);
     $stmtSelect->execute([':id' => $id_historia]);
@@ -31,20 +29,17 @@ try {
         exit;
     }
 
-    // 2. Verificar si es Admin o si es el usuario que la creó
     if ($payload['rol'] !== 'admin' && $payload['id_usuario'] != $historia['id_usuario']) {
         http_response_code(403);
         echo json_encode(["message" => "No tienes permiso para eliminar esta historia."]);
         exit;
     }
 
-    // 3. Borrar el registro de la Base de Datos
     $queryDelete = "DELETE FROM historias_adopcion WHERE id_historia = :id";
     $stmtDelete = $db->prepare($queryDelete);
     
     if ($stmtDelete->execute([':id' => $id_historia])) {
         
-        // 4. Borrar el archivo físico si no es la imagen por defecto
         $ruta_imagen = $historia['imagen_url'];
         
         if ($ruta_imagen && $ruta_imagen !== "public/historias/default.jpg") {

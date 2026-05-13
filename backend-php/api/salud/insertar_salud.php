@@ -14,7 +14,6 @@ if (empty($data->id_animal) || empty($data->evento) || empty($data->titulo) || e
     exit;
 }
 
-// Validar que el evento es uno de los permitidos por el ENUM
 $eventos_validos = ['Vacuna', 'Cirugía', 'Revisión', 'Tratamiento', 'Desparasitación'];
 if (!in_array($data->evento, $eventos_validos)) {
     http_response_code(400);

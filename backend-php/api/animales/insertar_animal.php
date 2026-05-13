@@ -43,8 +43,6 @@ if (!empty($nombre) && !empty($especie)) {
         $stmt->bindValue(':peso', $_POST['peso'] ?? null);
         $stmt->bindValue(':descripcion', $_POST['descripcion'] ?? null);
         $stmt->bindValue(':nivel_energia', $_POST['nivel_energia'] ?? 'Media');
-        
-        // Los booleanos llegan como '1' o '0' desde tu Angular
         $stmt->bindValue(':apto_pisos', $_POST['apto_pisos'] == '1' ? 1 : 0);
         $stmt->bindValue(':sociable_ninos', $_POST['sociable_ninos'] == '1' ? 1 : 0);
         $stmt->bindValue(':sociable_perros', $_POST['sociable_perros'] == '1' ? 1 : 0);
@@ -52,8 +50,7 @@ if (!empty($nombre) && !empty($especie)) {
         $stmt->bindValue(':enfermedad_cronica', $_POST['enfermedad_cronica'] == '1' ? 1 : 0);
         $stmt->bindValue(':esterilizado', $_POST['esterilizado'] == '1' ? 1 : 0);
         $stmt->bindValue(':nivel_paciencia', $_POST['nivel_paciencia'] ?? 'Baja');
-        $stmt->bindValue(':es_para_principiantes', $_POST['es_para_principiantes'] == '1' ? 1 : 0);
-        
+        $stmt->bindValue(':es_para_principiantes', $_POST['es_para_principiantes'] == '1' ? 1 : 0);       
         $stmt->bindValue(':aviso_importante', $_POST['aviso_importante'] ?? null);
         $stmt->bindValue(':estado', $_POST['estado'] ?? 'Disponible');
         $stmt->bindValue(':foto_portada', $ruta_portada);
@@ -61,17 +58,13 @@ if (!empty($nombre) && !empty($especie)) {
         if($stmt->execute()) {
             $nuevo_id = $db->lastInsertId();
 
-            // Crear carpeta física
             $dir = dirname(__FILE__, 3) . '/public/img/animales/' . $nombre_carpeta;
             if (!file_exists($dir)) {
                 mkdir($dir, 0777, true);
             }
 
-            // URL Dinámica para que Angular sepa qué mostrar (la default)
             $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') ? "https" : "http";
             $base_url = $protocol . "://" . $_SERVER['HTTP_HOST'];
-            
-            // Si es default.jpg, la ruta es directa, si no, es dentro de la carpeta
             $img_path = $base_url . '/RefugioAnimalesMatchPet/public/img/animales/' . $ruta_portada;
             echo json_encode([
                 "status" => "success", 

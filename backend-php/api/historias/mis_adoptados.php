@@ -6,14 +6,12 @@ require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
 try {
-    // Exigimos que esté logueado (cualquier rol vale)
     $payload = autenticar(); 
     $id_usuario = $payload['id_usuario'];
 
     $database = new Database();
     $db = $database->getConnection();
 
-    // Buscamos los animales que este usuario ha adoptado (solicitud aprobada)
     $query = "SELECT a.id_animal, a.nombre 
               FROM solicitudes s
               INNER JOIN animales a ON s.id_animal = a.id_animal

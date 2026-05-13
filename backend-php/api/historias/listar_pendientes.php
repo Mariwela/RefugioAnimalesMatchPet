@@ -6,14 +6,10 @@ require_once '../../config/conexion.php';
 require_once '../../config/auth_middleware.php';
 
 try {
-    // 1. Solo los admins pueden ver esto
     requiere_rol('admin');
 
     $database = new Database();
     $db = $database->getConnection();
-
-    // 2. Consulta mejorada
-    // Traemos los datos de la historia + el nombre del animal para que el admin sepa de quién es
     $query = "SELECT h.*, a.nombre as nombre_animal 
               FROM historias_adopcion h
               INNER JOIN animales a ON h.id_animal = a.id_animal
@@ -24,8 +20,7 @@ try {
     $stmt->execute();
     
     $historias = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    
-    // 3. Devolvemos la lista (aunque sea un array vacío)
+
     echo json_encode([
         "status" => "success", 
         "data" => $historias
