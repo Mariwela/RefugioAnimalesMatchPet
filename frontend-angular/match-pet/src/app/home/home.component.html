@@ -1,81 +1,67 @@
-<div class="home-wrapper">
-
+<main class="home-container">
+    <!-- SECCIÓN HERO -->
     <section class="hero-section">
         <div class="hero-content">
-            <div class="hero-badge">Bienvenidos a MatchPet 🐾</div>
-            <h1>El lugar donde los <span class="highlight">corazones peludos</span> encuentran su hogar</h1>
-            <p class="hero-subtitle">
-                Únete a la comunidad definitiva. Adopta un nuevo integrante para tu familia, encuentra pareja para tu
-                mascota, asiste a eventos y conecta con miles de amantes de los animales.
-            </p>
+            <h1>Encuentra a tu compañero de vida en <span>Matchpet</span></h1>
+            <p>Miles de animales buscan una segunda oportunidad. Adopta, acoge o colabora con nosotros para cambiar sus
+                vidas.</p>
             <div class="hero-buttons">
-                <a routerLink="/animales" class="btn btn-primary">
-                    <i class="fa fa-paw"></i> Adoptar ahora
-                </a>
-                <a routerLink="/login" class="btn btn-secondary">
-                    Crear cuenta libre
-                </a>
+                <button class="btn btn-primary" routerLink="/animales">Ver peludos disponibles</button>
+                <button class="btn btn-outline" routerLink="/como-adoptar">¿Cómo adoptar?</button>
             </div>
         </div>
     </section>
 
-    <section class="features-section">
-        <div class="section-header">
-            <h2 class="section-title">¿Qué puedes hacer en MatchPet?</h2>
-            <div class="title-underline"></div>
+    <!-- SECCIÓN MATCHPET DESTACADA -->
+    <section class="matchpet-banner">
+        <div class="matchpet-banner-text">
+            <h2>¿No sabes qué animal encaja mejor contigo?</h2>
+            <p>Prueba nuestro sistema <strong>Matchpet</strong>. Evaluamos tu nivel de energía, tipo de vivienda y
+                experiencia para encontrar el perro o gato ideal para ti.</p>
+            <button class="btn btn-secondary" routerLink="/matchpet">Hacer el test Matchpet ✨</button>
         </div>
+    </section>
 
-        <div class="features-grid">
-            <div class="feature-card">
-                <div class="icon-wrapper icon-adoptar">
-                    <i class="fa fa-home"></i>
-                </div>
-                <h3>Adopción</h3>
-                <p>Dale una segunda oportunidad a un peludo que lo necesita. Encuentra a tu nuevo mejor amigo.</p>
-                <a routerLink="/animales" class="feature-link">Ver peludos <i class="fa fa-arrow-right"></i></a>
+    <!-- SECCIÓN CÓMO AYUDAR (Tarjetas) -->
+    <section class="help-section">
+        <h2 class="section-title">¿Cómo puedes ayudar?</h2>
+        <div class="cards-grid">
+            <!-- Tarjeta Acogida -->
+            <div class="card">
+                <div class="card-icon">🏠</div>
+                <h3>Casas de Acogida</h3>
+                <p>Abre las puertas de tu casa temporalmente a un animal que lo necesita mientras encuentra su familia
+                    definitiva.</p>
+                <a routerLink="/acogida" class="card-link">Saber más ➔</a>
             </div>
 
-            <div class="feature-card">
-                <div class="icon-wrapper icon-pareja">
-                    <i class="fa fa-heart"></i>
-                </div>
-                <h3>Buscar Pareja</h3>
-                <p>Crea el perfil de tu mascota y haz 'match' con otros usuarios de tu zona para cruzas responsables.
-                </p>
-                <a routerLink="/pareja" class="feature-link">Ir a citas <i class="fa fa-arrow-right"></i></a>
+            <!-- Tarjeta Voluntariado -->
+            <div class="card">
+                <div class="card-icon">🤝</div>
+                <h3>Voluntariado</h3>
+                <p>Únete a nuestro equipo. Necesitamos manos para pasear, cuidar y dar cariño a nuestros animales
+                    rescatados.</p>
+                <a routerLink="/voluntariado" class="card-link">Únete ➔</a>
             </div>
 
-            <div class="feature-card">
-                <div class="icon-wrapper icon-eventos">
-                    <i class="fa fa-calendar-alt"></i>
-                </div>
-                <h3>Eventos Locales</h3>
-                <p>Descubre paseos grupales, ferias de adopción y talleres para disfrutar con tu mascota.</p>
-                <a routerLink="/eventos" class="feature-link">Descubrir eventos <i class="fa fa-arrow-right"></i></a>
-            </div>
-
-            <div class="feature-card">
-                <div class="icon-wrapper icon-comunidad">
-                    <i class="fa fa-comments"></i>
-                </div>
-                <h3>Comunidad</h3>
-                <p>Comparte fotos, resuelve dudas y recibe consejos de nuestra gran red de Pet Lovers.</p>
-                <a routerLink="/comunidad" class="feature-link">Unirse al foro <i class="fa fa-arrow-right"></i></a>
+            <!-- Tarjeta Donaciones -->
+            <div class="card">
+                <div class="card-icon">❤️</div>
+                <h3>Donaciones</h3>
+                <p>Tu aportación económica nos ayuda a costear gastos veterinarios, alimentación y mantenimiento de las
+                    instalaciones.</p>
+                <a routerLink="/donar" class="card-link">Donar ahora ➔</a>
             </div>
         </div>
     </section>
 
-    <section class="cta-section">
-        <div class="cta-banner">
-            <div class="cta-content">
-                <h2>¿Tienes un refugio o rescataste a un animal?</h2>
-                <p>Ayúdanos a encontrarles una familia amorosa. Publicar en MatchPet es 100% gratis y seguro.</p>
-                <button class="btn btn-light" routerLink="/login">Publicar una mascota</button>
-            </div>
-            <div class="cta-decoration">
-                <i class="fa fa-bullhorn"></i>
-            </div>
+    <!-- SECCIÓN FINALES FELICES -->
+    <section class="stories-section">
+        <div class="stories-content">
+            <h2>Finales Felices</h2>
+            <p>Lee las historias de las familias que ya han encontrado a su compañero ideal y cómo ha cambiado su vida.
+            </p>
+            <button class="btn btn-outline" routerLink="/historias">Leer historias de adopción</button>
         </div>
     </section>
-
-</div>
+</main>
