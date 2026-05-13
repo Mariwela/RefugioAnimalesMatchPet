@@ -3213,3 +3213,93 @@ UPDATE salud_historial SET id_usuario = (SELECT id_usuario FROM usuarios WHERE r
 
 UPDATE animal_fotos SET ruta_foto = REPLACE(ruta_foto, 'fotos/', '') WHERE ruta_foto LIKE 'fotos/%';
 UPDATE animales SET foto_portada = REPLACE(foto_portada, 'fotos/', '') WHERE foto_portada LIKE 'fotos/%';
+
+-- 1. Crear 8 Usuarios para evitar el error de clave foránea
+INSERT INTO usuarios (nombre_completo, email, password, rol) VALUES 
+('Carlos Martínez', 'carlos@ejemplo.com', 'pass123', 'colaborador'),
+('Laura Gómez', 'laura@ejemplo.com', 'pass123', 'colaborador'),
+('Javier Ruiz', 'javier@ejemplo.com', 'pass123', 'colaborador'),
+('Ana Fernández', 'ana@ejemplo.com', 'pass123', 'colaborador'),
+('David López', 'david@ejemplo.com', 'pass123', 'colaborador'),
+('María Sánchez', 'maria@ejemplo.com', 'pass123', 'colaborador'),
+('Pedro Jiménez', 'pedro@ejemplo.com', 'pass123', 'colaborador'),
+('Usuario Prueba', 'prueba@ejemplo.com', 'pass123', 'colaborador');
+
+-- 2. Crear 8 Animales para las historias
+INSERT INTO animales (nombre, especie, sexo, estado) VALUES 
+('Kira', 'Perro', 'Hembra', 'Adoptado'),
+('Toby', 'Perro', 'Macho', 'Adoptado'),
+('Salem', 'Gato', 'Macho', 'Adoptado'),
+('Bimba y Coco', 'Perro', 'Hembra', 'Adoptado'),
+('Tambor', 'Exótico', 'Macho', 'Adoptado'),
+('Rayo', 'Perro', 'Macho', 'Adoptado'),
+('Bagheera', 'Gato', 'Hembra', 'Adoptado'),
+('Firulais', 'Perro', 'Desconocido', 'Adoptado');
+
+-- 3. Insertar las 8 historias SOLO con las fotos indicadas
+INSERT INTO historias_adopcion 
+    (id_usuario, id_animal, titulo, contenido, imagen_url, estado, comentario_admin) 
+VALUES 
+    -- Imagen 8
+    (1, 1, 
+    'De la calle al sofá', 
+    'Kira llegó a casa muy asustadiza. El proceso de adaptación fue lento; tuvimos que enseñarle que los humanos también pueden dar caricias. Hoy, tres meses después, por fin ha aprendido a jugar con la pelota.', 
+    'historia_8_1778503083958.jpg', 
+    'Aprobada', 
+    'Historia destacada para nuestras redes sociales. ¡Gran trabajo de rehabilitación!'),
+
+    -- Imagen 9
+    (2, 2, 
+    'Un torbellino de energía', 
+    'Adoptar a este pequeño cachorro ha puesto nuestra rutina patas arriba, ¡pero en el buen sentido! Está en plena fase de morderlo todo, pero sus siestas en nuestro regazo lo compensan. Estamos yendo a un educador y va genial.', 
+    'historia_9_1778503396879.jpg', 
+    'Pendiente', 
+    NULL),
+
+    -- Imagen 10
+    (3, 3, 
+    'Paciencia, ronroneos y amor', 
+    'Nos dijeron que Salem era un gato "invisible" del refugio porque siempre se escondía de las visitas. Decidimos darle la oportunidad. Tardó dos semanas en salir de debajo del mueble, pero hoy nos ha despertado con un concierto de ronroneos.', 
+    'historia_10_1778503682373.JPG', 
+    'Aprobada', 
+    '¡Qué emocionante! Salem necesitaba exactamente una familia comprensiva como la vuestra.'),
+
+    -- Imagen 11
+    (4, 4, 
+    'Mejor en pareja', 
+    'No podíamos separar a estos dos hermanos. Sabíamos que adoptar dos perros de golpe era un reto, pero verlos jugar juntos y darse calor al dormir nos confirma que tomamos la decisión correcta. Son inseparables.', 
+    'historia_11_1778503943227.jpg', 
+    'Aprobada', 
+    NULL),
+
+    -- Imagen 12
+    (5, 5, 
+    'Saltos de alegría en el jardín', 
+    'Nunca habíamos tenido un conejo antes, pero Tambor nos ha sorprendido por lo listo que es. Ya sabe usar su esquinero y le encanta dar carreras por el pasillo cuando le abrimos su parque. Es un glotón con las zanahorias.', 
+    'historia_12_1778504205806.jpg', 
+    'Pendiente', 
+    NULL),
+
+    -- Imagen 13
+    (6, 6, 
+    'La vida después de las carreras', 
+    'Adoptar a un galgo rescatado es conocer lo que es la nobleza pura. Al principio no sabía lo que era subir unas escaleras ni pasear por la ciudad, pero confía ciegamente en nosotros. Ahora su pasatiempo favorito es dormir 18 horas al día en el sofá.', 
+    'historia_13_1778507133447.jpg', 
+    'Aprobada', 
+    'Los galgos son mágicos. Nos alegra saber que por fin conoce lo que es una cama de verdad.'),
+
+    -- Imagen 16
+    (7, 7, 
+    'Mi pequeña pantera', 
+    'Adopté a este gato negro porque me enteré de que son los menos adoptados por culpa de supersticiones absurdas. Es el animal más charlatán y cariñoso que he conocido. Me sigue a todas partes por la casa como si fuera un perrito.', 
+    'historia_16_1778569588927.JPG', 
+    'Aprobada', 
+    '¡Totalmente cierto! Rompiendo mitos gracias a familias como la tuya.'),
+
+    -- Imagen 23
+    (8, 8, 
+    'Prueba de adopción (Rechazar esta historia)', 
+    'Esta es una historia de prueba para ver si funciona el sistema. El perrito es muy bonito y bla bla bla. Insertando texto de relleno para probar el límite de caracteres del formulario de la web.', 
+    'historia_23_1778569565552.JPG', 
+    'Rechazada', 
+    'Se rechaza esta publicación por contener texto de prueba y no ser una historia real.');
