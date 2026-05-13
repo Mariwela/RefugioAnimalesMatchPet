@@ -23,16 +23,15 @@
             </button>
 
             @if (isAdmin) {
-                <div class="acciones-admin">
-                    <button class="btn-editar-admin" (click)="irAEditar()">
-                        <i class="fa fa-pencil"></i> Editar Ficha del Animal
-                    </button>
-                   <button class="btn-eliminar-admin" (click)="confirmarEliminar()">
-                        <i class="fa fa-trash"></i> Eliminar Animal
-                    </button>
-                </div>
+            <div class="acciones-admin">
+                <button class="btn-editar-admin" (click)="irAEditar()">
+                    <i class="fa fa-pencil"></i> Editar Ficha del Animal
+                </button>
+                <button class="btn-eliminar-admin" (click)="confirmarEliminar()">
+                    <i class="fa fa-trash"></i> Eliminar Animal
+                </button>
+            </div>
             }
-
         </div>
 
         <div class="grid-perfil">
@@ -49,19 +48,30 @@
                     style="display: flex; align-items: flex-start; justify-content: space-between; gap: 15px;">
                     <div>
                         <h2 style="margin-bottom: 5px;">{{ animal.nombre }}</h2>
-                        <span class="etiqueta-estado"><i class="fa fa-check-circle"></i> Disponible para Adopción</span>
+                        <!-- ESTADO DINÁMICO: En lugar de texto fijo, mostramos el estado real de la BD -->
+                        <span class="etiqueta-estado"
+                            [ngClass]="'estado-' + animal.estado.toLowerCase().replace(' ', '-')">
+                            <i class="fa fa-info-circle"></i> {{ animal.estado }}
+                        </span>
                     </div>
 
                     <button class="btn-favorito" (click)="toggleFavorito(animal.id_animal)"
                         [class.es-favorito]="isFavorito(animal.id_animal)" title="Añadir/Quitar de favoritos"
                         style="background: transparent; border: none; font-size: 28px; cursor: pointer; transition: transform 0.2s;">
                         <span class="heart-icon">
-                            @if (isFavorito(animal.id_animal)) {
-                            ❤️ } @else {
-                            🤍 }
+                            @if (isFavorito(animal.id_animal)) { ❤️ } @else { 🤍 }
                         </span>
                     </button>
                 </div>
+
+                <!-- AVISO IMPORTANTE: Si hay notas médicas o de comportamiento urgentes -->
+                @if (animal.aviso_importante) {
+                <div class="alerta-importante"
+                    style="background-color: #fff3cd; color: #856404; padding: 10px; border-left: 4px solid #ffeeba; margin-top: 15px; border-radius: 4px;">
+                    <strong>⚠️ Aviso Importante:</strong> {{ animal.aviso_importante }}
+                </div>
+                }
+
                 <div class="datos-rapidos" style="margin-top: 20px;">
                     <div class="dato-item">
                         <span class="icono">🐾</span>
@@ -96,14 +106,68 @@
                             <p>{{ animal.tamano }}</p>
                         </div>
                     </div>
+
+                    <!-- NUEVOS DATOS RÁPIDOS -->
+                    @if (animal.peso) {
+                    <div class="dato-item">
+                        <span class="icono">⚖️</span>
+                        <div class="dato-texto">
+                            <strong>Peso</strong>
+                            <p>{{ animal.peso }} kg</p>
+                        </div>
+                    </div>
+                    }
+
+                    <div class="dato-item">
+                        <span class="icono">⚡</span>
+                        <div class="dato-texto">
+                            <strong>Energía</strong>
+                            <p>{{ animal.nivel_energia }}</p>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="descripcion-animal">
+                <div class="descripcion-animal" style="margin-top: 20px;">
                     <h3>Conoce a {{ animal.nombre }}</h3>
                     <p>{{ animal.descripcion }}</p>
                 </div>
 
-                <div class="zona-adopcion">
+                <!-- NUEVA SECCIÓN: SOCIABILIDAD Y SALUD -->
+                <div class="info-detallada-grid"
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; background: #f9f9f9; padding: 15px; border-radius: 8px;">
+
+                    <div class="sociabilidad">
+                        <h4 style="margin-top: 0; color: #333;">Sociabilidad y Entorno</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
+                            <li>
+                                @if(animal.apto_pisos) { ✅ Apto para pisos } @else { ❌ Mejor casa con jardín }
+                            </li>
+                            <li>
+                                @if(animal.sociable_ninos) { ✅ Sociable con niños } @else { ⚠️ No testado con niños }
+                            </li>
+                            <li>
+                                @if(animal.sociable_perros) { ✅ Sociable con perros } @else { ⚠️ Problemas con perros }
+                            </li>
+                            <li>
+                                @if(animal.sociable_gatos) { ✅ Sociable con gatos } @else { ⚠️ No apto para gatos }
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="salud-caracter">
+                        <h4 style="margin-top: 0; color: #333;">Salud y Carácter</h4>
+                        <ul style="list-style: none; padding: 0; margin: 0; line-height: 1.8;">
+                            <li><strong>Esterilizado/a:</strong> {{ animal.esterilizado ? 'Sí ✅' : 'No ❌' }}</li>
+                            <li><strong>Enf. Crónica:</strong> {{ animal.enfermedad_cronica ? 'Sí ⚠️' : 'No ✅' }}</li>
+                            <li><strong>Paciencia req.:</strong> {{ animal.nivel_paciencia }}</li>
+                            <li><strong>¿Principiantes?:</strong> {{ animal.es_para_principiantes ? 'Sí, ideal ✅' :
+                                'Requiere experiencia ⚠️' }}</li>
+                        </ul>
+                    </div>
+
+                </div>
+
+                <div class="zona-adopcion" style="margin-top: 30px;">
                     <h3>¿Te has enamorado?</h3>
                     <p>Si crees que puedes darle el hogar que se merece, ¡inicia el proceso!</p>
 
@@ -120,11 +184,15 @@
                     }
 
                     @if (!mensajeSolicitud) {
-                    <button class="btn-adoptar-principal" (click)="solicitarAdopcion()" [disabled]="enviandoSolicitud"
+                    <!-- Deshabilito el botón si el animal ya está adoptado o reservado -->
+                    <button class="btn-adoptar-principal" (click)="solicitarAdopcion()"
+                        [disabled]="enviandoSolicitud || animal.estado !== 'Disponible'"
                         [class.btn-cargando]="enviandoSolicitud">
 
                         @if (enviandoSolicitud) {
                         <i class="fa fa-spinner fa-spin"></i> Procesando solicitud...
+                        } @else if (animal.estado !== 'Disponible') {
+                        <i class="fa fa-lock"></i> Actualmente {{ animal.estado.toLowerCase() }}
                         } @else {
                         <i class="fa fa-paw"></i> Adoptar a {{ animal.nombre }}
                         }
