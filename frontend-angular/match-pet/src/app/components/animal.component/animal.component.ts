@@ -25,12 +25,13 @@ export class AnimalComponent implements OnInit {
 
   favoritosIds: number[] = [];
 
-  // Objeto de filtros
+  // 👉 NUEVO: Añadimos nivel_energia al objeto de filtros
   filtros = {
     texto: '',
     especie: '',
     tamano: '',
-    sexo: ''
+    sexo: '',
+    nivel_energia: ''
   };
 
   public authService = inject(AuthService);
@@ -49,9 +50,6 @@ export class AnimalComponent implements OnInit {
     this.cargarAnimales(); // Solo llamamos a la lista normal al inicio
   }
 
-  // ---------------------------------------------------
-  // FAVORITOS
-  // ---------------------------------------------------
   cargarFavoritosUsuario() {
     if (this.authService.isLoggedIn()) {
       this.favoritosService.getFavoritos().subscribe({
@@ -90,18 +88,12 @@ export class AnimalComponent implements OnInit {
     }
   }
 
-  // ---------------------------------------------------
-  // NAVEGACIÓN Y DETALLES
-  // ---------------------------------------------------
   verDetalles(id: number) {
     this.router.navigate(['/animal', id]).then(exito => {
       if (!exito) console.log('La navegación falló');
     });
   }
 
-  // ---------------------------------------------------
-  // CARGA NORMAL Y PAGINACIÓN
-  // ---------------------------------------------------
   cargarAnimales(): void {
     this.cargando = true;
 
@@ -124,14 +116,15 @@ export class AnimalComponent implements OnInit {
     return this.filtros.texto !== '' ||
       this.filtros.especie !== '' ||
       this.filtros.tamano !== '' ||
-      this.filtros.sexo !== '';
+      this.filtros.sexo !== '' ||
+      this.filtros.nivel_energia !== '';
   }
 
   cambiarPagina(nuevaPagina: number): void {
     if (nuevaPagina >= 1) {
       this.paginaActual = nuevaPagina;
 
-      // Decidimos qué cargar dependiendo de si hay filtros activos
+
       if (this.hayFiltrosActivos()) {
         this.aplicarFiltros();
       } else {
@@ -142,13 +135,10 @@ export class AnimalComponent implements OnInit {
     }
   }
 
-  // ---------------------------------------------------
-  // FILTROS
-  // ---------------------------------------------------
 
-  // 👉 Esta es la función que debe llamar tu botón "Buscar" en el HTML
+
   buscarConFiltros(): void {
-    this.paginaActual = 1; // Volvemos a la página 1 en cada nueva búsqueda
+    this.paginaActual = 1;
     this.aplicarFiltros();
   }
 
@@ -156,7 +146,6 @@ export class AnimalComponent implements OnInit {
     this.cargando = true;
     this.cdr.detectChanges();
 
-    // Agregamos la página actual al objeto de filtros
     const filtrosConPagina = {
       ...this.filtros,
       pagina: this.paginaActual
@@ -164,7 +153,7 @@ export class AnimalComponent implements OnInit {
 
     this.animalService.filtrarAnimales(filtrosConPagina).subscribe({
       next: (res) => {
-        // Asegúrate de que tu PHP devuelve los datos en res.data
+
         this.animales = res.data || [];
         this.cargando = false;
         this.cdr.detectChanges();
@@ -178,14 +167,11 @@ export class AnimalComponent implements OnInit {
   }
 
   limpiarFiltros(): void {
-    this.filtros = { texto: '', especie: '', tamano: '', sexo: '' };
+    this.filtros = { texto: '', especie: '', tamano: '', sexo: '', nivel_energia: '' };
     this.paginaActual = 1; // Volvemos a la primera página
     this.cargarAnimales(); // Cargamos la lista normal
   }
 
-  // ---------------------------------------------------
-  // ELIMINAR ANIMAL
-  // ---------------------------------------------------
   eliminarAnimal(idAnimal: number, nombreAnimal: string) {
     const confirmacion = window.confirm(`¿Estás seguro de que deseas eliminar a ${nombreAnimal}? Esta acción borrará todas sus fotos y no se puede deshacer.`);
 
@@ -221,9 +207,6 @@ export class AnimalComponent implements OnInit {
     });
   }
 
-  // ---------------------------------------------------
-  // UTILIDADES (FOTOS)
-  // ---------------------------------------------------
   getFotoUrl(foto: string): string {
     if (!foto || foto === 'default_animal.jpg') {
       return 'assets/img/default_animal.jpg';

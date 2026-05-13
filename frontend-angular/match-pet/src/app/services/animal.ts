@@ -174,12 +174,17 @@ export class AnimalService {
       params = params.set('sexo', filtros.sexo);
     }
 
+    // 🌟 NUEVO: Añadimos el nivel de energía a los parámetros
+    if (filtros.nivel_energia && filtros.nivel_energia !== '') {
+      params = params.set('nivel_energia', filtros.nivel_energia);
+    }
+
     // NUEVO: Añadimos la página a los parámetros de la URL
     if (filtros.pagina) {
       params = params.set('pagina', filtros.pagina.toString());
     }
 
-    // Petición GET enviando los parámetros (ejemplo: .../filtrar_animales.php?especie=Perro&pagina=2)
+    // Petición GET enviando los parámetros
     return this.http.get(`${this.baseUrl}/filtrar_animales.php`, { params: params });
   }
 

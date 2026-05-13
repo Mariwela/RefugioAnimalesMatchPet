@@ -28,6 +28,14 @@
                 <option value="Hembra">Hembra</option>
             </select>
         </div>
+        <div class="filtro-grupo">
+            <select [(ngModel)]="filtros.nivel_energia" (ngModelChange)="buscarConFiltros()">
+                <option value="">Cualquier Energía</option>
+                <option value="Baja">Baja</option>
+                <option value="Media">Media</option>
+                <option value="Alta">Alta</option>
+            </select>
+        </div>
     </div>
 
     @if (cargando) {
@@ -65,9 +73,9 @@
                 }">{{ animal.especie }}</span>
                 <p><strong>Raza:</strong> {{ animal.raza }}</p>
                 <p><strong>Sexo:</strong> {{ animal.sexo }}</p>
-                <p><strong>Tamaño:</strong> {{ animal.tamano }}</p>
-                <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
+                <p><strong>Energía:</strong> {{ animal.nivel_energia }}</p>
 
+                <button class="btn-adoptar" (click)="verDetalles(animal.id_animal)">Ver Perfil</button>
             </div>
         </div>
         }
