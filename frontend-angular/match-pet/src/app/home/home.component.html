@@ -2,66 +2,77 @@
     <!-- SECCIÓN HERO -->
     <section class="hero-section">
         <div class="hero-content">
-            <h1>Encuentra a tu compañero de vida en <span>Matchpet</span></h1>
-            <p>Miles de animales buscan una segunda oportunidad. Adopta, acoge o colabora con nosotros para cambiar sus
-                vidas.</p>
+            <h1>Descubre a tu nuevo mejor amigo en <span>Matchpet</span></h1>
+            <p>Cientos de compañeros peludos esperan una oportunidad para llenar tu hogar de alegría. Explora, conecta y
+                cambia un destino hoy mismo.</p>
             <div class="hero-buttons">
-                <button class="btn btn-primary" routerLink="/animales">Ver peludos disponibles</button>
-                <button class="btn btn-outline" routerLink="/como-adoptar">¿Cómo adoptar?</button>
+                <button class="btn btn-primary" routerLink="/animales">Explorar adopciones</button>
+                <button class="btn btn-outline" routerLink="/como-adoptar">Guía de proceso</button>
             </div>
         </div>
     </section>
 
-    <!-- SECCIÓN MATCHPET DESTACADA -->
-    <section class="matchpet-banner">
-        <div class="matchpet-banner-text">
-            <h2>¿No sabes qué animal encaja mejor contigo?</h2>
-            <p>Prueba nuestro sistema <strong>Matchpet</strong>. Evaluamos tu nivel de energía, tipo de vivienda y
-                experiencia para encontrar el perro o gato ideal para ti.</p>
-            <button class="btn btn-secondary" routerLink="/matchpet">Hacer el test Matchpet ✨</button>
+    <!-- SECCIÓN PRINCIPAL: TEST Y ACCIONES -->
+    <section class="match-test-container">
+        <!-- Rastro de huellas decorativas por el fondo -->
+        <div class="floating-decorations">
+            <i class="fa fa-paw deco-1"></i>
+            <i class="fa fa-paw deco-2"></i>
+            <i class="fa fa-home deco-3"></i>
+            <i class="fa fa-paw deco-4"></i>
+            <i class="fa fa-paw deco-5"></i>
+            <i class="fa fa-paw deco-6"></i>
+            <i class="fa fa-heart deco-7"></i>
+            <i class="fa fa-paw deco-8"></i>
         </div>
-    </section>
 
-    <!-- SECCIÓN CÓMO AYUDAR (Tarjetas) -->
-    <section class="help-section">
-        <h2 class="section-title">¿Cómo puedes ayudar?</h2>
-        <div class="cards-grid">
+        <div class="test-header">
+            <h2>¿Buscas la mascota ideal para tu estilo de vida?</h2>
+            <p>Utiliza nuestra herramienta inteligente <strong>Matchpet</strong> para vincular tus hábitos y
+                preferencias con el animal que mejor se adapte a tu hogar. ¡Empieza ahora!</p>
+            <button class="btn-main-test" routerLink="/matchpet">Encontrar mi pareja ideal ✨</button>
+        </div>
+
+        <div class="action-grid">
             <!-- Tarjeta Acogida -->
-            <div class="card">
-                <div class="card-icon">🏠</div>
-                <h3>Casas de Acogida</h3>
-                <p>Abre las puertas de tu casa temporalmente a un animal que lo necesita mientras encuentra su familia
-                    definitiva.</p>
-                <a routerLink="/acogida" class="card-link">Saber más ➔</a>
+            <div class="card-action split">
+                <div class="card-info">
+                    <div class="icon-circle orange-icon"><i class="fa fa-home"></i></div>
+                    <h3>Hogar Temporal</h3>
+                    <p class="card-desc">Ofrece refugio y cariño provisional a un animal en espera de adopción.</p>
+                    <a routerLink="/acogida" class="btn-card orange">Más info</a>
+                </div>
+                <div class="card-img"
+                    style="background-image: url('https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?q=80&w=500&auto=format&fit=crop');">
+                </div>
             </div>
 
             <!-- Tarjeta Voluntariado -->
-            <div class="card">
-                <div class="card-icon">🤝</div>
-                <h3>Voluntariado</h3>
-                <p>Únete a nuestro equipo. Necesitamos manos para pasear, cuidar y dar cariño a nuestros animales
-                    rescatados.</p>
-                <a routerLink="/voluntariado" class="card-link">Únete ➔</a>
+            <div class="card-action split">
+                <div class="card-info">
+                    <div class="icon-circle orange-icon"><i class="fa fa-users"></i></div>
+                    <h3>Colabora</h3>
+                    <p class="card-desc">Regala tu tiempo paseando, cuidando o ayudando en tareas del refugio.</p>
+                    <a routerLink="/voluntariado" class="btn-card orange">Quiero ayudar</a>
+                </div>
+                <!-- Imagen con tres gatitos -->
+                <div class="card-img"
+                    style="background-image: url('https://thumbs.dreamstime.com/b/dos-gatitos-con-cinco-sobre-fondo-blanco-ginger-y-grises-dando-un-alto-incomparable-celebrando-la-amistad-colaboraci%C3%B3n-392534421.jpg?w=992');">
+                </div>
             </div>
 
-            <!-- Tarjeta Donaciones -->
-            <div class="card">
-                <div class="card-icon">❤️</div>
-                <h3>Donaciones</h3>
-                <p>Tu aportación económica nos ayuda a costear gastos veterinarios, alimentación y mantenimiento de las
-                    instalaciones.</p>
-                <a routerLink="/donar" class="card-link">Donar ahora ➔</a>
+            <!-- Tarjeta Donar -->
+            <div class="card-action split">
+                <div class="card-info">
+                    <div class="icon-circle blue-icon"><i class="fa fa-heart"></i></div>
+                    <h3>Donaciones</h3>
+                    <p class="card-desc">Tu apoyo económico financia rescates, alimento y atención veterinaria.</p>
+                    <a routerLink="/donar" class="btn-card blue">Aportar ahora</a>
+                </div>
+                <div class="card-img"
+                    style="background-image: url('https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=500&auto=format&fit=crop');">
+                </div>
             </div>
-        </div>
-    </section>
-
-    <!-- SECCIÓN FINALES FELICES -->
-    <section class="stories-section">
-        <div class="stories-content">
-            <h2>Finales Felices</h2>
-            <p>Lee las historias de las familias que ya han encontrado a su compañero ideal y cómo ha cambiado su vida.
-            </p>
-            <button class="btn btn-outline" routerLink="/historias">Leer historias de adopción</button>
         </div>
     </section>
 </main>
