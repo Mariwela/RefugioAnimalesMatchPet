@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { UsuarioService } from '../../services/usuario';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterModule } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-voluntariado',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, RouterModule,],
   templateUrl: './voluntariado.html',
   styleUrls: ['./voluntariado.css']
 })
@@ -41,7 +41,7 @@ export class Voluntariado implements OnInit {
       this.usuarioService.verPerfil(id).subscribe({
         next: (data) => {
           this.perfilVoluntario = { ...this.perfilVoluntario, ...data };
-          
+
           const valorCargado = this.perfilVoluntario.area_interes;
           if (valorCargado && !this.opcionesFijas.includes(valorCargado)) {
             this.opcionSeleccionada = 'Otros';
@@ -101,8 +101,8 @@ export class Voluntariado implements OnInit {
     this.guardando = true;
     this.perfilVoluntario.disponibilidad_voluntario = 'si';
 
-    const datos = { 
-      id_usuario: id, 
+    const datos = {
+      id_usuario: id,
       ...this.perfilVoluntario
     };
 
