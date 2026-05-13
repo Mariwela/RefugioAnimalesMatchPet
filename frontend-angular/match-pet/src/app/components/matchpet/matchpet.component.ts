@@ -313,7 +313,7 @@ export class MatchpetComponent implements OnInit {
             tipoPregunta: 'booleano',
             sinPreferencia: false,
             opciones: [
-                { label: '🚀 Quiero resultados rápidos', valor: 'Baja' },
+                { label: '🤨 Tengo poca paciencia', valor: 'Baja' },
                 { label: '🙂 Soy bastante paciente', valor: 'Alta' },
                 { label: '🧘 Tengo toda la paciencia del mundo', valor: 'Muy Alta' },
             ],
