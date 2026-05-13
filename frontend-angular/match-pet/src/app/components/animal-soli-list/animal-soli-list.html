@@ -28,7 +28,6 @@
                     <tr>
                         <th>ID</th>
                         <th>Animal</th>
-                        <!-- 👇 SOLO ADMIN VE EL ENCABEZADO DE SOLICITANTE 👇 -->
                         @if (isAdmin) {
                         <th>Solicitante</th>
                         }
@@ -53,7 +52,6 @@
                             </a>
                         </td>
 
-                        <!-- 👇 SOLO ADMIN VE LOS DATOS DEL SOLICITANTE 👇 -->
                         @if (isAdmin) {
                         <td class="col-solicitante">
                             <div class="solicitante-info">
@@ -133,7 +131,6 @@
                     </tr>
                     } @empty {
                     <tr>
-                        <!-- 👇 AJUSTAMOS EL COLSPAN A 4 PARA USUARIOS Y 6 PARA ADMIN 👇 -->
                         <td [attr.colspan]="isAdmin ? 6 : 4" class="sin-registros">
                             <div class="empty-state">
                                 <i class="fa fa-inbox"></i>

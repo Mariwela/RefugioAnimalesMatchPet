@@ -29,24 +29,15 @@ export class EditarHistoriasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // 1. Obtenemos el ID de la URL
     this.idHistoria = Number(this.route.snapshot.paramMap.get('id'));
-
-    // 2. Inicializamos el formulario vacío
     this.editarForm = this.fb.group({
       titulo: ['', [Validators.required]],
       contenido: ['', [Validators.required]]
     });
-
-    // 3. Recuperamos los datos que nos pasó el componente de la lista
     const historiaData = history.state.historiaData;
-
-    // Si la información existe, rellenamos el formulario automáticamente
     if (historiaData) {
         this.rellenarFormulario(historiaData);
       } else {
-        // Si el usuario recarga, pedimos los datos al servidor
-        // para que el formulario no se quede vacío e inválido.
         this.historiaService.obtenerHistoriaPorId(this.idHistoria).subscribe({
           next: (res) => this.rellenarFormulario(res.data),
           error: () => this.router.navigate(['/historias']) 
@@ -56,8 +47,6 @@ export class EditarHistoriasComponent implements OnInit {
 
   private rellenarFormulario(data: any): void {
     console.log("Revisando DATA para patchValue:", data);
-
-    // Si por alguna razón los datos vienen envueltos en otro objeto
     const actualData = data.data ? data.data : data;
 
     this.editarForm.patchValue({
@@ -65,8 +54,6 @@ export class EditarHistoriasComponent implements OnInit {
       contenido: actualData.contenido || ''
     });
 
-    // ESTO ES LO MÁS IMPORTANTE:
-    // Marcamos los controles como "sucios" y tocados para que Angular los valide
     Object.values(this.editarForm.controls).forEach(control => {
       control.markAsDirty();
       control.markAsTouched();
@@ -81,7 +68,6 @@ export class EditarHistoriasComponent implements OnInit {
     console.log("¿Es válido después del patch?:", this.editarForm.valid);
   }
 
-  // Función para capturar la nueva foto
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
@@ -135,7 +121,6 @@ export class EditarHistoriasComponent implements OnInit {
         this.finalizarEdicion('¡Historia e imagen actualizadas correctamente!');
       },
       error: (err) => {
-        // AQUÍ: Mira qué dice el error en la consola
         console.error('Error capturado en el componente:', err);
         this.mensajeError = 'Error al subir la foto. Mira la consola (F12) -> Network';
         this.cargando = false;

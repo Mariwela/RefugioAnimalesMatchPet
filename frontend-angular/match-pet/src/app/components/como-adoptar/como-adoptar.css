@@ -184,7 +184,6 @@
   .info-card { padding: 1.5rem; margin-top: 0; }
 }
 
-/* ─── Sidebar ───────────────────────── */
 .sidebar {
   display: flex;
   flex-direction: column;
@@ -315,7 +314,6 @@
   transform: translateY(-1px);
 }
 
-/* ─── Responsive sidebar ────────────── */
 @media (max-width: 860px) {
   .page-layout {
     grid-template-columns: 1fr;

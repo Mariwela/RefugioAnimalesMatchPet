@@ -14,7 +14,6 @@
   padding: 1.5rem;
 }
  
-/* ─── Cabecera ──────────────────────── */
 .seccion-cabecera {
   display: flex;
   justify-content: space-between;
@@ -65,8 +64,7 @@
   background: #A84520;
   transform: translateY(-1px);
 }
- 
-/* ─── Estados ───────────────────────── */
+
 .estado-info {
   display: flex;
   flex-direction: column;
@@ -95,15 +93,13 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
- 
-/* ─── Grid historias ────────────────── */
+
 .grid-historias {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.2rem;
 }
  
-/* ─── Tarjeta historia ──────────────── */
 .tarjeta-historia {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
@@ -120,8 +116,7 @@
   box-shadow: 0 8px 20px rgba(26, 58, 26, 0.1);
   border-color: #7AB07A;
 }
- 
-/* ─── Imagen ────────────────────────── */
+
 .contenedor-imagen {
   width: 100%;
   height: 200px;
@@ -152,8 +147,7 @@
   color: #B0CFB0;
   font-size: 3rem;
 }
- 
-/* ─── Contenido ─────────────────────── */
+
 .contenido-tarjeta {
   padding: 1.2rem;
   display: flex;
@@ -170,8 +164,7 @@
   margin: 0;
   line-height: 1.3;
 }
- 
-/* ─── Meta datos ────────────────────── */
+
 .meta-datos {
   display: flex;
   flex-wrap: wrap;
@@ -199,20 +192,18 @@
   color: #7A9A7A;
 }
  
-/* ─── Resumen texto ─────────────────── */
 .resumen-texto {
   font-size: 13px;
   color: #4A6A4A;
   line-height: 1.6;
   margin: 0;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   flex: 1;
 }
  
-/* ─── Pie tarjeta ───────────────────── */
 .pie-tarjeta {
   display: flex;
   gap: 8px;
@@ -263,8 +254,7 @@
   background: #F5D5C0;
   border-color: #C85A2A;
 }
- 
-/* ─── Mensaje vacío ─────────────────── */
+
 .mensaje-vacio {
   grid-column: 1 / -1;
   display: flex;
@@ -282,8 +272,7 @@
   font-size: 3rem;
   color: #B0CFB0;
 }
- 
-/* Estilo para la tarjeta (cursor de mano para indicar que es clickeable) */
+
 .tarjeta-historia {
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -292,7 +281,6 @@
     transform: translateY(-5px);
 }
 
-/* Overlay del Modal */
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -308,7 +296,6 @@
     padding: 20px;
 }
 
-/* Caja de contenido */
 .modal-contenido {
     background: white;
     width: 100%;
@@ -348,7 +335,6 @@
     white-space: pre-line;
 }
 
-/* ─── Responsive ────────────────────── */
 @media (max-width: 640px) {
   .contenedor-historias { padding: 1rem; }
   .seccion-cabecera { flex-direction: column; }

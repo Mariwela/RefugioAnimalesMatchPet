@@ -13,8 +13,7 @@
   margin: 0 auto;
   padding: 1.5rem;
 }
- 
-/* ─── Cabecera ──────────────────────── */
+
 .cabecera-seccion {
   margin-bottom: 1.5rem;
   padding-bottom: 1.2rem;
@@ -42,7 +41,6 @@
   margin: 0;
 }
  
-/* ─── Estados ───────────────────────── */
 .estado-box {
   display: flex;
   flex-direction: column;
@@ -65,15 +63,13 @@
 .estado-box.error {
   color: #C85A2A;
 }
- 
-/* ─── Grid ──────────────────────────── */
+
 .grid-animales {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1.2rem;
 }
- 
-/* ─── Tarjeta animal ────────────────── */
+
 .tarjeta-animal {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
@@ -91,8 +87,7 @@
   box-shadow: 0 8px 20px rgba(26, 58, 26, 0.1);
   border-color: #7AB07A;
 }
- 
-/* ─── Botón quitar favorito ─────────── */
+
 .btn-quitar-favorito {
   position: absolute;
   top: 10px;
@@ -117,8 +112,7 @@
   background: #FBF0EA;
   transform: scale(1.1);
 }
- 
-/* ─── Foto ──────────────────────────── */
+
 .marco-foto {
   width: 100%;
   height: 190px;
@@ -138,8 +132,7 @@
 .tarjeta-animal:hover .foto-animal {
   transform: scale(1.04);
 }
- 
-/* ─── Info ──────────────────────────── */
+
 .info-animal {
   padding: 1rem 1.1rem;
   display: flex;
@@ -197,8 +190,7 @@
   color: #3B6B3B;
   font-weight: 500;
 }
- 
-/* ─── Acciones tarjeta ──────────────── */
+
 .acciones-tarjeta {
   margin-top: auto;
   padding-top: 0.8rem;
@@ -223,8 +215,7 @@
   background: #A84520;
   transform: translateY(-1px);
 }
- 
-/* ─── Empty state ───────────────────── */
+
 .empty-state-card {
   grid-column: 1 / -1;
   background: #FFFFFF;
@@ -284,8 +275,7 @@
 .btn-explorar:hover {
   background: #A84520;
 }
- 
-/* ─── Responsive ────────────────────── */
+
 @media (max-width: 640px) {
   .contenedor-animales {
     padding: 1rem;

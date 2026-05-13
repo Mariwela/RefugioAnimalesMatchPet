@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { HistoriaModel } from '../../interfaces/historia.model';
-import { HistoriaService } from '../../services/historia'; // Importamos el servicio
+import { HistoriaService } from '../../services/historia';
 import { AuthService } from '../../services/auth';
 import { RouterModule } from '@angular/router';
 
@@ -29,7 +29,6 @@ export class ListarHistoriasComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Obtenemos los datos del usuario actual para la lógica de borrado
     this.esAdmin = this.authService.isAdmin();
     this.usuarioActualId = this.authService.getUsuarioId();
     this.cargarHistorias();
@@ -74,14 +73,12 @@ export class ListarHistoriasComponent implements OnInit {
   }
 
   eliminarHistoria(historia: HistoriaModel): void {
-    // 1. Pedimos confirmación al usuario (para evitar borrados por error)
     const confirmacion = confirm(`¿Estás seguro de que deseas eliminar la historia "${historia.titulo}"? Esta acción no se puede deshacer.`);
 
     if (confirmacion) {
       this.historiaService.eliminarHistoria(historia.id_historia).subscribe({
         next: (respuesta) => {
           if (respuesta.status === 'success') {
-            // 2. Eliminamos la historia del array visualmente sin recargar la página
             this.historias = this.historias.filter(h => h.id_historia !== historia.id_historia);
             alert('✅ Historia eliminada correctamente.');
             this.cdr.detectChanges();

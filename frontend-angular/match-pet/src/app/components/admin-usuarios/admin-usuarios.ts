@@ -55,8 +55,7 @@ export class AdminUsuariosComponent implements OnInit {
   private busqueda$ = new Subject<string>();
  
   mensajeError = '';
- 
-  // Estado del modal de confirmación de eliminación
+
   usuarioAEliminar: Usuario | null = null;
   eliminando = false;
   mensajeEliminacion = '';
@@ -137,8 +136,6 @@ export class AdminUsuariosComponent implements OnInit {
     this.router.navigate(['/perfil', id]);
   }
  
-  // --- Eliminación ---
- 
   abrirConfirmacion(u: Usuario): void {
     this.usuarioAEliminar = u;
     this.mensajeEliminacion = '';
@@ -165,9 +162,7 @@ export class AdminUsuariosComponent implements OnInit {
       )
       .subscribe({
         next: (res) => {
-          // Quitamos el usuario de la lista sin recargar
           this.usuarios = this.usuarios.filter(u => u.id_usuario !== this.usuarioAEliminar!.id_usuario);
-          // Decrementamos el contador total
           this.totales.total = String(Number(this.totales.total) - 1);
           this.cerrarConfirmacion();
           this.cdr.detectChanges();
@@ -179,8 +174,6 @@ export class AdminUsuariosComponent implements OnInit {
         }
       });
   }
- 
-  // --- Helpers ---
  
   getUrlAvatar(avatar: string): string {
     if (avatar && avatar !== 'default_avatar.png') {

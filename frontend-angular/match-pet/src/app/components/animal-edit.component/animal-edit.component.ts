@@ -47,18 +47,15 @@ export class AnimalEditComponent implements OnInit {
   ngOnInit(): void {
     const rolActual = this.authService.getRol();
 
-    // 1. BARRERA DE SEGURIDAD: Si no es admin, lo bloqueamos inmediatamente
     if (rolActual !== 'admin') {
       this.mensaje = '⛔ Acceso denegado. No tienes permisos de administrador.';
       this.cargando = false;
 
-      // Opcional: Lo expulsamos de vuelta a la lista tras 3 segundos
       setTimeout(() => this.router.navigate(['/animales']), 3000);
 
       return;
     }
 
-    // 2. Si pasa la barrera (es admin), entonces sí buscamos el ID y cargamos los datos
     const idString = this.route.snapshot.paramMap.get('id');
     if (idString) {
       this.idAnimal = Number(idString);
@@ -86,7 +83,6 @@ export class AnimalEditComponent implements OnInit {
     }, 4000);
   }
 
-  // 1. Estructuramos el formulario idéntico a tu tabla 'animales'
   iniciarFormulario(): void {
     this.animalForm = this.fb.group({
       id_animal: ['', Validators.required],
@@ -113,7 +109,6 @@ export class AnimalEditComponent implements OnInit {
     });
   }
 
-  // 2. Traemos los datos de la DB y los metemos en el formulario
   cargarDatosAnimal(id: number): void {
     console.log('1. Iniciando petición para el animal ID:', id);
 
@@ -124,8 +119,6 @@ export class AnimalEditComponent implements OnInit {
         if (res.status === 'success') {
           try {
             const animalData = res.data;
-
-            // TRADUCCIÓN DE DATOS PARA ANGULAR
             animalData.apto_pisos = animalData.apto_pisos == 1;
             animalData.sociable_ninos = animalData.sociable_ninos == 1;
             animalData.sociable_perros = animalData.sociable_perros == 1;
@@ -153,7 +146,6 @@ export class AnimalEditComponent implements OnInit {
           this.mensaje = 'Error al cargar datos: ' + res.message;
         }
 
-        // Sea cual sea el resultado, quitamos la pantalla de carga
         this.cargando = false;
         this.cdr.detectChanges();
       },
@@ -166,7 +158,6 @@ export class AnimalEditComponent implements OnInit {
     });
   }
 
-  // 3. Enviamos los datos actualizados a tu PHP
   guardarCambios(): void {
     if (this.animalForm.invalid) {
       this.mensajeError = 'Por favor, rellena todos los campos obligatorios.';
@@ -190,7 +181,6 @@ export class AnimalEditComponent implements OnInit {
           this.mensaje = '¡Ficha de animal actualizada correctamente!';
           this.animalForm.markAsPristine();
           this.notificacionFadeOut();
-          // Opcional: Volver al detalle tras 2 segundos
           setTimeout(() => this.router.navigate(['/animal', this.idAnimal]), 2000);
         } else {
           this.mensaje = 'Error: ' + res.message;
@@ -211,7 +201,6 @@ export class AnimalEditComponent implements OnInit {
   }
 
   eliminarAnimal(): void {
-    // 1. Confirmación de seguridad
     const confirmar = confirm(`¿Estás seguro de eliminar a ${this.animalForm.value.nombre}? Esta acción borrará permanentemente el registro y todas sus fotos.`);
 
     if (!confirmar) return;
@@ -225,7 +214,6 @@ export class AnimalEditComponent implements OnInit {
           this.mensajeExito = '¡Animal y fotos eliminados correctamente!';
           this.notificacionFadeOut();
 
-          // Redirigir a la lista general tras el borrado
           setTimeout(() => this.router.navigate(['/animales']), 2000);
         } else {
           this.mensajeError = 'Error: ' + res.message;
@@ -269,7 +257,6 @@ export class AnimalEditComponent implements OnInit {
 
   getFotoUrl(ruta: string): string {
     if (!ruta) return this.baseImageUrl + 'default.jpg';
-    // Si ya viene con http, la devolvemos tal cual
     if (ruta.startsWith('http')) return ruta;
     return this.baseImageUrl + ruta;
   }
@@ -304,7 +291,6 @@ export class AnimalEditComponent implements OnInit {
     this.subiendoFotos = true;
     this.cdr.detectChanges();
 
-    // Subir portada
     if (this.nuevaPortada) {
       const fd = new FormData();
       fd.append('foto', this.nuevaPortada);
@@ -315,7 +301,6 @@ export class AnimalEditComponent implements OnInit {
       this.nuevaPortadaPreview = null;
     }
 
-    // Subir fotos de galería
     for (const foto of this.nuevasFotosGaleria) {
       const fd = new FormData();
       fd.append('foto', foto);

@@ -1,6 +1,5 @@
 <div class="acogida-page">
 
-    <!-- SECCIÓN HERO (Cabecera) -->
     <header class="hero">
         <span class="hero-tag">Edición</span>
         <h1>Actualiza tu <span class="accent">Historia</span></h1>
@@ -8,11 +7,9 @@
             antes de ser pública.</p>
     </header>
 
-    <!-- CONTENEDOR PRINCIPAL -->
     <div class="container">
         <div class="info-card">
 
-            <!-- ALERTAS DE ÉXITO Y ERROR -->
             @if (mensajeExito) {
             <div class="alert-success">
                 {{ mensajeExito }}
@@ -25,16 +22,13 @@
             </div>
             }
 
-            <!-- FORMULARIO REACTIVO -->
             <form [formGroup]="editarForm" (ngSubmit)="onSubmit()">
 
-                <!-- Campo Título -->
                 <div class="form-group">
                     <label for="titulo">Título de la historia</label>
                     <input type="text" id="titulo" formControlName="titulo"
                         placeholder="Ej: El nuevo hogar de Firulais">
 
-                    <!-- Mensaje de validación -->
                     @if (editarForm.get('titulo')?.invalid && editarForm.get('titulo')?.touched) {
                     <div class="validation-message">
                         El título es obligatorio y debe tener al menos 5 caracteres.
@@ -42,13 +36,11 @@
                     }
                 </div>
 
-                <!-- Campo Contenido -->
                 <div class="form-group">
                     <label for="contenido">Contenido de la historia</label>
                     <textarea id="contenido" rows="6" formControlName="contenido"
                         placeholder="Cuenta cómo ha sido tu experiencia desde la adopción..."></textarea>
 
-                    <!-- Mensaje de validación -->
                     @if (editarForm.get('contenido')?.invalid && editarForm.get('contenido')?.touched) {
                     <div class="validation-message">
                         El contenido es obligatorio y debe tener al menos 20 caracteres.
@@ -56,7 +48,6 @@
                     }
                 </div>
 
-                <!-- Campo para la Imagen -->
                 <div class="form-group">
                     <label>Imagen de la historia</label>     
                     <div class="preview-container" style="margin-bottom: 1rem;">
@@ -77,10 +68,8 @@
                     <p class="help-text">Opcional: Selecciona una nueva foto solo si deseas cambiar la actual.</p>
                 </div>
 
-                <!-- BOTONES DE ACCIÓN -->
                 <div style="margin-top: 2.5rem;">
 
-                    <!-- Botón principal de guardar -->
                     <button type="submit" class="btn-save" [disabled]="editarForm.invalid || cargando">
                         @if (cargando) {
                         <span>Guardando cambios...</span>
@@ -89,7 +78,6 @@
                         }
                     </button>
 
-                    <!-- Enlace para cancelar -->
                     <a routerLink="/historias/moderar" routerLinkActive="active" class="btn-link">
                         Volver a la lista de moderar
                     </a>

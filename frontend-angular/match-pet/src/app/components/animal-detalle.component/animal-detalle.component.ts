@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AnimalService } from '../../services/animal'; // Ajusta esta ruta si es diferente
+import { AnimalService } from '../../services/animal';
 import { AuthService } from '../../services/auth';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ImageZoomDialogComponent } from '../image-zoom-dialog.component/image-zoom-dialog.component';
@@ -21,7 +21,6 @@ export class AnimalDetalleComponent implements OnInit {
   fotosGaleria: any[] = [];
   isAdmin: boolean = false;
   favoritosIds: number[] = [];
-  // 👇 NUEVAS VARIABLES PARA LA SOLICITUD 👇
   enviandoSolicitud: boolean = false;
   mensajeSolicitud: string = '';
   errorSolicitud: string = '';
@@ -115,21 +114,17 @@ export class AnimalDetalleComponent implements OnInit {
     }
   }
 
-  // 👇 NUEVA FUNCIÓN PARA SOLICITAR ADOPCIÓN 👇
   solicitarAdopcion(): void {
-    // 1. Verificamos si el usuario ha iniciado sesión
     if (!this.authService.isLoggedIn()) {
       this.errorSolicitud = 'Debes iniciar sesión para poder adoptar.';
       this.cdr.detectChanges();
       return;
     }
 
-    // 2. Preparamos el estado de carga
     this.enviandoSolicitud = true;
     this.mensajeSolicitud = '';
     this.errorSolicitud = '';
 
-    // 3. Llamamos al servicio
     if (this.animal && this.animal.id_animal) {
       this.animalService.enviarSolicitud(this.animal.id_animal).subscribe({
         next: (response) => {
@@ -139,7 +134,7 @@ export class AnimalDetalleComponent implements OnInit {
             this.errorSolicitud = response.message || 'Error al enviar la solicitud.';
           }
           this.enviandoSolicitud = false;
-          this.cdr.detectChanges(); // Actualizamos la vista
+          this.cdr.detectChanges();
         },
         error: (error) => {
           if (error.status === 409) {
@@ -150,35 +145,28 @@ export class AnimalDetalleComponent implements OnInit {
             this.errorSolicitud = error.error?.message || 'Ocurrió un error al enviar la solicitud.';
           }
           this.enviandoSolicitud = false;
-          this.cdr.detectChanges(); // Actualizamos la vista
+          this.cdr.detectChanges();
         }
       });
     }
   }
 
-  // 👇 FUNCIÓN CORREGIDA CON TUS NOMBRES DE VARIABLES 👇
   abrirZoom(imagenClickeadaUrl: string): void {
     let todasLasImagenes: string[] = [];
-
-    // 1. Metemos la foto principal usando TU variable: 'foto_portada'
     if (this.animal.foto_portada) {
       todasLasImagenes.push(this.animal.foto_portada);
     }
 
-    // 2. Metemos las de la galería usando TU variable: 'url_completa'
     if (this.animal.galeria && this.animal.galeria.length > 0) {
       const urlsGaleria = this.animal.galeria.map((foto: any) => foto.url_completa);
       todasLasImagenes = [...todasLasImagenes, ...urlsGaleria];
     }
 
-    // 3. Eliminamos duplicados (por si la portada se repite en la galería)
     todasLasImagenes = [...new Set(todasLasImagenes)];
 
-    // 4. Buscamos qué posición ocupa la imagen que clickeó el usuario
     let indiceClickeado = todasLasImagenes.indexOf(imagenClickeadaUrl);
     if (indiceClickeado === -1) indiceClickeado = 0;
 
-    // 5. Abrimos el modal
     this.dialog.open(ImageZoomDialogComponent, {
       data: { imagenes: todasLasImagenes, indiceIndex: indiceClickeado },
       maxWidth: '100vw',
@@ -193,20 +181,18 @@ export class AnimalDetalleComponent implements OnInit {
   }
   toggleFavorito(id_animal: number) {
     if (this.isFavorito(id_animal)) {
-      // Eliminar de favoritos
       this.favoritosService.eliminarFavorito(id_animal).subscribe({
         next: () => {
           this.favoritosIds = this.favoritosIds.filter(id => id !== id_animal);
-          this.cdr.detectChanges(); // 👈 Repintamos para que el corazón se ponga blanco
+          this.cdr.detectChanges();
         },
         error: (err) => console.error("Error al eliminar de favoritos", err)
       });
     } else {
-      // Agregar a favoritos
       this.favoritosService.agregarFavorito(id_animal).subscribe({
         next: () => {
           this.favoritosIds.push(id_animal);
-          this.cdr.detectChanges(); // 👈 Repintamos para que el corazón se ponga rojo
+          this.cdr.detectChanges();
         },
         error: (err) => console.error("Error al agregar a favoritos", err)
       });
@@ -226,13 +212,13 @@ export class AnimalDetalleComponent implements OnInit {
 }
 
 eliminarAnimal(id: number): void {
-  this.cargando = true; // Mostramos el spinner mientras borra
+  this.cargando = true;
 
   this.animalService.eliminarAnimal(id).subscribe({
     next: (res) => {
       if (res.status === 'success') {
         alert('Animal eliminado correctamente.');
-        this.router.navigate(['/animales']); // Redirigimos a la lista
+        this.router.navigate(['/animales']);
       } else {
         this.errorMsg = res.message || 'No se pudo eliminar el animal.';
         this.cargando = false;

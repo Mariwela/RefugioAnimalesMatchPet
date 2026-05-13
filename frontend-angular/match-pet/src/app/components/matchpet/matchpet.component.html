@@ -1,18 +1,8 @@
-<!-- ============================================================
-     matchpet.component.html
-     Wizard de afinidad para adopción de animales – MatchPet
-     Angular 17+ : usa @if / @for en lugar de *ngIf / *ngFor
-     ============================================================ -->
-
-<div class="matchpet-wrapper">
-
-    <!-- ─── CABECERA SIEMPRE VISIBLE ──────────────────────────── -->
     <header class="mp-header">
         <span class="mp-logo">🐾 MatchPet</span>
         <p class="mp-tagline">Encuentra a tu compañero perfecto</p>
     </header>
 
-    <!-- ─── ERROR GLOBAL ──────────────────────────────────────── -->
     @if (error) {
         <div class="mp-error">
             <span>⚠️ {{ error }}</span>
@@ -20,9 +10,6 @@
         </div>
     }
 
-    <!-- ═══════════════════════════════════════════════════════════
-       PASO 1: ESPECIE
-       ═════════════════════════════════════════════════════════ -->
     @if (pasoActual === 'especie') {
         <section class="mp-step step-especie">
 
@@ -53,13 +40,9 @@
         </section>
     }
 
-    <!-- ═══════════════════════════════════════════════════════════
-       PASOS 2-N: PREGUNTAS DEL WIZARD
-       ═════════════════════════════════════════════════════════ -->
     @if (pasoActual.startsWith('pregunta')) {
         <section class="mp-step step-pregunta">
 
-            <!-- Barra de progreso -->
             <div class="mp-progress-bar">
                 <div class="mp-progress-fill"
                     [style.width.%]="((indicePregunta + 1) / totalPreguntas) * 100">
@@ -69,13 +52,11 @@
                 Pregunta {{ indicePregunta + 1 }} de {{ totalPreguntas }}
             </p>
 
-            <!-- Pregunta -->
             <div class="mp-pregunta-card">
                 <span class="mp-pregunta-icono">{{ preguntaActual.icono }}</span>
                 <h2 class="mp-pregunta-titulo">{{ preguntaActual.titulo }}</h2>
                 <p class="mp-pregunta-desc">{{ preguntaActual.descripcion }}</p>
 
-                <!-- Opciones -->
                 @if (preguntaActual.opciones) {
                     <div class="mp-opciones">
                         @for (op of preguntaActual.opciones; track op.valor) {
@@ -88,7 +69,6 @@
                     </div>
                 }
 
-                <!-- Opción "No tengo preferencia" — solo en preguntas que lo permiten -->
                 @if (preguntaActual.sinPreferencia !== false &&
                      preguntaActual.prefKey !== 'tipo_vivienda' &&
                      preguntaActual.prefKey !== 'acceso_exterior') {
@@ -99,7 +79,6 @@
                     </button>
                 }
 
-                <!-- Slider de importancia — se oculta en preguntas de contexto puro -->
                 @if (!preguntaActual.soloContexto &&
                      preferenciaActual !== null &&
                      preferenciaActual !== undefined &&
@@ -125,7 +104,6 @@
                 }
             </div>
 
-            <!-- Navegación -->
             <div class="mp-nav">
                 <button class="mp-btn mp-btn-secondary" (click)="anteriorPregunta()">
                     ← Atrás
@@ -140,9 +118,6 @@
         </section>
     }
 
-    <!-- ═══════════════════════════════════════════════════════════
-       CARGANDO
-       ═════════════════════════════════════════════════════════ -->
     @if (pasoActual === 'cargando') {
         <section class="mp-step step-cargando">
             <div class="mp-loader">
@@ -152,9 +127,6 @@
         </section>
     }
 
-    <!-- ═══════════════════════════════════════════════════════════
-       RESULTADOS
-       ═════════════════════════════════════════════════════════ -->
     @if (pasoActual === 'resultados') {
         <section class="mp-step step-resultados">
 
@@ -164,7 +136,6 @@
                 ¡Conoce su perfil y da el primer paso!
             </p>
 
-            <!-- Sin resultados -->
             @if (resultados.length === 0) {
                 <div class="mp-sin-resultados">
                     <span>😿</span>
@@ -173,19 +144,15 @@
                 </div>
             }
 
-            <!-- Tarjetas de resultado -->
             @if (resultados.length > 0) {
                 <div class="mp-resultados-grid">
 
                     @for (animal of resultados; track animal.id_animal; let i = $index) {
                         <article class="mp-animal-card" [class.top-match]="i === 0">
 
-                            <!-- Badge de posición -->
                             @if (i === 0) {
                                 <div class="mp-rank-badge">⭐ Mejor match</div>
                             }
-
-                            <!-- Aviso importante (trauma, manejo especial…) -->
                             @if (animal.aviso_importante) {
                                 <div class="mp-aviso-importante">
                                     <span class="mp-aviso-icono">⚠️</span>
@@ -193,14 +160,12 @@
                                 </div>
                             }
 
-                            <!-- Foto -->
                             <div class="mp-animal-foto-wrap">
                                 <img [src]="getImageUrl(animal.foto)"
                                     [alt]="animal.nombre"
                                     class="mp-animal-foto"
                                     (error)="$any($event.target).src = 'assets/img/default.jpg'" />
 
-                                <!-- Porcentaje de afinidad -->
                                 <div class="mp-afinidad-badge"
                                     [style.background]="getColorAfinidad(animal.afinidad)">
                                     <span class="mp-afinidad-num">{{ animal.afinidad }}%</span>
@@ -208,14 +173,12 @@
                                 </div>
                             </div>
 
-                            <!-- Info -->
                             <div class="mp-animal-info">
                                 <h3 class="mp-animal-nombre">{{ animal.nombre }}</h3>
                                 <p class="mp-animal-meta">
                                     {{ animal.especie }} · {{ animal.raza }} · {{ animal.edad }}
                                 </p>
 
-                                <!-- Badges de características -->
                                 <div class="mp-badges">
                                     <span class="mp-badge mp-badge-energia">
                                         ⚡ {{ animal.badges.nivel_energia }}
@@ -231,21 +194,18 @@
                                         👶 {{ animal.badges.sociable_ninos ? 'Con niños ✓' : 'Sin niños' }}
                                     </span>
 
-                                    <!-- Medicación crónica -->
                                     @if (animal.badges.enfermedad_cronica) {
                                         <span class="mp-badge mp-badge-medicacion">
                                             💊 Medicación diaria
                                         </span>
                                     }
 
-                                    <!-- Nivel para principiantes -->
                                     <span class="mp-badge"
                                         [class.mp-badge-ok]="animal.badges.es_para_principiantes"
                                         [class.mp-badge-no]="!animal.badges.es_para_principiantes">
                                         🎓 {{ animal.badges.es_para_principiantes ? 'Apto principiantes' : 'Requiere experiencia' }}
                                     </span>
 
-                                    <!-- Nivel de paciencia requerido -->
                                     @if (animal.badges.nivel_paciencia) {
                                         <span class="mp-badge mp-badge-paciencia">
                                             🧘 Paciencia {{ animal.badges.nivel_paciencia }}
@@ -273,7 +233,6 @@
                 </div>
             }
 
-            <!-- Botón reiniciar -->
             <div class="mp-reiniciar">
                 <button class="mp-btn mp-btn-secondary" (click)="reiniciar()">
                     🔄 Repetir test

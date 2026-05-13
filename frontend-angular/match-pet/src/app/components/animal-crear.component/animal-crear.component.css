@@ -14,7 +14,6 @@
   padding: 1.5rem;
 }
 
-/* ─── Cabecera ──────────────────────── */
 .cabecera-form {
   margin-bottom: 1.5rem;
   text-align: left;
@@ -34,7 +33,6 @@
   margin: 0;
 }
 
-/* ─── Alertas ───────────────────────── */
 .alerta {
   display: flex;
   align-items: center;
@@ -55,7 +53,6 @@
 .alerta-exito { background: #EAF5EA; border: 1px solid #B0CFB0; color: #3B6B3B; }
 .alerta-error { background: #FBF0EA; border: 1px solid #E8C4A8; color: #C85A2A; }
 
-/* ─── Formulario y Secciones ────────── */
 .formulario-animal {
   display: flex;
   flex-direction: column;
@@ -88,7 +85,6 @@
   margin: 0;
 }
 
-/* ─── Grids y Campos ────────────────── */
 .grid-2-col { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .grid-3-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 18px; }
 
@@ -119,7 +115,6 @@
 
 .campo textarea { min-height: 100px; resize: vertical; }
 
-/* ─── Checkboxes ────────────────────── */
 .grid-checkboxes {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -144,7 +139,6 @@
 .checkbox-container:hover { background: #EAF5EA; border-color: #7AB07A; transform: translateY(-1px); }
 .checkbox-container input { accent-color: #C85A2A; width: 17px; height: 17px; }
 
-/* ─── Input File ────────────────────── */
 .campo input[type="file"] {
   padding: 15px;
   border: 2px dashed #B0CFB0;
@@ -156,9 +150,6 @@
   text-align: center;
 }
 
-/* ─── Previews (CORREGIDO) ─────────── */
-
-/* Contenedor general de previews */
 .preview-container {
   margin-top: 15px;
   display: block;
@@ -171,14 +162,12 @@
   margin-top: 15px;
 }
 
-/* El item que contiene la imagen y el botón */
 .preview-item {
   position: relative;
   display: inline-block;
   width: fit-content;
 }
 
-/* Estilo común para imágenes */
 .preview-item img {
   object-fit: cover;
   border: 2px solid #7AB07A;
@@ -187,14 +176,12 @@
   transition: transform 0.2s ease;
 }
 
-/* TAMAÑO PORTADA: Controlado para que no sea enorme */
 .img-preview {
   width: 180px; 
   height: 130px;
   border-radius: 12px;
 }
 
-/* TAMAÑO GALERÍA */
 .preview-galeria .preview-item img {
   width: 100px;
   height: 100px;
@@ -203,7 +190,6 @@
 
 .preview-item img:hover { transform: scale(1.02); }
 
-/* BOTÓN QUITAR: Igual para ambos */
 .btn-quitar {
   position: absolute;
   top: -8px;
@@ -226,7 +212,6 @@
 .btn-quitar:hover { background: #A84520; transform: scale(1.1); }
 .btn-quitar i { font-size: 12px; }
 
-/* ─── Botón Guardar ─────────────────── */
 .btn-guardar {
   width: 100%;
   max-width: 400px;
@@ -253,7 +238,6 @@
 .fa-spin { animation: fa-spin 1s infinite linear; }
 @keyframes fa-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-/* ─── Responsive ────────────────────── */
 @media (max-width: 768px) {
   .grid-3-col { grid-template-columns: 1fr 1fr; }
 }

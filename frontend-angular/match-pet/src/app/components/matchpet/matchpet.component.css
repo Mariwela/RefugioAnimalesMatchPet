@@ -1,17 +1,10 @@
-/* ============================================================
-   matchpet.component.css
-   Estilo warm & friendly para el wizard MatchPet
-   ============================================================ */
 
-/* ── Fuentes ─────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fraunces:ital,wght@0,700;1,700&display=swap');
-
-/* ── Variables ───────────────────────────────────────────── */
 :host {
   --mp-bg:        #fdf8f4;
   --mp-surface:   #ffffff;
   --mp-border:    #e8ddd4;
-  --mp-primary:   #e05a2b;       /* naranja cálido */
+  --mp-primary:   #e05a2b;      
   --mp-primary-h: #c44a1e;
   --mp-accent:    #f9a03f;
   --mp-text:      #2d1f13;
@@ -25,7 +18,6 @@
   display: block;
 }
 
-/* ── Wrapper global ──────────────────────────────────────── */
 .matchpet-wrapper {
   min-height: 100vh;
   background: var(--mp-bg);
@@ -38,7 +30,6 @@
   gap: 2rem;
 }
 
-/* ── Cabecera ────────────────────────────────────────────── */
 .mp-header {
   text-align: center;
 }
@@ -57,7 +48,6 @@
   font-size: 1rem;
 }
 
-/* ── Error ───────────────────────────────────────────────── */
 .mp-error {
   background: #fef2f2;
   border: 1px solid #fca5a5;
@@ -81,7 +71,6 @@
   font-weight: 700;
 }
 
-/* ── Pasos genéricos ─────────────────────────────────────── */
 .mp-step {
   width: 100%;
   max-width: 700px;
@@ -93,7 +82,6 @@
   to   { opacity: 1; transform: none; }
 }
 
-/* ── ESPECIE ─────────────────────────────────────────────── */
 .step-especie {
   text-align: center;
 }
@@ -155,7 +143,6 @@
   text-align: center;
 }
 
-/* ── PREGUNTA ────────────────────────────────────────────── */
 .mp-progress-bar {
   height: 6px;
   background: var(--mp-border);
@@ -250,7 +237,6 @@
   color: #fff;
 }
 
-/* Slider importancia */
 .mp-importancia {
   width: 100%;
   max-width: 400px;
@@ -292,7 +278,6 @@
   height: 4px;
 }
 
-/* ── Navegación ──────────────────────────────────────────── */
 .mp-nav {
   display: flex;
   justify-content: space-between;
@@ -300,7 +285,6 @@
   gap: 1rem;
 }
 
-/* ── Botones ─────────────────────────────────────────────── */
 .mp-btn {
   font-family: var(--mp-font);
   font-weight: 800;
@@ -338,7 +322,6 @@
   margin-top: 0.8rem;
 }
 
-/* ── CARGANDO ────────────────────────────────────────────── */
 .step-cargando {
   display: flex;
   justify-content: center;
@@ -363,8 +346,6 @@
   from { transform: translateY(0); }
   to   { transform: translateY(-16px); }
 }
-
-/* ── RESULTADOS ──────────────────────────────────────────── */
 .step-resultados {
   display: flex;
   flex-direction: column;
@@ -409,7 +390,6 @@
   width: 100%;
 }
 
-/* Tarjeta animal */
 .mp-animal-card {
   background: var(--mp-surface);
   border: 1.5px solid var(--mp-border);
@@ -547,12 +527,10 @@
   flex: 1;
 }
 
-/* ── Reiniciar ───────────────────────────────────────────── */
 .mp-reiniciar {
   text-align: center;
 }
 
-/* ── Responsive ──────────────────────────────────────────── */
 @media (max-width: 520px) {
   .mp-especie-cards { flex-direction: column; align-items: center; }
   .mp-especie-card  { width: 100%; max-width: 320px; }

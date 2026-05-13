@@ -14,7 +14,6 @@
   padding: 1.5rem;
 }
  
-/* ─── Título ────────────────────────── */
 .contenedor-publicar h2 {
   font-family: 'Playfair Display', serif;
   font-size: 26px;
@@ -28,8 +27,7 @@
   color: #4A6A4A;
   margin: 0 0 1.5rem;
 }
- 
-/* ─── Carga inicial ─────────────────── */
+
 .pantalla-carga {
   display: flex;
   align-items: center;
@@ -42,7 +40,6 @@
   color: #7AB07A;
 }
  
-/* ─── Alertas ───────────────────────── */
 .alerta {
   padding: 12px 16px;
   border-radius: 10px;
@@ -101,7 +98,6 @@
   color: #3B6B3B;
 }
  
-/* ─── Formulario ────────────────────── */
 .formulario-historia {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
@@ -112,8 +108,7 @@
   flex-direction: column;
   gap: 1.2rem;
 }
- 
-/* ─── Form groups ───────────────────── */
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -152,8 +147,7 @@
 .form-group textarea {
   resize: vertical;
 }
- 
-/* ─── Input file ────────────────────── */
+
 .input-file {
   width: 100%;
   padding: 8px 12px;
@@ -172,8 +166,7 @@
   border-color: #7AB07A;
   background: #EAF5EA;
 }
- 
-/* ─── Preview imagen ────────────────── */
+
 .preview-contenedor {
   margin-top: 8px;
 }
@@ -184,8 +177,7 @@
   border: 1px solid #C8DFC8;
   display: block;
 }
- 
-/* ─── Botón enviar ──────────────────── */
+
 .btn-enviar {
   width: 100%;
   display: flex;
@@ -220,8 +212,7 @@
   cursor: not-allowed;
   box-shadow: none;
 }
- 
-/* ─── Responsive ────────────────────── */
+
 @media (max-width: 640px) {
   .contenedor-publicar {
     padding: 1rem;

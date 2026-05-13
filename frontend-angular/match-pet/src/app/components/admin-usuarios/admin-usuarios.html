@@ -7,8 +7,7 @@
   </header>
  
   <div class="container">
- 
-    <!-- Tarjetas resumen -->
+
     <div class="stats-grid">
       <div class="stat-card stat-card--gray">
         <span class="stat-num">{{ totales.total }}</span>
@@ -27,8 +26,7 @@
         <span class="stat-label">🐾 Acogida</span>
       </div>
     </div>
- 
-    <!-- Filtros -->
+
     <div class="filtros-bar">
       <div class="tabs-grupo">
         @for (g of grupos; track g.key) {
@@ -55,8 +53,7 @@
         }
       </div>
     </div>
- 
-    <!-- Carga / error -->
+
     @if (cargando) {
       <div class="loading">
         <div class="spinner"></div>
@@ -67,8 +64,7 @@
     @if (mensajeError && !cargando) {
       <div class="alert alert--error">❌ {{ mensajeError }}</div>
     }
- 
-    <!-- Lista -->
+
     @if (!cargando && !mensajeError) {
       @if (usuarios.length === 0) {
         <div class="empty-state">
@@ -134,8 +130,7 @@
  
   </div>
 </div>
- 
-<!-- Modal de confirmación -->
+
 @if (usuarioAEliminar) {
   <div class="modal-overlay" (click)="cerrarConfirmacion()">
     <div class="modal-box" (click)="$event.stopPropagation()">

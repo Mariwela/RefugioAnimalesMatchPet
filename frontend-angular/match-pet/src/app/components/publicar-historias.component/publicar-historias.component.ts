@@ -42,13 +42,13 @@ export class PublicarHistoriasComponent implements OnInit {
           console.log('El status no fue success:', res.status);
         }
 
-        this.cargandoInicial = false; // Esto quita el mensaje de "Verificando..."
-        this.cdr.detectChanges(); // Forzar la detección de cambios
+        this.cargandoInicial = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('2. Ocurrió un error en la suscripción:', err);
         this.cargandoInicial = false;
-        this.cdr.detectChanges(); // Forzar la detección de cambios
+        this.cdr.detectChanges();
       }
     });
   }
@@ -78,7 +78,6 @@ export class PublicarHistoriasComponent implements OnInit {
           
           this.historiaService.subirFotoHistoria(res.id_historia, this.fotoSeleccionada!)
             .pipe(
-              // El bloque finalize se ejecuta SIEMPRE al terminar la petición
               finalize(() => {
                   this.cargando = false; 
                   this.cdr.detectChanges();
@@ -90,7 +89,6 @@ export class PublicarHistoriasComponent implements OnInit {
                 this.resetearFormulario();
               },
               error: (err) => {
-                // Si la foto ya se guardó en la carpeta, este error es un "falso positivo" de CORS/Canal
                 console.warn('Error de comunicación, pero la foto podría estar guardada', err);
                 this.mensajeExito = "Historia guardada correctamente.";
                 this.resetearFormulario();

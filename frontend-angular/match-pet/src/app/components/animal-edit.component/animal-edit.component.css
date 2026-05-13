@@ -14,7 +14,6 @@
   padding: 1.5rem;
 }
 
-/* ─── Loading ───────────────────────── */
 .loading {
   display: flex;
   flex-direction: column;
@@ -41,7 +40,6 @@
   }
 }
 
-/* ─── Acceso denegado ───────────────── */
 .acceso-denegado {
   text-align: center;
   padding: 4rem 1rem;
@@ -59,7 +57,6 @@
   color: #7A9A7A;
 }
 
-/* ─── Cabecera ──────────────────────── */
 .cabecera-form {
   display: flex;
   justify-content: space-between;
@@ -102,14 +99,12 @@
   color: #FF7E67;
 }
 
-/* ─── Formulario ────────────────────── */
 .formulario-animal {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-/* ─── Secciones ─────────────────────── */
 .form-seccion {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
@@ -140,7 +135,6 @@
   margin: 0;
 }
 
-/* ─── Grids ─────────────────────────── */
 .grid-2-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -153,7 +147,6 @@
   gap: 14px;
 }
 
-/* ─── Campos ────────────────────────── */
 .campo {
   display: flex;
   flex-direction: column;
@@ -197,7 +190,6 @@
   border-left: 3px solid #E8854A !important;
 }
 
-/* ─── Checkboxes ────────────────────── */
 .grid-checkboxes {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -239,7 +231,6 @@
   display: none;
 }
 
-/* ─── Alerta ────────────────────────── */
 .alert {
   display: flex;
   align-items: center;
@@ -270,11 +261,9 @@
   pointer-events: none;
 }
 
-/* ─── Acciones finales (BOTONERA ACTUALIZADA) ──────────────── */
 .acciones-finales {
   display: flex;
   justify-content: space-between;
-  /* Eliminar a la izq, el resto a la der */
   align-items: center;
   margin-top: 1rem;
   padding-top: 1.5rem;
@@ -289,7 +278,6 @@
   align-items: center;
 }
 
-/* BOTÓN ELIMINAR */
 .btn-delete {
   display: flex;
   align-items: center;
@@ -311,7 +299,6 @@
   color: #C85A2A;
 }
 
-/* BOTÓN GUARDAR */
 .btn-guardar {
   display: flex;
   align-items: center;
@@ -346,7 +333,6 @@
   box-shadow: none;
 }
 
-/* ─── Fotos ─────────────────────────── */
 .preview-galeria {
   display: flex;
   flex-wrap: wrap;
@@ -450,8 +436,6 @@
   margin: 0.3rem 0;
 }
 
-
-/* ─── Responsive ────────────────────── */
 @media (max-width: 640px) {
   .grid-2-col {
     grid-template-columns: 1fr;

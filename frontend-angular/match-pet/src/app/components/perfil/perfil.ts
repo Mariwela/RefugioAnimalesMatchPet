@@ -28,8 +28,6 @@ export class PerfilComponent implements OnInit {
   usuario: any = null;
   cargando = true;
   tabActiva: 'datos' | 'password' | 'eliminar' = 'datos';
-
-  // 🔥 NUEVA VARIABLE: Nos dirá si estamos en modo lectura o edición 🔥
   esMiPerfil: boolean = true;
 
   perfilForm!: FormGroup;
@@ -59,12 +57,9 @@ export class PerfilComponent implements OnInit {
 
   ngOnInit(): void {
     console.log('mensajeExito al init:', this.mensajeExito);
-
-    // 1. CAPTURAMOS EL ID DE LA URL (SI EXISTE)
     const idUrl = this.route.snapshot.paramMap.get('id');
 
     if (idUrl) {
-      // Modo: Viendo el perfil de otra persona
       this.esMiPerfil = false;
       this.cargarPerfil(idUrl);
     } else {
@@ -105,9 +100,8 @@ export class PerfilComponent implements OnInit {
     }, 4000);
   }
 
-  // 2. MODIFICADO: Ahora puede recibir un ID opcional
   cargarPerfil(idUsuario?: string): void {
-    this.cargando = true; // Aseguramos que empiece cargando
+    this.cargando = true;
 
     const urlConsulta = idUsuario
       ? `${this.BASE_URL}/ver_perfil.php?id=${idUsuario}`
@@ -124,13 +118,13 @@ export class PerfilComponent implements OnInit {
         } else {
           this.mensajeError = res.message || 'No se pudo cargar el perfil.';
         }
-        this.cargando = false; // 👈 IMPORTANTE: Siempre pasamos a false al terminar
+        this.cargando = false;
         this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error en la petición:', err);
         this.mensajeError = 'Error de conexión con el servidor.';
-        this.cargando = false; // 👈 IMPORTANTE: También en caso de error
+        this.cargando = false;
         this.cdr.detectChanges();
       }
     });
@@ -166,7 +160,7 @@ export class PerfilComponent implements OnInit {
   }
 
   guardarPerfil(): void {
-    if (!this.esMiPerfil) return; // Seguridad extra
+    if (!this.esMiPerfil) return;
     if (this.perfilForm.invalid) return;
     if (!this.perfilForm.dirty) {
       this.mensajeError = 'No hay cambios para guardar.';
@@ -196,7 +190,7 @@ export class PerfilComponent implements OnInit {
   }
 
   subirAvatar(event: Event): void {
-    if (!this.esMiPerfil) return; // Seguridad extra
+    if (!this.esMiPerfil) return;
     const input = event.target as HTMLInputElement;
     if (!input.files?.length) return;
 
@@ -224,7 +218,7 @@ export class PerfilComponent implements OnInit {
   }
 
   cambiarPassword(): void {
-    if (!this.esMiPerfil) return; // Seguridad extra
+    if (!this.esMiPerfil) return;
     if (this.passwordForm.invalid) return;
     this.guardandoPassword = true;
     this.mensajePasswordExito = '';
@@ -252,7 +246,7 @@ export class PerfilComponent implements OnInit {
   }
 
   eliminarCuenta(): void {
-    if (!this.esMiPerfil) return; // Seguridad extra
+    if (!this.esMiPerfil) return;
     if (this.emailConfirmacion !== this.usuario.email) return;
     this.eliminando = true;
     this.cdr.detectChanges();

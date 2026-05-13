@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core'; // 👈 Añadido ChangeDetectorRef e inject
+import { Component, OnInit, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { Favoritos } from '../../services/favoritos';
@@ -15,10 +15,9 @@ export class MisFavoritosComponent implements OnInit {
   cargando: boolean = true;
   errorMsg: string = '';
   baseUrlImagenes = 'http://localhost/RefugioAnimalesMatchPet/backend-php/public/img/animales/';
-  // Usamos inject para seguir tu estilo de código
   private favoritosService = inject(Favoritos);
   private router = inject(Router);
-  private cdr = inject(ChangeDetectorRef); // 👈 Inyectamos el detector de cambios
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.cargarMisFavoritos();
@@ -28,20 +27,20 @@ export class MisFavoritosComponent implements OnInit {
     this.cargando = true;
     this.favoritosService.getFavoritos().subscribe({
       next: (res) => {
-        console.log("Respuesta favoritos:", res); // Para ver qué llega en la consola
+        console.log("Respuesta favoritos:", res);
         if (res.status === 'success') {
           this.animalesFavoritos = res.data;
         } else {
           this.errorMsg = 'Hubo un problema al cargar tus favoritos.';
         }
         this.cargando = false;
-        this.cdr.detectChanges(); // 👈 ¡CLAVE! Avisamos a la vista que ya no cargue
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error("Error en favoritos:", err);
         this.errorMsg = 'Error de conexión. Inténtalo de nuevo.';
         this.cargando = false;
-        this.cdr.detectChanges(); // 👈 También aquí en caso de error
+        this.cdr.detectChanges();
       }
     });
   }
@@ -50,7 +49,7 @@ export class MisFavoritosComponent implements OnInit {
     this.favoritosService.eliminarFavorito(id_animal).subscribe({
       next: () => {
         this.animalesFavoritos = this.animalesFavoritos.filter(a => a.id_animal !== id_animal);
-        this.cdr.detectChanges(); // 👈 Repintamos la lista tras borrar
+        this.cdr.detectChanges();
       }
     });
   }
@@ -60,14 +59,11 @@ export class MisFavoritosComponent implements OnInit {
   }
 
   getImagenUrl(foto: string): string {
-    if (!foto) return 'assets/img/default_animal.jpg'; // Imagen por defecto si no hay foto
-
-    // Si la foto ya es una URL completa (empieza por http), la devolvemos tal cual
+    if (!foto) return 'assets/img/default_animal.jpg';
     if (foto.startsWith('http')) {
       return foto;
     }
 
-    // Si no, le pegamos la base de nuestro servidor
     return `${this.baseUrlImagenes}${foto}`;
   }
 }

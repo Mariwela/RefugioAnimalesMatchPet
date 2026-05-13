@@ -28,8 +28,7 @@ export class ImageZoomDialogComponent {
     this.imagenes = data.imagenes;
     this.indiceActual = data.indiceIndex;
   }
-
-  // 👇 Navegación por teclado (¡Muy importante para la UX!) 👇
+  
   @HostListener('window:keydown', ['$event'])
   manejarTeclado(event: KeyboardEvent) {
     if (this.imagenes.length > 1) {

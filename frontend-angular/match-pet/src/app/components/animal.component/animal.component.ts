@@ -20,12 +20,10 @@ export class AnimalComponent implements OnInit {
   errorMsg: string = '';
   animalIdSeleccionado: number | null = null;
 
-  // Control de paginación
   paginaActual: number = 1;
 
   favoritosIds: number[] = [];
 
-  // 👉 NUEVO: Añadimos nivel_energia al objeto de filtros
   filtros = {
     texto: '',
     especie: '',
@@ -47,7 +45,7 @@ export class AnimalComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarFavoritosUsuario();
-    this.cargarAnimales(); // Solo llamamos a la lista normal al inicio
+    this.cargarAnimales();
   }
 
   cargarFavoritosUsuario() {
@@ -168,8 +166,8 @@ export class AnimalComponent implements OnInit {
 
   limpiarFiltros(): void {
     this.filtros = { texto: '', especie: '', tamano: '', sexo: '', nivel_energia: '' };
-    this.paginaActual = 1; // Volvemos a la primera página
-    this.cargarAnimales(); // Cargamos la lista normal
+    this.paginaActual = 1;
+    this.cargarAnimales(); 
   }
 
   eliminarAnimal(idAnimal: number, nombreAnimal: string) {

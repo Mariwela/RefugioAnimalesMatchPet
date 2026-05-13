@@ -13,8 +13,7 @@
   margin: 0 auto;
   padding: 1.5rem;
 }
- 
-/* ─── Cabecera ──────────────────────── */
+
 .cabecera-seccion {
   margin-bottom: 1.5rem;
   padding-bottom: 1.2rem;
@@ -42,8 +41,7 @@
   color: #4A6A4A;
   margin: 0;
 }
- 
-/* ─── Estados ───────────────────────── */
+
 .estado-box {
   display: flex;
   flex-direction: column;
@@ -58,8 +56,7 @@
 .estado-box i { font-size: 2rem; }
 .estado-box.cargando { color: #5A8060; }
 .estado-box.error { color: #C85A2A; }
- 
-/* ─── Tarjeta tabla ─────────────────── */
+
 .tarjeta-tabla {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
@@ -72,8 +69,7 @@
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
- 
-/* ─── Tabla ─────────────────────────── */
+
 .tabla-solicitudes {
   width: 100%;
   border-collapse: collapse;
@@ -118,8 +114,7 @@
   color: #1A3A1A;
   vertical-align: middle;
 }
- 
-/* ─── Columnas ──────────────────────── */
+
 .col-id { width: 60px; }
 .col-fecha { white-space: nowrap; color: #5A8060; }
 .col-acciones { text-align: center; }
@@ -135,7 +130,6 @@
   border-radius: 20px;
 }
  
-/* ─── Solicitante ───────────────────── */
 .solicitante-info {
   display: flex;
   flex-direction: column;
@@ -165,7 +159,6 @@
   text-decoration: underline;
 }
  
-/* ─── Comentario admin ──────────────── */
 .comentario-wrapper {
   display: flex;
   flex-direction: column;
@@ -206,8 +199,7 @@
 .comentario-caja strong {
   color: #3B6B3B;
 }
- 
-/* ─── Badges estado ─────────────────── */
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -236,8 +228,7 @@
   color: #C85A2A;
   border: 1px solid #E8C4A8;
 }
- 
-/* ─── Botones acción ────────────────── */
+
 .botones-accion {
   display: flex;
   gap: 6px;
@@ -292,8 +283,7 @@
   font-size: 12px;
   color: #9AB89A;
 }
- 
-/* ─── Empty state ───────────────────── */
+
 .sin-registros {
   padding: 3rem !important;
 }
@@ -317,8 +307,7 @@
   color: #4A6A4A;
   margin: 0;
 }
- 
-/* ─── Responsive ────────────────────── */
+
 @media (max-width: 768px) {
   .solicitudes-container {
     padding: 1rem;

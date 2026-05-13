@@ -2,11 +2,6 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-
-// ────────────────────────────────────────────
-//  INTERFACES
-// ────────────────────────────────────────────
-
 export interface PreguntaMatchPet {
     key: keyof Pesos;
     prefKey: keyof Preferencias;
@@ -15,9 +10,7 @@ export interface PreguntaMatchPet {
     icono: string;
     tipoPregunta: 'rango' | 'energia' | 'booleano';
     opciones?: { label: string; valor: any }[];
-    /** Si es false, no aparece el botón "No tengo preferencia" y la respuesta es obligatoria */
     sinPreferencia?: false;
-    /** Si es true, no se muestra el slider de importancia (preguntas de contexto puro) */
     soloContexto?: true;
 }
 
@@ -46,15 +39,13 @@ export interface Preferencias {
     tiene_gatos: boolean | null;
     gatos_sociables: boolean | null;
 
-    // valores finales usados por el algoritmo
     apto_pisos: boolean | null;
     sociable_perros: boolean | null;
     sociable_gatos: boolean | null;
 
-    // nuevas preferencias
-    acepta_medicacion: boolean | null;       // ¿acepta animal con medicación diaria?
-    tiene_experiencia: boolean | null;       // ¿tiene experiencia con animales?
-    tiene_paciencia: string | null;          // 'Alta' | 'Muy Alta' | null
+    acepta_medicacion: boolean | null;     
+    tiene_experiencia: boolean | null;
+    tiene_paciencia: string | null;
 }
 
 export interface ResultadoAnimal {
@@ -80,10 +71,6 @@ export interface ResultadoAnimal {
     };
 }
 
-// ────────────────────────────────────────────
-//  PASOS DEL WIZARD
-// ────────────────────────────────────────────
-
 type Paso =
     | 'especie'
     | `pregunta-${number}`
@@ -93,14 +80,13 @@ type Paso =
 @Component({
     selector: 'app-matchpet',
     standalone: true,
-    imports: [FormsModule],   // CommonModule ya no es necesario con @if / @for
+    imports: [FormsModule],
     templateUrl: './matchpet.component.html',
     styleUrls: ['./matchpet.component.css'],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MatchpetComponent implements OnInit {
 
-    // Estado del wizard
     pasoActual: Paso = 'especie';
     especieSeleccionada: string | null = null;
     indicePregunta = 0;
@@ -141,18 +127,11 @@ export class MatchpetComponent implements OnInit {
 
     resultados: ResultadoAnimal[] = [];
     error: string | null = null;
-
-    /** Registra qué prefKeys ha tocado el usuario en esta sesión del wizard */
     preguntasTocadas = new Set<string>();
 
     private apiUrl = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api';
 
-    // ────────────────────────────────────────────
-    //  PREGUNTAS DEL WIZARD
-    // ────────────────────────────────────────────
-
     readonly PREGUNTAS: PreguntaMatchPet[] = [
-        // 0 – Energía
         {
             key: 'nivel_energia',
             prefKey: 'nivel_energia',
@@ -167,7 +146,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 1 – Tipo de vivienda
         {
             key: 'apto_pisos',
             prefKey: 'tipo_vivienda',
@@ -182,7 +160,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 2 – Acceso exterior (se salta si tiene jardín)
         {
             key: 'apto_pisos',
             prefKey: 'acceso_exterior',
@@ -196,7 +173,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 3 – Niños (obligatoria, sin opción "no tengo preferencia")
         {
             key: 'sociable_ninos',
             prefKey: 'sociable_ninos',
@@ -212,7 +188,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 4 – Perros en casa (obligatoria, sin preferencia, sin slider)
         {
             key: 'sociable_perros',
             prefKey: 'tiene_perros',
@@ -228,7 +203,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 5 – Perros sociables (se salta si no tiene perros)
         {
             key: 'sociable_perros',
             prefKey: 'perros_sociables',
@@ -243,7 +217,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 6 – Gatos en casa (obligatoria, sin preferencia, sin slider)
         {
             key: 'sociable_gatos',
             prefKey: 'tiene_gatos',
@@ -259,7 +232,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 7 – Gatos sociables (se salta si no tiene gatos)
         {
             key: 'sociable_gatos',
             prefKey: 'gatos_sociables',
@@ -274,7 +246,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 8 – Medicación diaria ← NUEVA
         {
             key: 'medicacion',
             prefKey: 'acepta_medicacion',
@@ -288,7 +259,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 9 – Experiencia ← NUEVA (obligatoria)
         {
             key: 'experiencia',
             prefKey: 'tiene_experiencia',
@@ -303,7 +273,6 @@ export class MatchpetComponent implements OnInit {
             ],
         },
 
-        // 10 – Paciencia ← NUEVA (obligatoria)
         {
             key: 'paciencia',
             prefKey: 'tiene_paciencia',
@@ -336,8 +305,6 @@ export class MatchpetComponent implements OnInit {
 
     ngOnInit(): void { }
 
-    // ─── Navegación ────────────────────────────
-
     seleccionarEspecie(especie: string | null): void {
         this.especieSeleccionada = especie;
         this.indicePregunta = 0;
@@ -363,7 +330,6 @@ export class MatchpetComponent implements OnInit {
         return (this.pesos as any)[this.preguntaActual.key];
     }
 
-    /** Determina si una pregunta debe saltarse según el contexto */
     private debeSaltar(indice: number): boolean {
         if (indice < 0 || indice >= this.totalPreguntas) return false;
         const prefKey = this.PREGUNTAS[indice].prefKey;
@@ -432,8 +398,6 @@ export class MatchpetComponent implements OnInit {
         this.preguntasTocadas.clear();
     }
 
-    // ─── Llamada al backend ────────────────────
-
     enviarFormulario(): void {
         this.pasoActual = 'cargando';
         this.error = null;
@@ -485,8 +449,6 @@ export class MatchpetComponent implements OnInit {
         });
     }
 
-    // ─── Helpers ──────────────────────────────
-
     irAPerfil(idAnimal: number): void {
         this.router.navigate(['/animal', idAnimal]);
     }
@@ -509,9 +471,7 @@ export class MatchpetComponent implements OnInit {
 
     get puedeAvanzar(): boolean {
         const prefKey = this.preguntaActual.prefKey;
-        // El usuario debe haber interactuado con esta pregunta concreta
         if (!this.preguntasTocadas.has(prefKey)) return false;
-        // En preguntas obligatorias, null no es válido (no se puede pulsar "sin preferencia")
         if (this.preguntaActual.sinPreferencia === false) {
             return (this.preferencias as any)[prefKey] !== null;
         }

@@ -1,12 +1,10 @@
 <?php
-// 1. Cargar la configuración
 if (!file_exists('config/config.php')) {
     die("❌ Error: No se encuentra 'config/config.php'. Copia 'config/config.php.example' como 'config/config.php' y rellena tus datos.");
 }
 require_once 'config/config.php';
 
 try {
-    // 2. Conexión inicial al servidor
     $dsn_inicial = "mysql:host=" . DB_HOST . ";charset=" . DB_CHARSET;
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
@@ -15,12 +13,10 @@ try {
     $pdo = new PDO($dsn_inicial, DB_USER, DB_PASS, $options);
     echo "✅ Conexión al servidor establecida.<br>";
 
-    // 3. Crear la base de datos si no existe
     $pdo->exec("CREATE DATABASE IF NOT EXISTS " . DB_NAME . " CHARACTER SET " . DB_CHARSET . " COLLATE utf8mb4_unicode_ci");
     $pdo->exec("USE " . DB_NAME);
     echo "✅ Base de datos '" . DB_NAME . "' lista.<br>";
 
-    // 4. Definir el SQL de las tablas
     $sql = "
     CREATE TABLE IF NOT EXISTS usuarios (
         id_usuario INT AUTO_INCREMENT PRIMARY KEY,
@@ -144,12 +140,8 @@ try {
         FOREIGN KEY (id_animal) REFERENCES animales(id_animal) ON DELETE CASCADE
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;";
 
-
-    // 5. Ejecutar la creación de tablas
     $pdo->exec($sql);
     echo "✅ Todas las tablas se crearon correctamente.<br>";
-
-    // 6. Crear Usuarios Iniciales (Admin + Roles de prueba)
     echo "⏳ Creando usuarios del sistema...<br>";
 
     $usuarios_iniciales = [

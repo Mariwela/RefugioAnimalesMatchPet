@@ -14,7 +14,6 @@
   padding: 1.5rem;
 }
 
-/* ─── Estados carga/error ───────────── */
 .estado-carga {
   display: flex;
   flex-direction: column;
@@ -68,7 +67,6 @@
   background: #EAF5EA;
 }
 
-/* ─── Cabecera ──────────────────────── */
 .cabecera-perfil {
   display: flex;
   justify-content: space-between;
@@ -147,7 +145,6 @@
   border-color: #C85A2A;
 }
 
-/* ─── Grid principal ────────────────── */
 .grid-perfil {
   display: grid;
   grid-template-columns: 380px 1fr;
@@ -155,7 +152,6 @@
   align-items: start;
 }
 
-/* ─── Foto ──────────────────────────── */
 .columna-foto {
   position: sticky;
   top: 24px;
@@ -181,7 +177,6 @@
   transform: scale(1.02);
 }
 
-/* ─── Columna info ──────────────────── */
 .columna-info {
   display: flex;
   flex-direction: column;
@@ -203,7 +198,6 @@
   margin: 0 0 8px;
 }
 
-/* ─── Etiquetas de Estado Dinámicas ─── */
 .etiqueta-estado {
   display: inline-flex;
   align-items: center;
@@ -239,7 +233,6 @@
   border-color: #B0CFD8;
 }
 
-/* ─── Botón Favorito ────────────────── */
 .btn-favorito {
   flex-shrink: 0;
   background: transparent;
@@ -253,7 +246,6 @@
   transform: scale(1.15);
 }
 
-/* ─── Aviso Importante ──────────────── */
 .alerta-importante {
   background-color: #FFF3CD;
   color: #856404;
@@ -264,7 +256,6 @@
   margin-top: 5px;
 }
 
-/* ─── Datos rápidos ─────────────────── */
 .datos-rapidos {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -314,7 +305,6 @@
   overflow-wrap: break-word;
 }
 
-/* ─── Descripción ───────────────────── */
 .descripcion-animal {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
@@ -336,7 +326,6 @@
   margin: 0;
 }
 
-/* ─── Sociabilidad y Salud ──────────── */
 .info-detallada-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -376,7 +365,6 @@
   color: #4A6A4A;
 }
 
-/* ─── Zona adopción ─────────────────── */
 .zona-adopcion {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
@@ -448,7 +436,6 @@
   box-shadow: none;
 }
 
-/* ─── Galería ───────────────────────── */
 .seccion-galeria {
   margin-top: 1.5rem;
 }
@@ -492,7 +479,6 @@
   transform: scale(1.05);
 }
 
-/* ─── Responsive ────────────────────── */
 @media (max-width: 768px) {
   .grid-perfil {
     grid-template-columns: 1fr;
@@ -500,7 +486,6 @@
 
   .columna-foto {
     position: static;
-    /* En móviles quitamos el sticky porque la foto va arriba */
   }
 
   .marco-foto {

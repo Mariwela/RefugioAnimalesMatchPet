@@ -195,8 +195,6 @@
             <h3>Fotos</h3>
         </div>
 
-        <!-- Portada actual -->
-<!-- Portada actual -->
         <div class="campo">
         <label>Foto de Portada actual</label>
         @if (fotoPortadaUrl) {
@@ -218,7 +216,6 @@
         }
         </div>
 
-        <!-- Galería actual -->
         <div class="campo">
             <label>Galería actual</label>
             @if (fotosGaleria.length === 0) {
@@ -236,7 +233,6 @@
             </div>
         </div>
 
-        <!-- Añadir fotos nuevas -->
         <div class="campo">
             <label>Añadir fotos a la galería</label>
             <label class="btn-secundario">
@@ -257,7 +253,6 @@
             }
         </div>
 
-        <!-- Botón guardar fotos -->
         <button type="button" class="btn-guardar" 
             (click)="guardarFotos()" 
             [disabled]="subiendoFotos || (!nuevaPortada && nuevasFotosGaleria.length === 0)">

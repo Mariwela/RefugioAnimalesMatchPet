@@ -90,7 +90,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 2: COMPORTAMIENTO Y ESTADO -->
         <div class="form-seccion">
             <div class="seccion-titulo"><i class="fa fa-heart"></i> <h3>Comportamiento y Estado</h3></div>
             <div class="grid-3-col">
@@ -121,7 +120,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 3: CHECKBOXES DE SOCIABILIDAD -->
         <div class="form-seccion">
             <div class="seccion-titulo"><i class="fa fa-medkit"></i> <h3>Salud y Sociabilidad</h3></div>
             <div class="grid-checkboxes">
@@ -135,7 +133,6 @@
             </div>
         </div>
 
-        <!-- SECCIÓN 4: FOTO Y DESCRIPCIÓN -->
         <div class="form-seccion">
             <div class="seccion-titulo"><i class="fa fa-file-text"></i> <h3>Descripción y Foto</h3></div>
             <div class="campo">
@@ -153,7 +150,6 @@
 
                 @if (fotoPreview) {
                     <div class="preview-container">
-                        <!-- Contenedor relativo para que el botón se pegue a la foto -->
                         <div class="preview-item"> 
                             <img [src]="fotoPreview" alt="Vista previa" class="img-preview">
                             <button type="button" class="btn-quitar" (click)="fotoPreview = null; fotoSeleccionada = null">

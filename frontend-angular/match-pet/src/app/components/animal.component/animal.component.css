@@ -14,7 +14,6 @@
   padding: 1.5rem;
 }
 
-/* ─── Título ────────────────────────── */
 .contenedor-animales h2 {
   font-family: 'Playfair Display', serif;
   font-size: 26px;
@@ -23,7 +22,6 @@
   margin: 0 0 1.2rem;
 }
 
-/* ─── Barra filtros ─────────────────── */
 .barra-filtros {
   display: flex;
   gap: 10px;
@@ -56,7 +54,6 @@
   box-shadow: 0 0 0 3px rgba(122, 176, 122, 0.1);
 }
 
-/* ─── Estados carga/error ───────────── */
 .mensaje-carga {
   display: flex;
   align-items: center;
@@ -80,7 +77,6 @@
   margin-bottom: 1rem;
 }
 
-/* ─── Grid animales ─────────────────── */
 .grid-animales {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -88,7 +84,6 @@
   margin-bottom: 1.5rem;
 }
 
-/* ─── Tarjeta animal ────────────────── */
 .tarjeta-animal {
   background: #FFFFFF;
   border: 1px solid #C8DFC8;
@@ -120,7 +115,6 @@
   transform: scale(1.04);
 }
 
-/* ─── Botón favorito ────────────────── */
 .btn-favorito {
   position: absolute;
   top: 10px;
@@ -146,7 +140,6 @@
   background: #fff;
 }
 
-/* ─── Info animal ───────────────────── */
 .info-animal {
   padding: 1rem 1.1rem;
   display: flex;
@@ -163,7 +156,6 @@
   margin: 0 0 4px;
 }
 
-/* ─── Etiquetas por especie ─────────── */
 .etiqueta {
   display: inline-flex;
   align-items: center;
@@ -227,7 +219,6 @@
   transform: translateY(-1px);
 }
 
-/* ─── Sin resultados ────────────────── */
 .sin-resultados {
   display: flex;
   flex-direction: column;
@@ -269,7 +260,6 @@
   color: #1A3A1A;
 }
 
-/* ─── Paginación ────────────────────── */
 .paginacion {
   display: flex;
   align-items: center;
@@ -312,7 +302,6 @@
   cursor: not-allowed;
 }
 
-/* ─── Responsive ────────────────────── */
 @media (max-width: 768px) {
   .barra-filtros {
     gap: 8px;
@@ -351,7 +340,6 @@
   }
 }
 
-/* ─── Etiquetas de Energía ─────────────────── */
 .dato-energia {
   display: flex;
   align-items: center;
@@ -370,21 +358,18 @@
   letter-spacing: 0.03em;
 }
 
-/* Color para Energía Baja (Verde relajado) */
 .energia-baja {
   background-color: #EAF5EA;
   color: #2E7D32;
   border: 1px solid #A5D6A7;
 }
 
-/* Color para Energía Media (Naranja vibrante) */
 .energia-media {
   background-color: #FFF4E5;
   color: #E65100;
   border: 1px solid #FFCC80;
 }
 
-/* Color para Energía Alta (Rojo intenso) */
 .energia-alta {
   background-color: #FFEBEE;
   color: #C62828;

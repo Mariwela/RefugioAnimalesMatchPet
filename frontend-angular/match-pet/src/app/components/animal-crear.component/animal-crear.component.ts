@@ -62,8 +62,6 @@ export class AnimalCrearComponent {
       const reader = new FileReader();
       reader.onload = () => {
         this.fotoPreview = reader.result;
-        
-        // ✅ Forzamos a Angular a ver el cambio de la portada al instante
         this.cdr.detectChanges(); 
       };
       reader.readAsDataURL(file);
@@ -101,13 +99,10 @@ export class AnimalCrearComponent {
     this.esError = false;
     this.esExito = false;
 
-    // Creamos el FormData con los datos del formulario
     const formData = new FormData();
-    
-    // Metemos todos los campos del formulario en el FormData
+
     Object.keys(this.animalForm.controls).forEach(key => {
       const value = this.animalForm.get(key)?.value;
-      // Convertimos booleanos a 1 o 0 para PHP
       if (typeof value === 'boolean') {
         formData.append(key, value ? '1' : '0');
       } else {
@@ -115,20 +110,16 @@ export class AnimalCrearComponent {
       }
     });
 
-    // Llamamos al servicio
     this.animalService.crearAnimal(formData).subscribe({
       next: (res) => {
         if (res.status === 'success') {
           const idNuevo = res.id_animal;
-          
-          // Si hay foto de portada, la subimos primero
+
           if (this.fotoSeleccionada) {
             this.subirFoto(idNuevo);
           } else if (this.fotosGaleria.length > 0) {
-            // Si no hay portada pero hay galería
             this.finalizarCreacion('¡Animal creado!', idNuevo);
           } else {
-            // Si no hay ninguna foto
             this.finalizarCreacion('¡Animal creado correctamente!', idNuevo);
           }
         } else {
@@ -146,7 +137,7 @@ export class AnimalCrearComponent {
 
 subirFoto(idAnimal: number) {
     const apiUrlFoto = 'http://localhost/RefugioAnimalesMatchPet/backend-php/api/animales/subir_foto_animal.php';
-    const token = this.authService.getToken() || '';  // ✅ usa el servicio
+    const token = this.authService.getToken() || ''; 
 
     const formData = new FormData();
     formData.append('foto', this.fotoSeleccionada as Blob);
@@ -158,7 +149,7 @@ subirFoto(idAnimal: number) {
     this.http.post<any>(apiUrlFoto, formData, { headers }).subscribe({
       next: (res) => {
         if (res.status === 'success') {
-          this.finalizarCreacion('¡Animal y fotos creados correctamente!', idAnimal); // ✅ solo esto
+          this.finalizarCreacion('¡Animal y fotos creados correctamente!', idAnimal);
         } else {
           this.mostrarError('Animal creado, pero falló la foto: ' + res.message);
         }
@@ -174,7 +165,7 @@ subirFoto(idAnimal: number) {
     const formData = new FormData();
     formData.append('foto', foto);
     formData.append('id_animal', idAnimal.toString());
-    formData.append('es_portada', '0'); // 0 porque son fotos de la galería
+    formData.append('es_portada', '0');
 
     const headers = new HttpHeaders({ 'Authorization': `Bearer ${token}` });
 
@@ -186,7 +177,7 @@ subirFoto(idAnimal: number) {
         },
         error: (err) => {
           console.error('Error al subir foto de galería:', err);
-          resolve(); // Resolvemos de todos modos para que el bucle continúe con la siguiente
+          resolve();
         }
       });
     });
@@ -194,7 +185,7 @@ subirFoto(idAnimal: number) {
 
   private async finalizarCreacion(msg: string, id?: number) {
     if (id && this.fotosGaleria.length > 0) {
-      this.mensaje = 'Subiendo galería...'; // Feedback visual
+      this.mensaje = 'Subiendo galería...';
       this.cdr.detectChanges();
       
       for (const foto of this.fotosGaleria) {
@@ -205,7 +196,7 @@ subirFoto(idAnimal: number) {
     this.cargando = false;
     this.mensaje = msg;
     this.esError = false;
-    this.esExito = true; // ✅ Activa la alerta de éxito
+    this.esExito = true;
     this.cdr.detectChanges();
 
     setTimeout(() => {
